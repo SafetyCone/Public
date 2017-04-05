@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\DisposableClass.cs" />
+    <Compile Include="Code\Enumeration.cs" />
     <Compile Include="Code\EqualsClass.cs" />
     <Compile Include="Code\EqualsStruct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
