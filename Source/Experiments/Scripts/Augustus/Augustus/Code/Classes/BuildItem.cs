@@ -40,13 +40,13 @@ namespace Augustus
 
             buildFilePath = BuildItem.GetBuildFilePathToken(tokens);
 
-            var platformToken = BuildItem.GetPlatformToken(tokens);
+            var platformToken = BuildItem.GetOsEnvironmentToken(tokens);
             platform = OsEnvironmentExtensions.FromDefault(platformToken);
 
             architecture = Augustus.Platform.Default;
             if (2 < tokens.Length)
             {
-                string architectureToken = BuildItem.GetArchitectureToken(tokens);
+                string architectureToken = BuildItem.GetPlatformToken(tokens);
                 architecture = PlatformExtensions.FromDefault(architectureToken);
 
                 if (OsEnvironment.Cygwin == platform && Augustus.Platform.Default != architecture)
@@ -63,13 +63,13 @@ namespace Augustus
             return output;
         }
 
-        private static string GetPlatformToken(string[] tokens)
+        private static string GetOsEnvironmentToken(string[] tokens)
         {
             var output = tokens[1];
             return output;
         }
 
-        private static string GetArchitectureToken(string[] tokens)
+        private static string GetPlatformToken(string[] tokens)
         {
             var output = tokens[2];
             return output;
@@ -78,24 +78,24 @@ namespace Augustus
         #endregion
 
         public string BuildFilePath { get; set; }
-        public OsEnvironment Platform { get; set; }
-        public Platform Architecture { get; set; }
+        public OsEnvironment OsEnvironment { get; set; }
+        public Platform Platform { get; set; }
 
 
         public BuildItem()
         {
         }
 
-        public BuildItem(string buildFilePath, OsEnvironment platform, Platform architecture)
+        public BuildItem(string buildFilePath, OsEnvironment osEnvironment, Platform platform)
         {
             this.BuildFilePath = buildFilePath;
+            this.OsEnvironment = osEnvironment;
             this.Platform = platform;
-            this.Architecture = architecture;
         }
 
         public override string ToString()
         {
-            var output = String.Format(@"{0}{1}{2}{1}{3}", this.BuildFilePath, BuildItem.TokenSeparator, this.Platform.ToDefaultString(), this.Architecture.ToDefaultString());
+            var output = String.Format(@"{0}{1}{2}{1}{3}", this.BuildFilePath, BuildItem.TokenSeparator, this.OsEnvironment.ToDefaultString(), this.Platform.ToDefaultString());
             return output;
         }
     }

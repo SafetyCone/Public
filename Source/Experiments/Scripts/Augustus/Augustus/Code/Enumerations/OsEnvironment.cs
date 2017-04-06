@@ -9,7 +9,7 @@ namespace Augustus
     /// </summary>
     /// <remarks>
     /// Visual Studio solution files must be labeled with 'Windows', while make files must be labeled with 'Cygwin'.
-    /// This code does not currently work for non-Windows environments.
+    /// This code does not currently work for non-Windows operating system environments.
     /// </remarks>
     public enum OsEnvironment
     {
@@ -33,10 +33,10 @@ namespace Augustus.Extensions
         public const string Cygwin = @"Cygwin";
 
 
-        public static string ToDefaultString(this OsEnvironment platform)
+        public static string ToDefaultString(this OsEnvironment osEnvironment)
         {
             string output;
-            switch(platform)
+            switch(osEnvironment)
             {
                 case OsEnvironment.Cygwin:
                     output = OsEnvironmentExtensions.Cygwin;
@@ -47,27 +47,27 @@ namespace Augustus.Extensions
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
+                    throw new UnexpectedEnumerationValueException<OsEnvironment>(osEnvironment);
             }
 
             return output;
         }
 
-        public static OsEnvironment FromDefault(string platform)
+        public static OsEnvironment FromDefault(string osEnvironment)
         {
             OsEnvironment output;
-            if (!OsEnvironmentExtensions.TryFromDefault(platform, out output))
+            if (!OsEnvironmentExtensions.TryFromDefault(osEnvironment, out output))
             {
-                throw new ArgumentException(@"Unrecognized build platform string.", nameof(platform));
+                throw new ArgumentException(@"Unrecognized OS environment string.", nameof(osEnvironment));
             }
 
             return output;
         }
 
-        public static bool TryFromDefault(string platform, out OsEnvironment value)
+        public static bool TryFromDefault(string osEnvironment, out OsEnvironment value)
         {
             bool output = true;
-            switch(platform)
+            switch(osEnvironment)
             {
                 case OsEnvironmentExtensions.Cygwin:
                     value = OsEnvironment.Cygwin;

@@ -15,14 +15,14 @@ namespace Augustus
         private const string DebugBuildFileListFileRelativePath = @"..\..\..\..\..\..\..\..\..\Data\Augustus Build File List - Debug.txt";
         private const string CommandShellExecutableName = @"cmd.exe";
         private const string MSBuildExecutablePath = @"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe";
-        private const string MSBuildShellCommandMask = @"/C > ""{2}"" ""{0}"" ""{1}""";
+        private const string MSBuildShellCommandMask = @"""{0}"" ""{1}""";
         private const string MSBuildSuccessRegexPattern = @"^Build succeeded.";
         private const string CygwinBinDirectoryPath = @"C:\Tools\Cygwin64\bin";
-        private const string CygwinShellCommandMask = @"/C set PATH={0};%PATH% && make --directory ""{1}"" clean && > ""{2}"" make --directory ""{1}""";// > {2}";
+        private const string CygwinShellCommandMask = @"set PATH={0};%PATH% & make --directory ""{1}"" clean & make --directory ""{1}""";
         private const string CygwinSucessRegexPattern = @"^Done!";
-        private const string LogFileSuffix = @"Build.log";
-        private const string ErrorFileSuffix = @"Build Error.log";
-        private const string ResultsFileName = @"Augustust Results.txt";
+        private const string OutputLogFileSuffix = @"Build.log";
+        private const string ErrorLogFileSuffix = @"Build Error.log";
+        private const string ResultsFileName = @"Augustus Results.txt";
         private const string ResultsViewerPath = @"C:\Program Files (x86)\Notepad++\notepad++.exe";
 
 
@@ -72,47 +72,16 @@ namespace Augustus
             return output;
         }
 
-        private static Dictionary<string, bool> RunBuildItems(IEnumerable<BuildItem> buildItems)
+        private static bool DetermineSuccess(BuildInfo buildInfo)
         {
-            var output = new Dictionary<string, bool>();
-            foreach (BuildItem buildItem in buildItems)
-            {
-                Program.RunBuildItem(buildItem);
-
-                bool success = Program.DetermineSuccess(buildItem);
-                output.Add(buildItem.BuildFilePath, success);
-            }
-
-            return output;
-        }
-
-        private static bool DetermineSuccess(BuildItem buildItem)
-        {
-            OsEnvironment platform = buildItem.Platform;
-
-            string successRegexPattern;
-            switch (platform)
-            {
-                case OsEnvironment.Cygwin:
-                    successRegexPattern = Program.CygwinSucessRegexPattern;
-                    break;
-
-                case OsEnvironment.Windows:
-                    successRegexPattern = Program.MSBuildSuccessRegexPattern;
-                    break;
-
-                default:
-                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
-            }
-
-            Regex successRegex = new Regex(successRegexPattern);
+            Regex successRegex = new Regex(buildInfo.SuccessRegexPattern);
 
             bool output = false;
 
-            string buildLogFilePath = Program.GetBuildLogFilePath(buildItem);
-            if (File.Exists(buildLogFilePath))
+            string outputLogPath = buildInfo.OutputLogPath;
+            if (File.Exists(outputLogPath))
             {
-                using (StreamReader fileReader = new StreamReader(buildLogFilePath))
+                using (StreamReader fileReader = new StreamReader(outputLogPath))
                 {
                     while (!fileReader.EndOfStream)
                     {
@@ -128,103 +97,121 @@ namespace Augustus
             return output;
         }
 
-        private static void RunBuildItem(BuildItem buildItem)
+        private static bool RunBuildItem(BuildInfo info)
         {
-            OsEnvironment platform = buildItem.Platform;
-
-            switch (platform)
+            using (StreamWriter standardOutput = new StreamWriter(info.OutputLogPath))
+            using (StreamWriter standardError = new StreamWriter(info.ErrorLogPath))
             {
-                case OsEnvironment.Cygwin:
-                    Program.RunCygwinBuildItem(buildItem);
-                    break;
+                Program.RunBuildItem(info, standardOutput, standardError);
+            }
 
-                case OsEnvironment.Windows:
-                    Program.RunWindowsBuildItem(buildItem);
-                    break;
+            bool output = Program.DetermineSuccess(info);
+            return output;
+        }
 
-                default:
-                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
+        private static void RunBuildItem(BuildInfo info, StreamWriter standardOutput, StreamWriter standardError)
+        {
+            //ProcessStartInfo startInfo = new ProcessStartInfo(Program.CommandShellExecutableName, info.BuildCommand);
+            ProcessStartInfo startInfo = new ProcessStartInfo(Program.CommandShellExecutableName);
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardInput = true;
+
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.ErrorDataReceived += (sender, e) => { Program.ProcessDataReceived(sender, e, standardError); };
+            process.OutputDataReceived += (sender, e) => { Program.ProcessDataReceived(sender, e, standardOutput); };
+
+            process.Start();
+            StreamWriter standardInput = process.StandardInput;
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+
+            standardInput.WriteLine(info.BuildCommand);
+            standardInput.Close();
+
+            process.WaitForExit();
+#if(DEBUG)
+            int exitCode = process.ExitCode; // For debugging.
+#endif
+            process.Close();
+        }
+
+        private static void ProcessDataReceived(object sender, DataReceivedEventArgs e, StreamWriter output)
+        {
+            if(!String.IsNullOrEmpty(e.Data))
+            {
+                output.WriteLine(e.Data);
             }
         }
 
-        private static void RunWindowsBuildItem(BuildItem buildItem)
+        private static BuildInfo GetWindowsBuildInfo(BuildItem buildItem)
         {
-            string buildLogFilePath = Program.GetBuildLogFilePath(buildItem);
+            string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildItem.BuildFilePath);
+            string buildDirectoryPath = Path.GetDirectoryName(buildItem.BuildFilePath);
+            string outputLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Program.OutputLogFileSuffix);
+            string outputLogPath = Path.Combine(buildDirectoryPath, outputLogFileName);
+            string errorLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Program.ErrorLogFileSuffix);
+            string errorLogPath = Path.Combine(buildDirectoryPath, errorLogFileName);
 
-            string command = String.Format(Program.MSBuildShellCommandMask, Program.MSBuildExecutablePath, buildItem.BuildFilePath, buildLogFilePath);
+            string successRegexPattern = Program.MSBuildSuccessRegexPattern;
 
-            ProcessStartInfo startInfo = new ProcessStartInfo(Program.CommandShellExecutableName, command);
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            startInfo.RedirectStandardOutput = true; // Required to make the command run to completion.
+            string buildCommand = String.Format(Program.MSBuildShellCommandMask, Program.MSBuildExecutablePath, buildItem.BuildFilePath);
 
-            Process proc = Process.Start(startInfo);
-            Console.WriteLine(proc.StandardOutput.ReadToEnd()); // Required to make the command run to completion, even though build text WILL be outputted to the log file.
-            proc.WaitForExit();
-
-            int exitCode = proc.ExitCode;
-            proc.Close();
+            var output = new BuildInfo(outputLogPath, errorLogPath, successRegexPattern, buildCommand);
+            return output;
         }
 
-        private static void RunCygwinBuildItem(BuildItem buildItem)
+        private static BuildInfo GetCygwinBuildInfo(BuildItem buildItem)
         {
+            string buildDirectoryPath = Path.GetDirectoryName(buildItem.BuildFilePath);
+            string outputLogPath = Path.Combine(buildDirectoryPath, Program.OutputLogFileSuffix);
+            string errorLogPath = Path.Combine(buildDirectoryPath, Program.ErrorLogFileSuffix);
+
+            string successRegexPattern = Program.CygwinSucessRegexPattern;
+
             string directoryForMake = Path.GetDirectoryName(buildItem.BuildFilePath);
+            string buildCommand = String.Format(Program.CygwinShellCommandMask, Program.CygwinBinDirectoryPath, directoryForMake);
 
-            string buildLogFilePath = Program.GetBuildLogFilePath(buildItem);
-            string buildErrorLogFilePath = Program.GetBuildErrorLogFilePath(buildItem);
-
-            string command = String.Format(Program.CygwinShellCommandMask, Program.CygwinBinDirectoryPath, directoryForMake, buildLogFilePath);
-
-            ProcessStartInfo startInfo = new ProcessStartInfo(Program.CommandShellExecutableName, command);
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            startInfo.RedirectStandardOutput = true; // Required to make the command run to completion.
-
-            Process proc = Process.Start(startInfo);
-
-            Console.WriteLine(proc.StandardOutput.ReadToEnd()); // Required to make the command run to completion, even though build text WILL be outputted to the log file.
-            proc.WaitForExit();
-
-            int exitCode = proc.ExitCode;
-            proc.Close();
-        }
-
-        private static string GetBuildLogFilePath(BuildItem buildItem)
-        {
-            string output = Program.GetLogFilePath(buildItem, Program.LogFileSuffix);
+            var output = new BuildInfo(outputLogPath, errorLogPath, successRegexPattern, buildCommand);
             return output;
         }
 
-        private static string GetBuildErrorLogFilePath(BuildItem buildItem)
+        private static BuildInfo GetBuildInfo(BuildItem buildItem)
         {
-            string output = Program.GetLogFilePath(buildItem, Program.ErrorFileSuffix);
-            return output;
-        }
+            OsEnvironment osEnvironment = buildItem.OsEnvironment;
 
-        private static string GetLogFilePath(BuildItem buildItem, string logFileSuffix)
-        {
-            string buildFilePath = buildItem.BuildFilePath;
-            OsEnvironment platform = buildItem.Platform;
-
-            string buildLogFileName;
-            switch(platform)
+            BuildInfo output;
+            switch (osEnvironment)
             {
                 case OsEnvironment.Cygwin:
-                    buildLogFileName = logFileSuffix;
+                    output = Program.GetCygwinBuildInfo(buildItem);
                     break;
 
                 case OsEnvironment.Windows:
-                    string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildFilePath);
-                    buildLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, logFileSuffix);
+                    output = Program.GetWindowsBuildInfo(buildItem);
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
+                    throw new UnexpectedEnumerationValueException<OsEnvironment>(osEnvironment);
             }
 
-            string directoryPath = Path.GetDirectoryName(buildFilePath);
+            return output;
+        }
 
-            string output = Path.Combine(directoryPath, buildLogFileName);
+        private static Dictionary<string, bool> RunBuildItems(IEnumerable<BuildItem> buildItems)
+        {
+            var output = new Dictionary<string, bool>();
+            foreach (BuildItem buildItem in buildItems)
+            {
+                BuildInfo info = Program.GetBuildInfo(buildItem);
+
+                bool success = Program.RunBuildItem(info);
+                output.Add(buildItem.BuildFilePath, success);
+            }
+
             return output;
         }
 
@@ -243,7 +230,8 @@ namespace Augustus
         private static List<string> GetBuildItemSpecifications()
         {
 #if (DEBUG)
-            string buildListFileRelativePath = Program.DebugBuildFileListFileRelativePath;
+            //string buildListFileRelativePath = Program.DebugBuildFileListFileRelativePath;
+            string buildListFileRelativePath = Program.BuildFileListFileRelativePath;
 #else
             string buildListFileRelativePath = Program.BuildFileListFileRelativePath;
 #endif

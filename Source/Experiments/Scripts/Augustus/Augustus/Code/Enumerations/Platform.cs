@@ -37,10 +37,10 @@ namespace Augustus.Extensions
         public const string x64 = @"Cygwin";
 
 
-        public static string ToDefaultString(this Platform Architecture)
+        public static string ToDefaultString(this Platform platform)
         {
             string output;
-            switch (Architecture)
+            switch (platform)
             {
                 case Platform.Default:
                     output = PlatformExtensions.Default;
@@ -55,27 +55,27 @@ namespace Augustus.Extensions
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<Platform>(Architecture);
+                    throw new UnexpectedEnumerationValueException<Platform>(platform);
             }
 
             return output;
         }
 
-        public static Platform FromDefault(string architecture)
+        public static Platform FromDefault(string platform)
         {
             Platform output;
-            if(!PlatformExtensions.TryFromDefault(architecture, out output))
+            if(!PlatformExtensions.TryFromDefault(platform, out output))
             {
-                throw new ArgumentException(@"Unrecognized build architecture string.", nameof(Platform));
+                throw new ArgumentException(@"Unrecognized build platform string.", nameof(Platform));
             }
 
             return output;
         }
 
-        public static bool TryFromDefault(string architecture, out Platform value)
+        public static bool TryFromDefault(string platform, out Platform value)
         {
             bool output = true;
-            switch (architecture)
+            switch (platform)
             {
                 case PlatformExtensions.Default:
                     value = Platform.Default;
