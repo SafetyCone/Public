@@ -12,6 +12,7 @@ namespace Augustus
     class Program
     {
         private const string BuildFileListFileRelativePath = @"..\..\..\..\..\..\..\..\..\Data\Augustus Build File List.txt";
+        private const string DebugBuildFileListFileRelativePath = @"..\..\..\..\..\..\..\..\..\Data\Augustus Build File List - Debug.txt";
         private const string CommandShellExecutableName = @"cmd.exe";
         private const string MSBuildExecutablePath = @"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe";
         private const string MSBuildShellCommandMask = @"/C > ""{2}"" ""{0}"" ""{1}""";
@@ -71,18 +72,10 @@ namespace Augustus
             return output;
         }
 
-        private static List<string> GetBuildItemSpecifications()
-        {
-            string[] lines = File.ReadAllLines(Program.BuildFileListFileRelativePath);
-
-            List<string> output = new List<string>(lines);
-            return output;
-        }
-
-        private static Dictionary<string, bool> RunBuildItems(IEnumerable<IBuildItem> buildItems)
+        private static Dictionary<string, bool> RunBuildItems(IEnumerable<BuildItem> buildItems)
         {
             var output = new Dictionary<string, bool>();
-            foreach (IBuildItem buildItem in buildItems)
+            foreach (BuildItem buildItem in buildItems)
             {
                 Program.RunBuildItem(buildItem);
 
@@ -93,23 +86,23 @@ namespace Augustus
             return output;
         }
 
-        private static bool DetermineSuccess(IBuildItem buildItem)
+        private static bool DetermineSuccess(BuildItem buildItem)
         {
-            Platform platform = buildItem.Platform;
+            OsEnvironment platform = buildItem.Platform;
 
             string successRegexPattern;
             switch (platform)
             {
-                case Platform.Cygwin:
+                case OsEnvironment.Cygwin:
                     successRegexPattern = Program.CygwinSucessRegexPattern;
                     break;
 
-                case Platform.Windows:
+                case OsEnvironment.Windows:
                     successRegexPattern = Program.MSBuildSuccessRegexPattern;
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<Platform>(platform);
+                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
             }
 
             Regex successRegex = new Regex(successRegexPattern);
@@ -135,29 +128,27 @@ namespace Augustus
             return output;
         }
 
-        private static void RunBuildItem(IBuildItem buildItem)
+        private static void RunBuildItem(BuildItem buildItem)
         {
-            Platform platform = buildItem.Platform;
+            OsEnvironment platform = buildItem.Platform;
 
             switch (platform)
             {
-                case Platform.Cygwin:
+                case OsEnvironment.Cygwin:
                     Program.RunCygwinBuildItem(buildItem);
                     break;
 
-                case Platform.Windows:
+                case OsEnvironment.Windows:
                     Program.RunWindowsBuildItem(buildItem);
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<Platform>(platform);
+                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
             }
         }
 
-        private static void RunWindowsBuildItem(IBuildItem buildItem)
+        private static void RunWindowsBuildItem(BuildItem buildItem)
         {
-            WindowsBuildItem windowsBuildItem = (WindowsBuildItem)buildItem;
-
             string buildLogFilePath = Program.GetBuildLogFilePath(buildItem);
 
             string command = String.Format(Program.MSBuildShellCommandMask, Program.MSBuildExecutablePath, buildItem.BuildFilePath, buildLogFilePath);
@@ -175,10 +166,8 @@ namespace Augustus
             proc.Close();
         }
 
-        private static void RunCygwinBuildItem(IBuildItem buildItem)
+        private static void RunCygwinBuildItem(BuildItem buildItem)
         {
-            CygwinBuildItem cygwinBuildItem = (CygwinBuildItem)buildItem;
-
             string directoryForMake = Path.GetDirectoryName(buildItem.BuildFilePath);
 
             string buildLogFilePath = Program.GetBuildLogFilePath(buildItem);
@@ -200,37 +189,37 @@ namespace Augustus
             proc.Close();
         }
 
-        private static string GetBuildLogFilePath(IBuildItem buildItem)
+        private static string GetBuildLogFilePath(BuildItem buildItem)
         {
             string output = Program.GetLogFilePath(buildItem, Program.LogFileSuffix);
             return output;
         }
 
-        private static string GetBuildErrorLogFilePath(IBuildItem buildItem)
+        private static string GetBuildErrorLogFilePath(BuildItem buildItem)
         {
             string output = Program.GetLogFilePath(buildItem, Program.ErrorFileSuffix);
             return output;
         }
 
-        private static string GetLogFilePath(IBuildItem buildItem, string logFileSuffix)
+        private static string GetLogFilePath(BuildItem buildItem, string logFileSuffix)
         {
             string buildFilePath = buildItem.BuildFilePath;
-            Platform platform = buildItem.Platform;
+            OsEnvironment platform = buildItem.Platform;
 
             string buildLogFileName;
             switch(platform)
             {
-                case Platform.Cygwin:
+                case OsEnvironment.Cygwin:
                     buildLogFileName = logFileSuffix;
                     break;
 
-                case Platform.Windows:
+                case OsEnvironment.Windows:
                     string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildFilePath);
                     buildLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, logFileSuffix);
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<Platform>(platform);
+                    throw new UnexpectedEnumerationValueException<OsEnvironment>(platform);
             }
 
             string directoryPath = Path.GetDirectoryName(buildFilePath);
@@ -239,13 +228,35 @@ namespace Augustus
             return output;
         }
 
-        private static List<IBuildItem> GetBuildItems(IEnumerable<string> buildItemSpecifications)
+        private static List<BuildItem> GetBuildItems(IEnumerable<string> buildItemSpecifications)
         {
-            var output = new List<IBuildItem>();
+            var output = new List<BuildItem>();
             foreach (string buildItemSpecification in buildItemSpecifications)
             {
-                var buildItem = BuildItemFactory.GetBuildItem(buildItemSpecification);
+                var buildItem = BuildItem.Parse(buildItemSpecification);
                 output.Add(buildItem);
+            }
+
+            return output;
+        }
+
+        private static List<string> GetBuildItemSpecifications()
+        {
+#if (DEBUG)
+            string buildListFileRelativePath = Program.DebugBuildFileListFileRelativePath;
+#else
+            string buildListFileRelativePath = Program.BuildFileListFileRelativePath;
+#endif
+
+            string[] lines = File.ReadAllLines(buildListFileRelativePath);
+
+            var output = new List<string>();
+            foreach(string line in lines)
+            {
+                if(!String.IsNullOrEmpty(line))
+                {
+                    output.Add(line);
+                }
             }
 
             return output;

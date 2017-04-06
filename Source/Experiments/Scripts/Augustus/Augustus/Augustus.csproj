@@ -43,14 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Build Item\Base Classes\BuildItemBase.cs" />
-    <Compile Include="Code\Build Item\BuildItemFactory.cs" />
-    <Compile Include="Code\Build Item\BuildItemSpecification.cs" />
-    <Compile Include="Code\Build Item\CygwinBuildItem.cs" />
-    <Compile Include="Code\Build Item\Interfaces\IBuildItem.cs" />
-    <Compile Include="Code\Build Item\WindowsBuildItem.cs" />
-    <Compile Include="Code\Enumerations\Architecture.cs" />
+    <Compile Include="Code\Classes\BuildItem.cs" />
     <Compile Include="Code\Enumerations\Platform.cs" />
+    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

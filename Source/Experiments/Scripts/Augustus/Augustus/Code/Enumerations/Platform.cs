@@ -5,21 +5,25 @@ using Public.Common.Lib;
 namespace Augustus
 {
     /// <summary>
-    /// The build platform for the build file.
+    /// The 32- or 64- bit platform for which to build.
     /// </summary>
     /// <remarks>
-    /// Visual Studio solution files must be labeled with 'Windows', while make files must be labeled with 'Cygwin'.
+    /// If you want to build both platforms, copy-and-paste two lines in the build list.
     /// </remarks>
     public enum Platform
     {
         /// <summary>
-        /// For Visual Studio solution files.
+        /// Whatever is the default for the operating system environment.
         /// </summary>
-        Windows,
+        Default,
         /// <summary>
-        /// For make files.
+        /// For 32 bits.
         /// </summary>
-        Cygwin
+        x86,
+        /// <summary>
+        /// For 64 bits.
+        /// </summary>
+        x64
     }
 }
 
@@ -28,57 +32,66 @@ namespace Augustus.Extensions
 {
     public static class PlatformExtensions
     {
-        public const string Windows = @"Windows";
-        public const string Cygwin = @"Cygwin";
+        public const string Default = @"Deafult";
+        public const string x86 = @"x86";
+        public const string x64 = @"Cygwin";
 
 
-        public static string ToDefaultString(this Platform platform)
+        public static string ToDefaultString(this Platform Architecture)
         {
             string output;
-            switch(platform)
+            switch (Architecture)
             {
-                case Platform.Cygwin:
-                    output = PlatformExtensions.Cygwin;
+                case Platform.Default:
+                    output = PlatformExtensions.Default;
                     break;
 
-                case Platform.Windows:
-                    output = PlatformExtensions.Windows;
+                case Platform.x86:
+                    output = PlatformExtensions.x86;
+                    break;
+
+                case Platform.x64:
+                    output = PlatformExtensions.x64;
                     break;
 
                 default:
-                    throw new UnexpectedEnumerationValueException<Platform>(platform);
+                    throw new UnexpectedEnumerationValueException<Platform>(Architecture);
             }
 
             return output;
         }
 
-        public static Platform FromDefault(string platform)
+        public static Platform FromDefault(string architecture)
         {
             Platform output;
-            if (!PlatformExtensions.TryFromDefault(platform, out output))
+            if(!PlatformExtensions.TryFromDefault(architecture, out output))
             {
-                throw new ArgumentException(@"Unrecognized build platform string.", nameof(platform));
+                throw new ArgumentException(@"Unrecognized build architecture string.", nameof(Platform));
             }
 
             return output;
         }
 
-        public static bool TryFromDefault(string platform, out Platform value)
+        public static bool TryFromDefault(string architecture, out Platform value)
         {
             bool output = true;
-            switch(platform)
+            switch (architecture)
             {
-                case PlatformExtensions.Cygwin:
-                    value = Platform.Cygwin;
+                case PlatformExtensions.Default:
+                    value = Platform.Default;
                     break;
 
-                case PlatformExtensions.Windows:
-                    value = Platform.Windows;
+                case PlatformExtensions.x86:
+                    value = Platform.x86;
                     break;
-                
+
+                case PlatformExtensions.x64:
+                    value = Platform.x64;
+                    break;
+
                 default:
                     output = false;
-                    value = Platform.Windows;
+                    value = Platform.Default;
                     break;
             }
 
