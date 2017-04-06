@@ -1,0 +1,12 @@
+﻿Project Augustus
+
+Augustus is a builder, named after the famed Roman emporer who found Rome a city of bricks and left it a city of marble.
+
+Augustus:
+	* When provided with a list of solution file paths and make file paths, labeled with "Windows" or "Cygwin" respectively, and if Windows labeled with "x86" or "x64".
+	* Will build each using their respective toolsets:
+		* MSBuild: "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" "C:\Path\SimpleMC1\SimpleMC1.sln" /p:Platform=x86
+		* make: make --directory "C:\Path\Stats2" (after adding C:\Tools\Cygwin\bin to the PATH)
+	* Direct all output from the build process to a file placed in the same directory as the solution or make file.
+	* Check the output for a keyword indicating success or failure (success: "^Build succeeded.", "^Done!") otherwise failure.
+	* Output list of all succeeded and failed builds.
