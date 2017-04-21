@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{29003A48-0967-4BB2-8AA0-2CB58F0454F1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Public.Common.Lib</RootNamespace>
-    <AssemblyName>Public.Common.Lib</AssemblyName>
+    <RootNamespace>Public.Common.Lib.Code.Construction</RootNamespace>
+    <AssemblyName>Public.Common.Lib.Code.Construction</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,34 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Constants.cs" />
-    <Compile Include="Code\Exceptions\UnexpectedEnumerationValueException.cs" />
-    <Compile Include="Code\Extensions\System.Collections.Generic.Dictionary.cs" />
-    <Compile Include="Code\Extensions\System.String.cs" />
-    <Compile Include="Code\IO\Paths\FilePathInfo.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\CreateDirectorySerializationUnit.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\CreateDirectorySerializer.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\FileCopySerializationUnit.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\FileCopySerializer.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\TextFileSerializationUnit.cs" />
-    <Compile Include="Code\IO\Serialization\Classes\TextFileSerializer.cs" />
-    <Compile Include="Code\IO\Serialization\Interfaces\ISerializationUnit.cs" />
-    <Compile Include="Code\IO\Serialization\Interfaces\ISerializer.cs" />
-    <Compile Include="Code\IO\Serialization\SerializationList.cs" />
-    <Compile Include="Code\IO\Files\TextFile.cs" />
-    <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />
-    <Compile Include="Code\Utilities\HashHelper.cs" />
-    <Compile Include="Code\Utilities\Utilities.cs" />
-    <Compile Include="Code\Utilities\XmlHelper.cs" />
+    <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Extensions\System.Boolean.cs" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Extensions\System.IO.Path.cs" />
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
+      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+      <Name>Public.Common.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.csproj">
+      <Project>{fd507e5f-f561-41fc-b543-8ff7ef178fa7}</Project>
+      <Name>Public.Common.Lib.Code</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

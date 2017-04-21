@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+
+using Public.Common.Lib.Code.Logical;
+using LogicalMethods = Public.Common.Lib.Code.Logical.Methods;
+
+
+namespace Public.Common.Lib.Code.Physical.CSharp
+{
+    public class Methods
+    {
+        public const string MainMethodName = @"Main";
+
+
+        #region Static
+
+        private static Dictionary<string, string> GetDefaultNamesByLogicalName()
+        {
+            Dictionary<string, string> output = new Dictionary<string, string>();
+
+            output.Add(LogicalMethods.MainMethodName, Methods.MainMethodName);
+
+            return output;
+        }
+
+        #endregion
+
+
+        public Dictionary<string, string> PhysicalCSharpNamesByLogicalName { get; private set; }
+
+
+        public Methods()
+        {
+            this.PhysicalCSharpNamesByLogicalName = Methods.GetDefaultNamesByLogicalName();
+        }
+    }
+}
