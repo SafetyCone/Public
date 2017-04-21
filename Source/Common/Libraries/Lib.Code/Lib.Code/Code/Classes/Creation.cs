@@ -351,7 +351,7 @@ namespace Public.Common.Lib.Code
 
         private static ProjectItem GetAssemblyInfoProjectItem(SerializationList serializationList, string projectDirectoryPath, string projectName, Guid guid)
         {
-            EmptyType assemblyInfo = CreateAssemblyInfo.GetAssemblyInfo(projectName, guid);
+            EmptyType assemblyInfo = Creation.GetAssemblyInfo(projectName, guid);
             CodeFile assemblyInfoFile = CodeFile.ProcessEmptyType(assemblyInfo);
 
             string fileRelativePath = @"Properties\AssemblyInfo.cs";
@@ -362,9 +362,59 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
+        // Ok.
+        public static EmptyType GetAssemblyInfo(string title, Guid guid)
+        {
+            EmptyType output = new EmptyType(@"AssemblyInfo");
+            output.NamespacesUsed.Add(@"System.Reflection");
+            output.NamespacesUsed.Add(@"System.Runtime.CompilerServices");
+            output.NamespacesUsed.Add(@"System.Runtime.InteropServices");
+
+            output.Lines.Add(
+@"// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly."
+                );
+            output.Lines.Add(String.Format(@"[assembly: AssemblyTitle(""{0}"")]", title));
+            output.Lines.Add(
+@"[assembly: AssemblyDescription("""")]
+[assembly: AssemblyConfiguration("""")]
+[assembly: AssemblyCompany("""")]
+[assembly: AssemblyProduct("""")]
+[assembly: AssemblyCopyright(""Copyright ©  2017"")]
+[assembly: AssemblyTrademark("""")]
+[assembly: AssemblyCulture("""")]
+
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM"
+                );
+            output.Lines.Add(String.Format(@"[assembly: Guid(""{0}"")]", guid.ToString()));
+            output.Lines.Add(
+@"
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion(""1.0.* "")]
+[assembly: AssemblyVersion(""1.0.0.0"")]
+[assembly: AssemblyFileVersion(""1.0.0.0"")]"
+                );
+
+            return output;
+        }
+
         private static ProjectItem GetConsoleProgramProjectItem(SerializationList serializationList, string projectDirectoryPath, string projectRootNamespaceName)
         {
-            Class program = CreateConsoleProgramClass.CreateProgram(projectRootNamespaceName);
+            Class program = Creation.CreateProgram(projectRootNamespaceName);
             CodeFile programFile = CodeFile.ProcessClass(program);
 
             string fileRelativePath = @"Code\Program.cs";
@@ -373,6 +423,26 @@ namespace Public.Common.Lib.Code
 
             ProjectItem output = new CompileProjectItem(fileRelativePath);
             return output;
+        }
+
+        // Ok.
+        public static Class CreateProgram(string namespaceName)
+        {
+            Class program = new Class(Logical.Types.ProgramTypeName, namespaceName, Accessibility.Private);
+
+            Method main = Creation.CreateMain();
+            program.Methods.Add(main);
+
+            return program;
+        }
+
+        // Ok.
+        private static Method CreateMain()
+        {
+            MethodArgument args = new MethodArgument(Logical.Types.StringArrayTypeName, @"args");
+
+            Method main = Method.NewStaticMethod(Logical.Methods.MainMethodName, Logical.Types.VoidTypeName, Accessibility.Private, new MethodArgument[] { args });
+            return main;
         }
 
         private static void AddReferenceProjectItems(List<ProjectItem> projectItems, Language language)

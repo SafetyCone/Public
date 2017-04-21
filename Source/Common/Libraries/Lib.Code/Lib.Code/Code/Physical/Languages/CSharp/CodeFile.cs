@@ -6,6 +6,7 @@ using Public.Common.Lib.Code.Logical;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    // Ok.
     public class CodeFile : CodeFileBase
     {
         #region Static

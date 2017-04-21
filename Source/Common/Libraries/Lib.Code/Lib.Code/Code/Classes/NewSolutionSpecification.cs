@@ -55,7 +55,7 @@ namespace Public.Common.Lib.Code
             ProjectType projectType,
             VisualStudioVersion visualStudioVersion)
             : this(
-                  OrganizationPaths.DefaultOrganizationsDirectoryPath,
+                  OrganizationalPaths.DefaultOrganizationsDirectoryPath,
                   organization,
                   repository,
                   domain,

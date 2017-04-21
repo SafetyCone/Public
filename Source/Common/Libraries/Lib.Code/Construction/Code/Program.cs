@@ -278,46 +278,12 @@ namespace Public.Common.Lib.Code.Construction
         {
             string namespaceName = @"Test1";
 
-            CreateConsoleProgramClass createProgram = new CreateConsoleProgramClass(namespaceName);
-            createProgram.Run();
-
-            Class programClass = createProgram.Class;
-
-            CreateClassCodeFile createProgramFile = new CreateClassCodeFile(programClass);
-            createProgramFile.Run();
-
-            CodeFile programFile = createProgramFile.CodeFile;
+            Class programClass = Creation.CreateProgram(namespaceName);
+            CodeFile programFile = CodeFile.ProcessClass(programClass);
 
             string path = @"C:\temp\Orgs\Minex\Repositories\Public\Source\Common\Scripts\Test\Program.cs";
-            SerializeCodeFileToPath serializeProgramFile = new SerializeCodeFileToPath(path, programFile);
-            serializeProgramFile.Run();
-        }
-
-        private static void TestWriteProgramFile()
-        {
-            string path = @"C:\Users\David\Documents\Visual Studio 2010\Projects\CsConsoleApplication1\CsConsoleApplication1\Program.cs";
-
-            WriteProgramFileSimple command = new WriteProgramFileSimple(path);
-            command.Run();
-        }
-
-        private static void TestCreateNewConsoleSolution()
-        {
-            //string desiredPath = @"C:\temp\Orgs\Minex\Repositories\Public\Source\Common\Scripts\Test";
-
-            NewSolutionSpecification newSolutionSpec = new NewSolutionSpecification(
-                @"C:\temp\Orgs",
-                MinexOrganization.OrganizationName,
-                PublicRepository.RepositoryName,
-                CommonDomain.DomainName,
-                SolutionType.Script,
-                @"Test",
-                ProjectType.Console,
-                VisualStudioVersion.VS2015,
-                Language.CSharp);
-
-            CreateNewSolution createNewSolution = new CreateNewSolution(newSolutionSpec);
-            createNewSolution.Run();
+            CSharpCodeFileSerializer serializer = new CSharpCodeFileSerializer();
+            serializer.Serialize(path, programFile);
         }
     }
 }
