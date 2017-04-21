@@ -7,6 +7,11 @@ namespace Public.Common.Lib.Code.Physical
     // Ok.
     public class OrganizationalPaths
     {
+        public const string DefaultOrganizationsDirectoryPath = @"C:\Organizations";
+        public const string DefaultRepositoriesDirectoryName = @"Repositories";
+        public const string DefaultSourceDirectoryName = @"Source";
+
+
         public string OrganizationsDirectoryPath { get; set; }
         public string OrganizationDirectoryPath { get; protected set; }
         public string RepositoriesDirectoryPath { get; protected set; }
@@ -57,11 +62,11 @@ namespace Public.Common.Lib.Code.Physical
             string domainName,
             string solutionTypeName)
             : this(
-                  Constants.DefaultOrganizationsDirectoryPath,
+                  OrganizationalPaths.DefaultOrganizationsDirectoryPath,
                   organizationName,
-                  Constants.DefaultRepositoriesDirectoryName,
+                  OrganizationalPaths.DefaultRepositoriesDirectoryName,
                   repositoryName,
-                  Constants.DefaultSourceDirectoryName,
+                  OrganizationalPaths.DefaultSourceDirectoryName,
                   domainName,
                   solutionTypeName)
         {
@@ -72,11 +77,11 @@ namespace Public.Common.Lib.Code.Physical
             string domainName,
             string solutionTypeName)
             : this(
-                  Constants.DefaultOrganizationsDirectoryPath,
+                  OrganizationalPaths.DefaultOrganizationsDirectoryPath,
                   MinexOrganization.OrganizationName,
-                  Constants.DefaultRepositoriesDirectoryName,
+                  OrganizationalPaths.DefaultRepositoriesDirectoryName,
                   repositoryName,
-                  Constants.DefaultSourceDirectoryName,
+                  OrganizationalPaths.DefaultSourceDirectoryName,
                   domainName,
                   solutionTypeName)
         {
@@ -91,9 +96,9 @@ namespace Public.Common.Lib.Code.Physical
             : this(
                   organizationsDirectoryPath,
                   organizationName,
-                  Constants.DefaultRepositoriesDirectoryName,
+                  OrganizationalPaths.DefaultRepositoriesDirectoryName,
                   repositoryName,
-                  Constants.DefaultSourceDirectoryName,
+                  OrganizationalPaths.DefaultSourceDirectoryName,
                   domainName,
                   solutionTypeName)
         {

@@ -7,9 +7,13 @@ using LogicalProject = Public.Common.Lib.Code.Logical.Project;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    // Ok.
     /// <summary>
-    /// This class models the physical layout of a C# project (.csproj) file.
+    /// This class models the physical layout of a C# project (.csproj) file, and can be serialized to/deserialized from a project file.
     /// </summary>
+    /// <remarks>
+    /// A logical project object can be created from a physical project object, and vice-versa.
+    /// </remarks>
     public class Project
     {
         public ProjectInfo Info { get; set; }

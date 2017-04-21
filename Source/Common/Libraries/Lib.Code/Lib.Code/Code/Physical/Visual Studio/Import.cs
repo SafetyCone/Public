@@ -3,6 +3,7 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
+    // Ok.
     public class Import : IEquatable<Import>
     {
         #region Static

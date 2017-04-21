@@ -3,6 +3,7 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
+    // Ok.
     public enum ProjectOutputType
     {
         Exe, // Console executable.

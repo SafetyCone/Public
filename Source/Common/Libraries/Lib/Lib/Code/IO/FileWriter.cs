@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 
 
-namespace Public.Common.Lib.Code.Physical
+namespace Public.Common.Lib.IO
 {
     public class FileWriter : IDisposable
     {

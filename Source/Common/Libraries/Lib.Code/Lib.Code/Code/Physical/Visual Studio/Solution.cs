@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Physical
 {
+    // Ok.
+    /// <summary>
+    /// A physical solution represents a solution file, and can be serialized to/deserialized from a solution file.
+    /// </summary>
+    /// <remarks>
+    /// A logical solution object can be created from a physical solution object, and vice-versa.
+    /// </remarks>
     public class Solution
     {
         public SolutionInfo Info { get; set; }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Physical
 {
+    // Ok.
     // Error report will always be the default.
     // Warning level will always be the default.
     public class BuildConfigurationInfo

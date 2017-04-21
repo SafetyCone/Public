@@ -3,6 +3,7 @@
 
 namespace Public.Common.Lib.Code
 {
+    // Ok.
     public enum CopyToOutputDirectory
     {
         Never,

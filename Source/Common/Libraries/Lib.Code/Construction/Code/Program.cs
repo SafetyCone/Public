@@ -319,43 +319,5 @@ namespace Public.Common.Lib.Code.Construction
             CreateNewSolution createNewSolution = new CreateNewSolution(newSolutionSpec);
             createNewSolution.Run();
         }
-
-        private static void TestPathInfoNode()
-        {
-            string filePath = @"C:\Organizations\Minex\Repositories\Minex\Source\Common\Libraries\Lib.Code\Lib.Code\Files\CsConsoleApplication1.VS2010.csproj";
-
-            string[] filePathTokens = filePath.SplitPath();
-
-            PathInfoRootNode root = new PathInfoRootNode();
-            root.AddPathTokens(filePathTokens);
-        }
-
-        private static void TestOrganizationsDirectoryPathIdentificationDefault()
-        {
-            string path = @"C:\temp\Organizations";
-            string expected = path;
-
-            string test = OrganizationsDirectoryInfo.IdentifyOrganizationsDirectoryPath(path);
-
-            if(expected != test)
-            {
-                throw new Exception();
-            }
-        }
-
-        private static void TestOrganizationsDirectoryPathIdentificationCustom()
-        {
-            string organizationsDirectoryName = @"AllOrgs";
-
-            string path = Path.Combine(@"C:\temp", organizationsDirectoryName);
-            string expected = path;
-
-            string test = OrganizationsDirectoryInfo.IdentifyOrganizationsDirectoryPath(path, organizationsDirectoryName);
-
-            if (expected != test)
-            {
-                throw new Exception();
-            }
-        }
     }
 }

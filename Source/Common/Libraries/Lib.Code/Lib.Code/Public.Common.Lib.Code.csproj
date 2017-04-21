@@ -40,9 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Classes\CodeFileWriter.cs" />
-    <Compile Include="Code\Classes\CSharpCodeFileWriter.cs" />
-    <Compile Include="Code\Classes\FileWriter.cs" />
+    <Compile Include="Code\IO\CodeFileWriter.cs" />
+    <Compile Include="Code\IO\CSharpCodeFileWriter.cs" />
     <Compile Include="Code\Classes\NewProjectSpecification.cs" />
     <Compile Include="Code\Commands\Logical\CreateAssemblyInfo.cs" />
     <Compile Include="Code\Commands\Physical\CreateClassCodeFile.cs" />
@@ -60,9 +59,6 @@
     <Compile Include="Code\Logical\Code\Namespaces.cs" />
     <Compile Include="Code\Classes\BuildConfiguration.cs" />
     <Compile Include="Code\Classes\Creation.cs" />
-    <Compile Include="Code\Logical\Visual Studio\Classes\Base Classes\CompilationUnit.cs" />
-    <Compile Include="Code\Logical\Visual Studio\Classes\CodeFileCompilationUnit.cs" />
-    <Compile Include="Code\Logical\Visual Studio\Classes\FileReferenceCompilationUnit.cs" />
     <Compile Include="Code\Classes\FileReference.cs" />
     <Compile Include="Code\Logical\Visual Studio\Project.cs" />
     <Compile Include="Code\Classes\ProjectBuildConfigurationSet.cs" />
@@ -85,7 +81,6 @@
     <Compile Include="Code\Physical\Languages\CSharp\Methods.cs" />
     <Compile Include="Code\Physical\Languages\CSharp\Types.cs" />
     <Compile Include="Code\Physical\Visual Studio\BuildConfigurationInfo.cs" />
-    <Compile Include="Code\Classes\ContentFileReference.cs" />
     <Compile Include="Code\Serialization\Classes\ItemGroups.cs" />
     <Compile Include="Code\Serialization\Serialization Units\CSharpCodeFileSerializationUnit.cs" />
     <Compile Include="Code\Serialization\Serialization Units\CSharpProjectSerializationUnit.cs" />
@@ -95,7 +90,6 @@
     <Compile Include="Code\Serialization\Serializers\CSharpProjectSerializer.cs" />
     <Compile Include="Code\Physical\Visual Studio\SolutionPlatformExtensions.cs" />
     <Compile Include="Code\Physical\Visual Studio\VisualStudioVersionToolsVersionExtensions.cs" />
-    <Compile Include="Code\Project\Reference.cs" />
     <Compile Include="Code\Physical\Visual Studio\Import.cs" />
     <Compile Include="Code\Physical\Scopes\Classes\Scope.cs" />
     <Compile Include="Code\Physical\Scopes\Classes\NamespaceScope.cs" />
@@ -150,33 +144,6 @@
     <Compile Include="Code\Domains\IDomain.cs" />
     <Compile Include="Code\Enumerations\ProjectType.cs" />
     <Compile Include="Code\Enumerations\SolutionType.cs" />
-    <Compile Include="Code\Nodes\INode.cs" />
-    <Compile Include="Code\Nodes\Node.cs" />
-    <Compile Include="Code\Organization Paths Bad\BasePathInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Constants.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\CodeDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\DirectoryInfoBase.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\DomainDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\IDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\ProjectDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\RootDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\SolutionDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\File Infos\CodeFileInfoBad.cs" />
-    <Compile Include="Code\Organization Paths Bad\File Infos\FileInfoBase.cs" />
-    <Compile Include="Code\Organization Paths Bad\File Infos\IFileInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\File Infos\ProjectFileInfoBad.cs" />
-    <Compile Include="Code\Organization Paths Bad\File Infos\SolutionFileInfoBad.cs" />
-    <Compile Include="Code\Organization Paths Bad\IPathInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\OrganizationalPath.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\OrganizationDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\OrganizationsDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\RepositoriesDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\RepositoryDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\SolutionTypeDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\Directory Infos\SourceDirectoryInfo.cs" />
-    <Compile Include="Code\Organization Paths Bad\PathInfoBase.cs" />
-    <Compile Include="Code\Organization Paths Bad\PathInfoNode.cs" />
-    <Compile Include="Code\Organization Paths Bad\PathInfoRootNode.cs" />
     <Compile Include="Code\Organizations\IOrganization.cs" />
     <Compile Include="Code\Organizations\MinexOrganization.cs" />
     <Compile Include="Code\Organizations\Organizations.cs" />

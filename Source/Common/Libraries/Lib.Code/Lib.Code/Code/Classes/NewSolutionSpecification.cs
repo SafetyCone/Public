@@ -6,6 +6,7 @@ using Public.Common.Lib.Code.Physical;
 
 namespace Public.Common.Lib.Code
 {
+    // Ok.
     public class NewSolutionSpecification
     {
         public string OrganizationsDirectoryPath { get; set; }

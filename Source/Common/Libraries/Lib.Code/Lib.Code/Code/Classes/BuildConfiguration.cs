@@ -3,6 +3,7 @@
 
 namespace Public.Common.Lib.Code
 {
+    // Ok.
     public class BuildConfiguration : IEquatable<BuildConfiguration>
     {
         public const char BuildConfigurationTokenSeparator = '|';

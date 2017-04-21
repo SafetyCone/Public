@@ -44,6 +44,7 @@
     <Compile Include="Code\Exceptions\UnexpectedEnumerationValueException.cs" />
     <Compile Include="Code\Extensions\System.Collections.Generic.Dictionary.cs" />
     <Compile Include="Code\Extensions\System.String.cs" />
+    <Compile Include="Code\IO\FileWriter.cs" />
     <Compile Include="Code\IO\Paths\FilePathInfo.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />
