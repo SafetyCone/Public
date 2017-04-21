@@ -3,6 +3,10 @@
 
 namespace Public.Common.Lib.IO.Serialization
 {
+    /// <summary>
+    /// The base class of all serializers.
+    /// </summary>
+    /// <typeparam name="T">The serialization unit type.</typeparam>
     public abstract class SerializerBase<T> : ISerializer
         where T: class, ISerializationUnit
     {

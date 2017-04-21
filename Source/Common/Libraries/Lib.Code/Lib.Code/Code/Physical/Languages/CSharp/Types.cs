@@ -7,6 +7,9 @@ using LogicalTypes = Public.Common.Lib.Code.Logical.Types;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// Provides useful constants for important type names (like "Program"). These are substituted for logical placeholder names when serializing a logical class.
+    /// </summary>
     public class Types
     {
         public const string ProgramTypeName = @"Program";

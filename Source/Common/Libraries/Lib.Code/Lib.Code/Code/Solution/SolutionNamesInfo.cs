@@ -3,7 +3,6 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
     /// <summary>
     /// Holds the names for important properties of a solution, both logical and physical, like solution name, solution folder name, and solution file name.
     /// </summary>

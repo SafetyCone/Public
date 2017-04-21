@@ -5,8 +5,12 @@ using Public.Common.Lib.Code.Physical;
 
 namespace Public.Common.Lib.Code.Logical
 {
-    // Ok.
-    // See: https://www.codeproject.com/Reference/720512/List-of-Visual-Studio-Project-Type-GUIDs
+    /// <summary>
+    /// Specifies the exact Visual Studio project type.
+    /// </summary>
+    /// <remarks>
+    /// See: https://www.codeproject.com/Reference/720512/List-of-Visual-Studio-Project-Type-GUIDs
+    /// </remarks>
     public enum ProjectType
     {
         Console,
@@ -18,6 +22,9 @@ namespace Public.Common.Lib.Code.Logical
     }
 
 
+    /// <summary>
+    /// Basic string representations.
+    /// </summary>
     public static class ProjectTypeExtensions
     {
         public const string Console = @"Console";

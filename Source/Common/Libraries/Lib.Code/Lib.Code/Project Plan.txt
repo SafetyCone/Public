@@ -1,1 +1,10 @@
-﻿
+﻿Public.Common.Lib.Code
+
+Goals:
+* Allow creation of new solutions and projects named and structured just the way we like them; in accordance with the Minex standard.
+* Allow creation and addition of new code files to existing projects, written just the way we like them, and placed just where we want them; in accordance with the Minex standard.
+* Allow the creation of solution and project sets for all versions of Visual Studio (2010, 2013, 2015, 2017).
+* Allow replication of file references and other project items from the solutions and projects of the "default" version of Visual Studio to all other Visual Studio version solutions and projects in the same solution set.
+* Creat a commonly-named shortcut to the "default" Visual Studio solution for a solution set.
+
+This library contains functionality for creating new Console solutions and Library solutions.

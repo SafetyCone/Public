@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// The relative path of content file in a project that might be copied to the output directory.
+    /// </summary>
     public class ContentProjectItem : ProjectItem
     {
         public CopyToOutputDirectory CopyToOutputDirectory { get; set; }

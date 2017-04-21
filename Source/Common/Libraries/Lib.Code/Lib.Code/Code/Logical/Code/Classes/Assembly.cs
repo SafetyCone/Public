@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents an assembly as a dictionary of types keyed by type key (generally {namespaceName}.{className}).
+    /// </summary>
     public class Assembly
     {
         public string Name { get; set; }

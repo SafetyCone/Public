@@ -25,7 +25,7 @@ namespace Public.Common.Lib.Code.Physical
             output.DebugType = DebugType.Full;
             output.Optimize = false;
             string vsVersion = VisualStudioVersionExtensions.ToDefaultString(visualStudioVersion);
-            output.OutputPath = String.Format(@"\bin\{0}\Debug", vsVersion);
+            output.OutputPath = String.Format(@"bin\{0}\Debug", vsVersion);
             output.DefinedConstants.Add(BuildConfigurationInfo.DebugConstant);
             output.DefinedConstants.Add(BuildConfigurationInfo.TraceConstant);
 
@@ -39,7 +39,7 @@ namespace Public.Common.Lib.Code.Physical
             output.DebugType = DebugType.PdbOnly;
             output.Optimize = true;
             string vsVersion = VisualStudioVersionExtensions.ToDefaultString(visualStudioVersion);
-            output.OutputPath = String.Format(@"\bin\{0}\Release", vsVersion);
+            output.OutputPath = String.Format(@"bin\{0}\Release", vsVersion);
             output.DefinedConstants.Add(BuildConfigurationInfo.TraceConstant);
 
             return output;

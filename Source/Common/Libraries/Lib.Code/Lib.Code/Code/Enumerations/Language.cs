@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specifies the language of a Visual Studio project.
+    /// </summary>
     public enum Language
     {
         CSharp,
@@ -11,6 +13,9 @@ namespace Public.Common.Lib.Code
     }
 
 
+    /// <summary>
+    /// Basic string representations.
+    /// </summary>
     public static class LanguageExtensions
     {
         public const string CSharp = @"CSharp";

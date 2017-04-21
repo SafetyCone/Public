@@ -7,7 +7,9 @@ using Public.Common.Lib.Code.Physical;
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specifies information used in creating (constructing and serializing) a new Visual Studio project.
+    /// </summary>
     public class NewProjectSpecification
     {
         public OrganizationalInfo OrganizationalInfo { get; set; }

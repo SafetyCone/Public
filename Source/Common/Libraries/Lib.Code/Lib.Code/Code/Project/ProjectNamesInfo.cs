@@ -3,7 +3,6 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
     /// <summary>
     /// Holds the names for important properties of a project, both logical and physical, like project name, directory name, project file name, root namespace, and assembly name.
     /// </summary>

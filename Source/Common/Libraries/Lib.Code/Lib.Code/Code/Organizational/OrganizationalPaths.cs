@@ -4,7 +4,9 @@ using System.IO;
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Specifies and builds organization paths following the Minex organizational standard.
+    /// </summary>
     public class OrganizationalPaths
     {
         public const string DefaultOrganizationsDirectoryPath = @"C:\Organizations";

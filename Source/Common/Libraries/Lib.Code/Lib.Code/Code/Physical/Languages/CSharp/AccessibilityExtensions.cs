@@ -5,6 +5,9 @@ using Public.Common.Lib.Code.Logical;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// C# keyword representations.
+    /// </summary>
     public static class AccessibilityExtensions
     {
         public const string Private = Constants.PrivateKeyword;

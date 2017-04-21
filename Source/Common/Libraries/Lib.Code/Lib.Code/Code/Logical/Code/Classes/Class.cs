@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents the specification for a class type.
+    /// </summary>
     public class Class : LogicalStructuralTypeObjectBase
     {
         public bool IsStatic { get; set; } // Static cannot be abstract or sealed.

@@ -1,9 +1,11 @@
 ﻿using System;
 
 
-namespace Public.Common.Lib.Code
+namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Used in a physical solution to represent build properties for a project for a particular solution buiild configuration.
+    /// </summary>
     public class ProjectBuildConfigurationInfo
     {
         /// <summary>

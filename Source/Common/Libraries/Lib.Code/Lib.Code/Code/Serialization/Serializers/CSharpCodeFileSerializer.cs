@@ -15,6 +15,9 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Public.Common.Lib.Code.Serialization
 {
+    /// <summary>
+    /// Allows serialization ONLY of C# code files to a path. Designed for use in a serialization list.
+    /// </summary>
     public class CSharpCodeFileSerializer : SerializerBase<CSharpCodeFileSerializationUnit>
     {
         private const string UnexpectedScopeTypeErrorMessage = @"Unexpected type of scope.";

@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Hardware platform for build configurations.
+    /// </summary>
     public enum Platform
     {
         x86,
@@ -13,6 +15,9 @@ namespace Public.Common.Lib.Code
     }
 
 
+    /// <summary>
+    /// Non-space basic string representations.
+    /// </summary>
     public static class PlatformExtensions
     {
         public const string x86 = @"x86";

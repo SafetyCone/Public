@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Represents a reference to a project without its physical path.
+    /// </summary>
     public class ProjectReference
     {
         public string Name { get; set; }

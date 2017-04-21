@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Language project file extension representations.
+    /// </summary>
     public static class ProjectFileLanguageExtensions
     {
         public const string CSharp = @"csproj";

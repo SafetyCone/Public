@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Base class for all code logical objects (class, enums, methods, members, etc.).
+    /// </summary>
+    /// <remarks>
+    /// Designed for C#.
+    /// </remarks>
     public abstract class LogicalObjectBase
     {
         public Accessibility Accessibility { get; set; }

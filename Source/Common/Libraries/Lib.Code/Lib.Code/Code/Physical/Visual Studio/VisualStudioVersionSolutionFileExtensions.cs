@@ -3,6 +3,14 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
+    /// <summary>
+    /// Maps Visual Studio year version to Icon Handler and Visual Studio Version Selector solution version string.
+    /// </summary>
+    /// <remarks>
+    /// Via the magic of Icon Handlers and Visual Studio Version Selector, despite having the same .sln file extensions, solution files can specifiy with their contents what version of Visual Studio they require.
+    /// 
+    /// See: https://msdn.microsoft.com/en-us/library/cc144122%28VS.85%29.aspx?f=255&MSPPError=-2147217396
+    /// </remarks>
     public static class VisualStudioVersionSolutionFileExtensions
     {
         public const string VS2010 = @"# Visual Studio 2010";
@@ -44,11 +52,7 @@ namespace Public.Common.Lib.Code.Physical
             VisualStudioVersion output;
             if (!VisualStudioVersionSolutionFileExtensions.TryFromDefault(visualStudioVersion, out output))
             {
-#if (CSharp_6)
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", nameof(output));
-#else
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", "output");
-#endif  
+                throw new ArgumentException(@"Unrecognized Visual Studio version string.");
             }
 
             return output;

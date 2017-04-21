@@ -6,7 +6,9 @@ using Public.Common.Lib.Code.Physical;
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Contains information used in creating (construction and serializing) a new Visual Studio solution.
+    /// </summary>
     public class NewSolutionSpecification
     {
         public string OrganizationsDirectoryPath { get; set; }

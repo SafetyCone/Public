@@ -19,23 +19,17 @@ using Public.Common.Lib.IO.Serialization.Extensions;
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// A class containing all code for the creation of a new solution.
+    /// </summary>
     public class Creation
     {
-        public const string ConsoleProjectMoniker = @"Console";
-        public const string ConsoleLibraryProjectMoniker = @"ConsoleLibrary";
-        public const string LibraryProjectMoniker = @"Library";
-        public const string LibraryConstructionConsoleProjectMoniker = @"ConstructionConsole";
-
-        // Ok.
         public const string Lib = @"Lib";
-        // Ok.
         public const string Construction = @"Construction";
 
 
         #region Static
 
-        // OK.
         /// <summary>
         /// Creates (both constructs and serializes) a new solution based on the provided specification.
         /// </summary>
@@ -49,7 +43,6 @@ namespace Public.Common.Lib.Code
             serializationList.Serialize();
         }
 
-        // Ok.
         /// <summary>
         /// Constructs a new solution and add all component files (solution, projects, and classes) to the serialization list.
         /// </summary>
@@ -61,7 +54,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-       // Ok.
        /// <summary>
        /// Constructs a new solution in the given solution type directory.
        /// </summary>
@@ -79,7 +71,6 @@ namespace Public.Common.Lib.Code
             return solution;
         }
 
-        // Ok.
         private static List<ProjectReference> GetProjectReferences(string solutionFilePath, LogicalSolution solution)
         {
             List<ProjectReference> output = new List<ProjectReference>();
@@ -98,7 +89,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         /// <summary>
         /// Creates the solution, adding all sub-components to the serialization list.
         /// </summary>
@@ -123,7 +113,6 @@ namespace Public.Common.Lib.Code
             return solution;
         }
 
-        // Ok.
         /// <summary>
         /// Gets project specifications, including any references between projects (which means creating project specifications in a particular order).
         /// </summary>
@@ -145,7 +134,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         private static SolutionInfo GetSolutionInfo(NewSolutionSpecification specification)
         {
             SolutionInfo output = new SolutionInfo();
@@ -157,7 +145,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         /// <summary>
         /// Creates (constructs and serializes) a new project, including all code files.
         /// </summary>
@@ -186,7 +173,6 @@ namespace Public.Common.Lib.Code
             return project;
         }
 
-        // Ok.
         private static PhysicalCSharpProject CreatePhysicalCSharpProject(SerializationList serializationList, NewSolutionSpecification solutionSpecification, LogicalProject logicalProject)
         {
             PhysicalCSharpProject output = new PhysicalCSharpProject(logicalProject);
@@ -202,14 +188,12 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         private static string GetProjectDirectoryPath(string solutionDirectoryPath, ProjectInfo info)
         {
             string output = Path.Combine(solutionDirectoryPath, info.NamesInfo.DirectoryName);
             return output;
         }
 
-        // Ok.
         private static string GetProjectFilePath(string solutionDirectoryPath, ProjectInfo info)
         {
             string projectDirectoryPath = Creation.GetProjectDirectoryPath(solutionDirectoryPath, info);
@@ -362,7 +346,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static EmptyType GetAssemblyInfo(string title, Guid guid)
         {
             EmptyType output = new EmptyType(@"AssemblyInfo");
@@ -425,7 +408,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static Class CreateProgram(string namespaceName)
         {
             Class program = new Class(Logical.Types.ProgramTypeName, namespaceName, Accessibility.Private);
@@ -436,7 +418,6 @@ namespace Public.Common.Lib.Code
             return program;
         }
 
-        // Ok.
         private static Method CreateMain()
         {
             MethodArgument args = new MethodArgument(Logical.Types.StringArrayTypeName, @"args");
@@ -473,7 +454,6 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        // Ok.
         private static ProjectInfo GetProjectInfo(NewProjectSpecification specification)
         {
             ProjectInfo output = new ProjectInfo();
@@ -487,17 +467,6 @@ namespace Public.Common.Lib.Code
 
         #region Physical
 
-        private static string CreateSolutionFilePath(NewSolutionSpecification specification, PhysicalSolution solution)
-        {
-            string solutionDirectoryPath = Creation.CreateSolutionDirectoryPath(specification, solution.Info.NamesInfo);
-
-            string solutionFileName = String.Format(@"{0}.{1}", solution.Info.NamesInfo.FileName, SolutionSerializer.SolutionFileExtension);
-
-            string output = Path.Combine(solutionDirectoryPath, solutionFileName);
-            return output;
-        }
-
-        // Ok.
         public static PhysicalSolution CreatePhysicalSolution(
             NewSolutionSpecification specification,
             List<ProjectReference> projects,
@@ -517,7 +486,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         private static void AddDefaultProjectBuildConfigurations(PhysicalSolution physicalSolution, LogicalSolution logicalSolution)
         {
             switch (physicalSolution.VisualStudioVersion)
@@ -532,7 +500,6 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        // Ok.
         private static void AddDefaultProjectBuildConfigurationsVs2010(PhysicalSolution physicalSolution, LogicalSolution logicalSolution)
         {
             List<BuildConfiguration> buildConfigs = new List<BuildConfiguration>();
@@ -565,7 +532,6 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        // Ok.
         private static void AddDefaultProjectBuildConfigurationsNonVs2010(PhysicalSolution physicalSolution, LogicalSolution logicalSolution)
         {
             List<BuildConfiguration> buildConfigs = new List<BuildConfiguration>();
@@ -587,25 +553,6 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        public static ProjectReference GetReference(PhysicalCSharpProject physicalProject)
-        {
-            string name = physicalProject.Info.NamesInfo.Name;
-            string relativePath = Path.Combine(physicalProject.Info.NamesInfo.DirectoryName, physicalProject.Info.NamesInfo.FileName); // By this point, the project file name is complete with VsVersion and extension.
-            Guid guid = physicalProject.Info.GUID;
-
-            ProjectReference output = new ProjectReference(name, relativePath, guid);
-            return output;
-        }
-
-        private static string CreateProjectFilePath(NewSolutionSpecification solutionSpecification, LogicalSolution logicalSolution, PhysicalCSharpProject physicalProject)
-        {
-            string solutionDirectoryPath = Creation.CreateSolutionDirectoryPath(solutionSpecification, logicalSolution.Info.NamesInfo);
-
-            string output = Path.Combine(solutionDirectoryPath, physicalProject.Info.NamesInfo.DirectoryName, physicalProject.Info.NamesInfo.FileName);
-            return output;
-        }
-
-        // Ok.
         private static string CreateSolutionDirectoryPath(NewSolutionSpecification solutionSpecification, SolutionNamesInfo namesInfo)
         {
             OrganizationalInfo orgInfo = solutionSpecification.OrganizationalInfo;
@@ -683,7 +630,6 @@ namespace Public.Common.Lib.Code
 
         #region Logical
 
-        // Ok.
         private static void DetermineNamesInfoForProject(ProjectNamesInfo namesInfo, NewProjectSpecification specification)
         {
             string repository = specification.OrganizationalInfo.Repository;
@@ -751,48 +697,12 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        private static Dictionary<string, NewProjectSpecification> CreateProjectSpecificationsByMoniker(NewSolutionSpecification solutionSpecification)
-        {
-            Dictionary<string, NewProjectSpecification> output = new Dictionary<string, NewProjectSpecification>();
-            switch (solutionSpecification.SolutionType)
-            {
-                case SolutionType.Library:
-                    NewProjectSpecification constructionConsole = new NewProjectSpecification(solutionSpecification, ProjectType.Console);
-                    output.Add(Creation.LibraryConstructionConsoleProjectMoniker, constructionConsole);
-                    NewProjectSpecification library = new NewProjectSpecification(solutionSpecification, ProjectType.Library);
-                    output.Add(Creation.LibraryProjectMoniker, library);
-                    break;
-
-                default:
-                    // All others, including Applications, Experiments, Scripts and Web Sites.
-                    switch (solutionSpecification.ProjectType)
-                    {
-                        case ProjectType.Library:
-                            throw new InvalidOperationException(@"Cannot create a library project type for a non-library solution type.");
-
-                        case ProjectType.Console:
-                            NewProjectSpecification console = new NewProjectSpecification(solutionSpecification, ProjectType.Console);
-                            output.Add(Creation.ConsoleProjectMoniker, console);
-                            NewProjectSpecification supportLibrary = new NewProjectSpecification(solutionSpecification, ProjectType.Library);
-                            output.Add(Creation.ConsoleLibraryProjectMoniker, supportLibrary);
-                            break;
-
-                        default:
-                            throw new UnexpectedEnumerationValueException<ProjectType>(solutionSpecification.ProjectType);
-                    }
-                    break;
-            }
-
-            return output;
-        }
-
         public static string DetermineSolutionFilePath(string solutionTypeDirectoryPath, SolutionInfo info)
         {
             string output = Path.Combine(solutionTypeDirectoryPath, info.NamesInfo.DirectoryName, info.NamesInfo.DirectoryName);
             return output;
         }
 
-        // Ok.
         /// <summary>
         /// Gets the full solution file path.
         /// </summary>
@@ -805,7 +715,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static string DetermineSolutionTypeDirectoryPath(NewSolutionSpecification specification)
         {
             OrganizationalPaths paths = new OrganizationalPaths(
@@ -819,14 +728,12 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static string DetermineSolutionDirectoryPath(string solutionTypeDirectoryPath, NewSolutionSpecification specification)
         {
             string output = Path.Combine(solutionTypeDirectoryPath, specification.SolutionName);
             return output;
         }
 
-        // Ok.
         /// <summary>
         /// The solution file name includes the VS version and the file extension.
         /// </summary>
@@ -836,7 +743,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static string DetermineSolutionFileName(string solutionName, SolutionType solutionType, string domain, string repository, VisualStudioVersion visualStudioVersion)
         {
             string logicalSolutionName = Creation.DetermineLogicalSolutionFileName(solutionName, solutionType, domain, repository);
@@ -855,7 +761,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        // Ok.
         public static string DetermineLogicalSolutionFileName(string solutionName, SolutionType solutionType, string domain, string repository)
         {
             // In all names, no Visual Studio token yet, that will be added during logical to physial translation. No file extension either, that will be added during serialization to a file.

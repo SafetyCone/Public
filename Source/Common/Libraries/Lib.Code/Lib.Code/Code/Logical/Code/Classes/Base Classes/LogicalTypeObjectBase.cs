@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Base class for all logical types that can be their own type (classes, structs, delegates, enums; NOT members and methods).
+    /// </summary>
     public abstract class LogicalTypeObjectBase : LogicalObjectBase
     {
         #region Static

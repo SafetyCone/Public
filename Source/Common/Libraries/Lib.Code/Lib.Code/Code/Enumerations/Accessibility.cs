@@ -1,9 +1,11 @@
 ﻿using System;
 
 
-namespace Public.Common.Lib.Code.Logical
+namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specified the accessibility of a logical code object.
+    /// </summary>
     public enum Accessibility
     {
         Private,

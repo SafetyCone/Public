@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
+    /// <summary>
+    /// Maps Visual Studio year version to majory product version.
+    /// </summary>
     public static class VisualStudioVersionToolsVersionExtensions
     {
         public const int VS2010 = 4;

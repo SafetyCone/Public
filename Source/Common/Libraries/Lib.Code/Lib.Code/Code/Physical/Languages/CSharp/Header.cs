@@ -6,6 +6,14 @@ using Public.Common.Lib.Code.Logical;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// Represents the header of a C# code file.
+    /// </summary>
+    /// <remarks>
+    /// Provides space to specify usings (including both imports and aliases).
+    /// 
+    /// Could be expanded to include a header comment.
+    /// </remarks>
     public class Header
     {
         public HashSet<UsingDeclaration> Usings { get; protected set; }

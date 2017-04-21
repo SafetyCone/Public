@@ -16,6 +16,9 @@ namespace Public.Common.Lib.Code.Serialization
     // The app designer folder will always be the default.
     // The file alignment will always be the default.
     // Autogenerate binding redirects will always be true, and is only set during serialization.
+    /// <summary>
+    /// Allows deserialization/serialization of a Visual Studio C# project to a path. Designed for use in a serialization list.
+    /// </summary>
     public class CSharpProjectSerializer : SerializerBase<CSharpProjectSerializationUnit>
     {
         private const string MicrosoftCommonPropsImportKey = @"$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props";

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
     /// <summary>
     /// A physical solution represents a solution file, and can be serialized to/deserialized from a solution file.
     /// </summary>

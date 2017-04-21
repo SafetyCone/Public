@@ -2,6 +2,9 @@
 
 namespace Public.Common.Lib.Code
 {
+    /// <summary>
+    /// Represents the Minex organization.
+    /// </summary>
     public sealed class MinexOrganization : IOrganization
     {
         public const string OrganizationName = @"Minex";

@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Represents an import used in the build of a project file.
+    /// </summary>
     public class Import : IEquatable<Import>
     {
         #region Static

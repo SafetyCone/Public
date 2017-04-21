@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// Allows a namespace or type to be aliased (for example, in the case of name conflicts).
+    /// </summary>
     public class AliasDeclaration : UsingDeclaration
     {
         public string Alias { get; set; }

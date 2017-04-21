@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.IO.Serialization.Extensions
 {
-    // Ok.
+    /// <summary>
+    /// Extensions to the serialization list to streamline use of basic serializer units.
+    /// </summary>
     public static class SerializationListExtensions
     {
         public const string DefaultCreateDirectoryMoniker = @"DefaultCreateDirectory";

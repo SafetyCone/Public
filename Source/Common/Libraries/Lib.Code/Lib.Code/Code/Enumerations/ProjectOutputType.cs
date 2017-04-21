@@ -3,15 +3,29 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Specifies the Visual Studio project output type.
+    /// </summary>
     public enum ProjectOutputType
     {
+        /// <summary>
+        /// Console program.
+        /// </summary>
         Exe, // Console executable.
+        /// <summary>
+        /// Non-executable libaray (DLL).
+        /// </summary>
         Library, // Library.
+        /// <summary>
+        /// Windows GUI program (Windows Forms, WPF, etc.).
+        /// </summary>
         WinExe, // Windows executable.
     }
 
 
+    /// <summary>
+    /// String representations for project file reading/writing.
+    /// </summary>
     public static class ProjectOutputTypeExtensions
     {
         public const string Exe = @"Exe";

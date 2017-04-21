@@ -6,7 +6,10 @@ using Public.Common.Lib.IO;
 
 namespace Public.Common.Lib.Code.Physical
 {
-    public class CodeFileWriter : FileWriter
+    /// <summary>
+    /// Provides methods useful in write code in text files. The class is disposable and should be used in a using block.
+    /// </summary>
+    public class CodeFileWriter : TextFileWriter
     {
         public const string DefaultIndentSegment = @"    ";
 

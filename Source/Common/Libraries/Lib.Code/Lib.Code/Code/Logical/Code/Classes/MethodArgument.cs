@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents an input argument to a method.
+    /// </summary>
     public class MethodArgument
     {
         #region Static

@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Public.Common.Lib.IO
 {
-    public class FileWriter : IDisposable
+    /// <summary>
+    /// Provides methods useful in writing text files.
+    /// </summary>
+    public class TextFileWriter : IDisposable
     {
         #region IDisposable Members
 
@@ -35,7 +38,7 @@ namespace Public.Common.Lib.IO
             this.zDisposed = true;
         }
 
-        ~FileWriter()
+        ~TextFileWriter()
         {
             this.CleanUp(false);
         }
@@ -48,12 +51,12 @@ namespace Public.Common.Lib.IO
         public StreamWriter Writer { get; protected set; }
 
 
-        public FileWriter(string path)
+        public TextFileWriter(string path)
             : this(path, Encoding.UTF8)
         {
         }
 
-        public FileWriter(string path, Encoding encoding)
+        public TextFileWriter(string path, Encoding encoding)
         {
             this.Path = path;
             this.Encoding = encoding;

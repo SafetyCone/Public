@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// C# code constants, including keywords and special syntax characters.
+    /// </summary>
     public class Constants
     {
         public const string AbstractKeyword = @"abstract";
@@ -31,17 +34,6 @@ namespace Public.Common.Lib.Code.Physical.CSharp
         public const char CallBeginOperatorChar = '(';
         public const char CallEndOperatorChar = ')';
 
-        public const string ProgramClassName = @"Program";
-
-        public const string MainMethodName = @"Main";
-
         public const string CodeFileExtension = @"cs";
-
-
-        #region Static
-
-
-
-        #endregion
     }
 }

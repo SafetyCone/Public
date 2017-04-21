@@ -9,6 +9,9 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Public.Common.Lib.Code.Serialization
 {
+    /// <summary>
+    /// Allows deserialization/serialization of a Visual Studio C# solution to a path. Designed for use in a serialization list.
+    /// </summary>
     public class SolutionSerializer : SerializerBase<SolutionSerializationUnit>
     {
         public const string SolutionFileExtension = @"sln";

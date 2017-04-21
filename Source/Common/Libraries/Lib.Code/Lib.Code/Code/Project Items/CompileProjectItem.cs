@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// The relative path of compiled file in a project.
+    /// </summary>
     public class CompileProjectItem : ProjectItem
     {
         public CompileProjectItem()

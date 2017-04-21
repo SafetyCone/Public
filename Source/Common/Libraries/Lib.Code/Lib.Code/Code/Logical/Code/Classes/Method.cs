@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents the specification of a method.
+    /// </summary>
     public class Method : LogicalObjectBase
     {
         #region Static

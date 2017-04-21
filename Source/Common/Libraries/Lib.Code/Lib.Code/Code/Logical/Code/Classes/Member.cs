@@ -2,6 +2,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents a data member.
+    /// </summary>
     public class Member : LogicalObjectBase
     {
         public bool IsStatic { get; set; } // Static cannot be abstract, virtual, or override; or sealed.

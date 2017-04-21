@@ -5,7 +5,9 @@ using Public.Common.Lib;
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Specifies the Visual Studio year version.
+    /// </summary>
     public enum VisualStudioVersion
     {
         VS2010,
@@ -15,7 +17,12 @@ namespace Public.Common.Lib.Code.Physical
     }
 
 
-    // Ok.
+    /// <summary>
+    /// Basic human and machine readable string representations.
+    /// </summary>
+    /// <remarks>
+    /// This format is used in solution and project file tokens.
+    /// </remarks>
     public static class VisualStudioVersionExtensions
     {
         public const string VS2010 = @"VS2010";

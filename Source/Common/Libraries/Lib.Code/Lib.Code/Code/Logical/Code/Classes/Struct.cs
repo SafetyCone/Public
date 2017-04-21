@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents the specification for a structure.
+    /// </summary>
     public class Struct : LogicalStructuralTypeObjectBase
     {
         public Struct()

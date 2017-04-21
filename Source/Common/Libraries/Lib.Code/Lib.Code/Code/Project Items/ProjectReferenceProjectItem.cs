@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// The relative path and properties of a project referenced by a project.
+    /// </summary>
     public class ProjectReferenceProjectItem : ProjectItem
     {
         public Guid GUID { get; set; }

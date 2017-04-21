@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// .NET Framework versions.
+    /// </summary>
     public enum NetFrameworkVersion
     {
         NetFramework10,
@@ -22,6 +24,9 @@ namespace Public.Common.Lib.Code
     }
 
 
+    /// <summary>
+    /// Non-machine human readable string representations.
+    /// </summary>
     public static class NetFrameworkVersionExtensions
     {
         public const string NetFramework10 = @"NetFramework10";
@@ -184,6 +189,9 @@ namespace Public.Common.Lib.Code
     }
 
 
+    /// <summary>
+    /// Machine readable version strings in the 'v' format (example: v4.0).
+    /// </summary>
     public static class NetFrameworkVersionVFormatExtensions
     {
         public const string NetFramework10 = @"v1.0";

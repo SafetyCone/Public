@@ -1,12 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Public.Common.Lib.Code.Logical;
 
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
-    // Ok.
+    /// <summary>
+    /// Represents the physical structure of a C# code file.
+    /// </summary>
+    /// <remarks>
+    /// Generally, a code file contains a logical type object. Frequently a code file contains multiple types and sometimes a type can be split over multiple files (a partial class).
+    /// Thus a logical type can easily be translated to a code file, but the reverse is more difficult and is thus unimplemented.
+    /// A code file can be serialized to a path, but the reverse is again more difficult and is thus unimplemented.
+    /// </remarks>
     public class CodeFile : CodeFileBase
     {
         #region Static
@@ -75,12 +81,11 @@ namespace Public.Common.Lib.Code.Physical.CSharp
 
 
         public Header Header { get; set; }
-        public List<ScopeBase> Scopes { get; protected set; }
 
 
         public CodeFile()
+            : base()
         {
-            this.Scopes = new List<ScopeBase>();
         }
     }
 }

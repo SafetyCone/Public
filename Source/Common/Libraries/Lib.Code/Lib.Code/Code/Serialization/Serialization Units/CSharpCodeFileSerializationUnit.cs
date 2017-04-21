@@ -6,6 +6,9 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Public.Common.Lib.Code.Serialization
 {
+    /// <summary>
+    /// A C# code file serialize unit.
+    /// </summary>
     public class CSharpCodeFileSerializationUnit : SerializationUnitBase
     {
         public CodeFile CodeFile { get; set; }

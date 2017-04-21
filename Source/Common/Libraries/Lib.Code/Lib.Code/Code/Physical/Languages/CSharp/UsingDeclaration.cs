@@ -5,6 +5,9 @@ using Public.Common.Lib.Code.Logical;
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// Allows specifying a namespace for importing into a code file.
+    /// </summary>
     public class UsingDeclaration : IComparable<UsingDeclaration>, IEquatable<UsingDeclaration>
     {
         #region Static

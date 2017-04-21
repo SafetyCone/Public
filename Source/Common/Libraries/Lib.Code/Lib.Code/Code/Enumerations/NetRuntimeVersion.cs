@@ -3,12 +3,21 @@
 
 namespace Public.Common.Lib.Code
 {
+    /// <summary>
+    /// .NET runtime versions.
+    /// </summary>
+    /// <remarks>
+    /// This is different from the .NET Framework version. In fact, the runtime version has not changed since version 4.0.
+    /// </remarks>
     public enum NetRuntimeVersion
     {
         Runtime40,
     }
 
 
+    /// <summary>
+    /// Non-machine, human readable runtime versions.
+    /// </summary>
     public static class NetRuntimeVersionExtensions
     {
         public const string Runtime40 = @"Runtime40";

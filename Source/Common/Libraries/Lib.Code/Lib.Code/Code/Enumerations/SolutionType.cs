@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
-    // Ok.
+    /// <summary>
+    /// The solution type within a domain. These are specified by the Minex organization paths standard.
+    /// </summary>
     public enum SolutionType
     {
         Application,
@@ -13,6 +15,9 @@ namespace Public.Common.Lib.Code.Logical
     }
 
 
+    /// <summary>
+    /// Basic singular string representations.
+    /// </summary>
     public static class SolutionTypeExtensions
     {
         public const string Application = @"Application";
@@ -94,7 +99,9 @@ namespace Public.Common.Lib.Code.Logical
     }
 
 
-    // Ok.
+    /// <summary>
+    /// Basic plural string representations.
+    /// </summary>
     public static class SolutionTypePluralExtensions
     {
         public const string Applications = @"Applications";

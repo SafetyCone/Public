@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Serialization
 {
+    /// <summary>
+    /// Disaggregates project items into groups of specific types of project items for easier processing.
+    /// </summary>
     public class ItemGroups
     {
         #region Static

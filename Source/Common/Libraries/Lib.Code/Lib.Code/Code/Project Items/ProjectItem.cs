@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// The base class for all project items.
+    /// </summary>
     public abstract class ProjectItem
     {
         public const string Compile = @"Compile";

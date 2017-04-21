@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Specifies a Visual Studio project build configuration debug type.
+    /// </summary>
     public enum DebugType
     {
         Full,
@@ -11,6 +13,9 @@ namespace Public.Common.Lib.Code.Physical
     }
 
 
+    /// <summary>
+    /// For use in reading/writing Visual Studio project files.
+    /// </summary>
     public static class DebugTypeExtensions
     {
         public const string Full = @"full";

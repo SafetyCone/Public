@@ -6,6 +6,9 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Public.Common.Lib.Code.Serialization
 {
+    /// <summary>
+    /// A Visual Studio C# project file serialization unit.
+    /// </summary>
     public class CSharpProjectSerializationUnit : SerializationUnitBase
     {
         public Project Project { get; set; }

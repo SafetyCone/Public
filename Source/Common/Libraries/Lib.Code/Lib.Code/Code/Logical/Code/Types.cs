@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Provides placeholder names for important type names. These are replaced in the physical code file by the actual type name.
+    /// </summary>
     public class Types
     {
         public const string ProgramTypeName = @"PROGRAM_TYPE_NAME";

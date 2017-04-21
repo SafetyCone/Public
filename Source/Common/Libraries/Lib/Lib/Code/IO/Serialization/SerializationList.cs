@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.IO.Serialization
 {
-    // Ok.
     /// <summary>
     /// A list of [serialization unit, serializer] pairs that can accumulate objects in need of serialization, then serialize all objects in one step.
     /// </summary>

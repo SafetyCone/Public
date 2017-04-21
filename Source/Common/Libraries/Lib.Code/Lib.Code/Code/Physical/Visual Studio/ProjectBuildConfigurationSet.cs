@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 
 
-namespace Public.Common.Lib.Code
+namespace Public.Common.Lib.Code.Physical
 {
-    // Ok.
+    /// <summary>
+    /// Used in a physical solution to represent build properties for all projects for a particular solutio build configuration.
+    /// </summary>
     public class ProjectBuildConfigurationSet
     {
         public BuildConfiguration BuildConfiguration { get; set; }

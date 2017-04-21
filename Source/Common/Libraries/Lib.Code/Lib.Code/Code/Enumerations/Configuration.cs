@@ -3,14 +3,18 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specifies the configuration for building a unit of code.
+    /// </summary>
     public enum Configuration
     {
         Debug,
         Release
     }
 
-
+    /// <summary>
+    /// Basic string representations.
+    /// </summary>
     public static class ConfigurationExtensions
     {
         public const string Debug = @"Debug";
@@ -42,11 +46,7 @@ namespace Public.Common.Lib.Code
             Configuration output;
             if (!ConfigurationExtensions.TryFromDefault(configuration, out output))
             {
-#if (CSharp_6)
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", nameof(output));
-#else
-                throw new ArgumentException(@"Unrecognized configuration string.", "output");
-#endif  
+                throw new ArgumentException(@"Unrecognized configuration string.");
             }
 
             return output;

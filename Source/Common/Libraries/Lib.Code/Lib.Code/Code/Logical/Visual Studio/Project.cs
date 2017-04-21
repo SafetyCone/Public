@@ -6,7 +6,7 @@ namespace Public.Common.Lib.Code.Logical
 {
     // Ok.
     /// <summary>
-    /// This class represents a project, which is basically a dictionary of project items by relative path.
+    /// Logically represents a project in memory, which is basically a dictionary of project items by relative path.
     /// </summary>
     /// <remarks>
     /// A project file can be deserialized to a physical project object, then translated from a physical project object to this logical project object.

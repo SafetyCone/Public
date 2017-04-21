@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// A configuration-platform pair (example: Debug-Any CPU).
+    /// </summary>
     public class BuildConfiguration : IEquatable<BuildConfiguration>
     {
         public const char BuildConfigurationTokenSeparator = '|';

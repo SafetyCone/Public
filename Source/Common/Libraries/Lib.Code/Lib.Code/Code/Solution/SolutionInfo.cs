@@ -5,7 +5,6 @@ using Public.Common.Lib.Code.Logical;
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
     /// <summary>
     /// Holds property values for important details about a project, including solution type and naming info.
     /// </summary>

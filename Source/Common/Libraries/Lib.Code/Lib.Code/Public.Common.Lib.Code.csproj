@@ -40,24 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Domains\Domains.cs" />
     <Compile Include="Code\IO\CodeFileWriter.cs" />
     <Compile Include="Code\IO\CSharpCodeFileWriter.cs" />
     <Compile Include="Code\Classes\NewProjectSpecification.cs" />
     <Compile Include="Code\Enumerations\Configuration.cs" />
     <Compile Include="Code\Enumerations\CopyToOutputDirectory.cs" />
     <Compile Include="Code\Enumerations\DebugType.cs" />
-    <Compile Include="Code\Enumerations\ErrorReport.cs" />
     <Compile Include="Code\Enumerations\NetFrameworkVersion.cs" />
     <Compile Include="Code\Enumerations\NetRuntimeVersion.cs" />
     <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Code\Enumerations\ProjectOutputType.cs" />
     <Compile Include="Code\Enumerations\VisualStudioVersion.cs" />
-    <Compile Include="Code\Logical\Code\EmptyType.cs" />
+    <Compile Include="Code\Logical\Code\Classes\EmptyType.cs" />
     <Compile Include="Code\Logical\Code\Namespaces.cs" />
     <Compile Include="Code\Classes\BuildConfiguration.cs" />
     <Compile Include="Code\Classes\Creation.cs" />
     <Compile Include="Code\Logical\Visual Studio\Project.cs" />
-    <Compile Include="Code\Classes\ProjectBuildConfigurationSet.cs" />
+    <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationSet.cs" />
     <Compile Include="Code\Project Items\CompileProjectItem.cs" />
     <Compile Include="Code\Project Items\ContentProjectItem.cs" />
     <Compile Include="Code\Project Items\FolderProjectItem.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="Code\Project Items\ProjectReferenceProjectItem.cs" />
     <Compile Include="Code\Project Items\ReferenceProjectItem.cs" />
     <Compile Include="Code\Project\ProjectReference.cs" />
-    <Compile Include="Code\Classes\ProjectBuildConfigurationInfo.cs" />
+    <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationInfo.cs" />
     <Compile Include="Code\Logical\Visual Studio\Solution.cs" />
     <Compile Include="Code\Organizational\OrganizationalInfo.cs" />
     <Compile Include="Code\Physical\Visual Studio\ProjectFileLanguageExtensions.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="Code\Physical\Languages\CSharp\Methods.cs" />
     <Compile Include="Code\Physical\Languages\CSharp\Types.cs" />
     <Compile Include="Code\Physical\Visual Studio\BuildConfigurationInfo.cs" />
+    <Compile Include="Code\Repositories\Repositories.cs" />
     <Compile Include="Code\Serialization\Classes\ItemGroups.cs" />
     <Compile Include="Code\Serialization\Serialization Units\CSharpCodeFileSerializationUnit.cs" />
     <Compile Include="Code\Serialization\Serialization Units\CSharpProjectSerializationUnit.cs" />
@@ -146,7 +147,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Files\Test.txt" />
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup />

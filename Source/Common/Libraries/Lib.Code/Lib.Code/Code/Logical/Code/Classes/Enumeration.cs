@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents the specification for an enumeration.
+    /// </summary>
     public class Enumeration : LogicalTypeObjectBase
     {
         public List<string> Values { get; protected set; }

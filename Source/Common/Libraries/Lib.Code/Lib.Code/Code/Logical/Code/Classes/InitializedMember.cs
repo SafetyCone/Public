@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents a data member that is initialized with a value.
+    /// </summary>
     public class InitializedMember : Member
     {
         public bool IsConst { get; set; }

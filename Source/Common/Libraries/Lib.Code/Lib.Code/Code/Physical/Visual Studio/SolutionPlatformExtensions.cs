@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical
 {
+    /// <summary>
+    /// Spaced platform string representations.
+    /// </summary>
     public static class SolutionPlatformExtensions
     {
         public const string x86 = @"x86";
@@ -44,11 +47,7 @@ namespace Public.Common.Lib.Code.Physical
             Platform output;
             if (!SolutionPlatformExtensions.TryFromDefault(platform, out output))
             {
-#if (CSharp_6)
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", nameof(output));
-#else
-                throw new ArgumentException(@"Unrecognized solution platform string.", "output");
-#endif  
+                throw new ArgumentException(@"Unrecognized solution platform string.");
             }
 
             return output;

@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specifies whether a Visual Studio project content file should be copied to the output build directory.
+    /// </summary>
     public enum CopyToOutputDirectory
     {
         Never,
@@ -16,6 +18,9 @@ namespace Public.Common.Lib.Code
     }
 
 
+    /// <summary>
+    /// For use in reading/writing a Visual Studio project file.
+    /// </summary>
     public static class CopyToOutputDirectoryExtensions
     {
         public const string Never = @"Never";

@@ -2,6 +2,9 @@
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents the specification of a delegate type, which just contains a method.
+    /// </summary>
     public class Delegate : LogicalTypeObjectBase
     {
         public Method Method { get; set; }

@@ -3,7 +3,9 @@
 
 namespace Public.Common.Lib.Code
 {
-    // Ok.
+    /// <summary>
+    /// Specifies information about the organization location of code.
+    /// </summary>
     public class OrganizationalInfo
     {
         public string Organization { get; set; }

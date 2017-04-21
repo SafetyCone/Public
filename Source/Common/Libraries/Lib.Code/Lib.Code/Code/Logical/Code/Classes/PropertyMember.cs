@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Public.Common.Lib.Code.Logical
 {
+    /// <summary>
+    /// Represents a property, which is a get method, a set method, and a data member all in one.
+    /// </summary>
     public class PropertyMember : Member
     {
         public Accessibility GetAccessibility { get; set; }

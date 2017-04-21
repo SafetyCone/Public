@@ -3,6 +3,9 @@
 
 namespace Public.Common.Lib.Code.Physical.CSharp
 {
+    /// <summary>
+    /// Provides methods useful in writing C# code files.
+    /// </summary>
     public class CSharpCodeFileWriter : CodeFileWriter
     {
         public Types Types { get; protected set; }
