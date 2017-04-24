@@ -26,5 +26,10 @@ namespace Public.Common.Lib.Code
             this.DirectoryName = directoryName;
             this.FileName = FileName;
         }
+
+        public SolutionNamesInfo(SolutionNamesInfo other)
+            : this(other.Name, other.DirectoryName, other.FileName)
+        {
+        }
     }
 }

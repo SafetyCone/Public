@@ -38,7 +38,7 @@ namespace Public.Common.Lib.Code
         }
 
         public ProjectInfo(ProjectInfo other)
-            : this(other.GUID, other.Language, other.Type, other.NamesInfo)
+            : this(other.GUID, other.Language, other.Type, new ProjectNamesInfo(other.NamesInfo))
         {
         }
     }

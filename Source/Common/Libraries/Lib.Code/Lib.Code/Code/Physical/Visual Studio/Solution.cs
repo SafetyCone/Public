@@ -25,5 +25,18 @@ namespace Public.Common.Lib.Code.Physical
             this.ProjectsByGuid = new Dictionary<Guid, ProjectReference>();
             this.ProjectBuildConfigurationsBySolutionBuildConfiguration = new Dictionary<BuildConfiguration, ProjectBuildConfigurationSet>();
         }
+
+        public Solution(Solution other)
+        {
+            this.Info = new SolutionInfo(other.Info);
+            this.VisualStudioVersion = other.VisualStudioVersion;
+            this.ProjectsByGuid = new Dictionary<Guid, ProjectReference>();
+            foreach(Guid guid in other.ProjectsByGuid.Keys)
+            {
+                ProjectReference referenceCopy = new ProjectReference(other.ProjectsByGuid[guid]);
+                this.ProjectsByGuid.Add(guid, referenceCopy);
+            }
+            this.ProjectBuildConfigurationsBySolutionBuildConfiguration = new Dictionary<BuildConfiguration, ProjectBuildConfigurationSet>(other.ProjectBuildConfigurationsBySolutionBuildConfiguration);
+        }
     }
 }

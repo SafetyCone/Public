@@ -30,6 +30,138 @@ namespace Public.Common.Lib.Code
 
         #region Static
 
+        #region Create Solution Set
+
+        public static void CreateSolutionSet(string initialSolutionFilePath, IEnumerable<VisualStudioVersion> desiredVsVersions)
+        {
+            string solutionDirectoryPath = Path.GetDirectoryName(initialSolutionFilePath);
+            string solutionFileName = Path.GetFileName(initialSolutionFilePath);
+            SolutionFileNameInfo fileNameInfo = SolutionFileNameInfo.Parse(initialSolutionFilePath);
+
+            // Deserialize the solution file to a physical solution object.
+            PhysicalSolution initialSolution = SolutionSerializer.Deserialize(initialSolutionFilePath);
+
+            // Determine the paths to each project referenced by the solution object.
+            List<string> projectFilePaths = new List<string>();
+            foreach(ProjectReference initialProjectReference in initialSolution.ProjectsByGuid.Values)
+            {
+                string projectFileUnresolvedPath = Path.Combine(solutionDirectoryPath, initialProjectReference.RelativePath);
+                string projectFilePath = PathExtensions.GetResolvedPath(projectFileUnresolvedPath);
+                projectFilePaths.Add(projectFilePath);
+            }
+
+            // Deserialize each project file to a physical project object.
+            Dictionary<string, PhysicalCSharpProject> initialProjectsByPath = new Dictionary<string, PhysicalCSharpProject>();
+            foreach(string projectFilePath in projectFilePaths)
+            {
+                PhysicalCSharpProject curInitialProject = CSharpProjectSerializer.Deserialize(projectFilePath);
+                initialProjectsByPath.Add(projectFilePath, curInitialProject);
+            }
+
+            // Determine the paths of all desired VS version solution files.
+            List<Tuple<string, VisualStudioVersion>> solutionFilePathVsVersionPairs = new List<Tuple<string, VisualStudioVersion>>();
+            foreach(VisualStudioVersion desiredVsVersion in desiredVsVersions)
+            {
+                SolutionFileNameInfo curVersion = new SolutionFileNameInfo(fileNameInfo);
+                curVersion.VisualStudioVersion = desiredVsVersion;
+
+                string desiredSolutionFileName = SolutionFileNameInfo.Format(curVersion);
+                string desiredSolutionFilePath = Path.Combine(solutionDirectoryPath, desiredSolutionFileName);
+                solutionFilePathVsVersionPairs.Add(new Tuple<string, VisualStudioVersion>(desiredSolutionFilePath, desiredVsVersion));
+            }
+
+            // Check to see if the files exist.
+            //  If they do then we are on to the situation of distributing information from files of one version of VS to files of another version of VS.
+            //  If they don't, then create these solution files.
+            foreach(Tuple<string, VisualStudioVersion> solutionFilePathVsVersionPair in solutionFilePathVsVersionPairs)
+            {
+                VisualStudioVersion desiredVsVersion = solutionFilePathVsVersionPair.Item2;
+
+                string filePath = solutionFilePathVsVersionPair.Item1;
+                if (!File.Exists(filePath))
+                {
+                    PhysicalSolution curVsVersionSolution = new PhysicalSolution(initialSolution);
+                    curVsVersionSolution.VisualStudioVersion = desiredVsVersion;
+
+                    // Now modify all project file paths to have the proper VS Version token.
+                    foreach(ProjectReference reference in curVsVersionSolution.ProjectsByGuid.Values)
+                    {
+                        string relativePath = reference.RelativePath;
+                        string relativePathDirectory = Path.GetDirectoryName(relativePath);
+                        string relativeFileName = Path.GetFileName(relativePath);
+
+                        ProjectFileNameInfo fileInfo = ProjectFileNameInfo.Parse(relativeFileName, initialSolution.VisualStudioVersion);
+                        fileInfo.VisualStudioVersion = desiredVsVersion;
+
+                        string newRelativeFileName = ProjectFileNameInfo.Format(fileInfo);
+                        reference.RelativePath = Path.Combine(relativePathDirectory, newRelativeFileName);
+                    }
+
+                    SolutionSerializer.Serialize(filePath, curVsVersionSolution);
+                }
+            }
+
+            // Foreach project, determine the paths of all desired VS version project files.
+            Dictionary<string, List<Tuple<string, VisualStudioVersion>>> projectFilePathVsVersionPairsByInitialProjectPath = new Dictionary<string, List<Tuple<string, VisualStudioVersion>>>();
+            foreach (string path in initialProjectsByPath.Keys)
+            {
+                List<Tuple<string, VisualStudioVersion>> projectFilePathVsVersionPairs = new List<Tuple<string, VisualStudioVersion>>();
+                projectFilePathVsVersionPairsByInitialProjectPath.Add(path, projectFilePathVsVersionPairs);
+
+                string projectDirectoryPath = Path.GetDirectoryName(path);
+
+                ProjectFileNameInfo projectFileNameInfo = ProjectFileNameInfo.Parse(path, initialSolution.VisualStudioVersion);
+                foreach(VisualStudioVersion desiredVsVersion in desiredVsVersions)
+                {
+                    ProjectFileNameInfo curVersion = new ProjectFileNameInfo(projectFileNameInfo);
+                    curVersion.VisualStudioVersion = desiredVsVersion;
+
+                    string desiredProjectFileName = ProjectFileNameInfo.Format(curVersion);
+                    string desiredProjectFilePath = Path.Combine(projectDirectoryPath, desiredProjectFileName);
+
+                    projectFilePathVsVersionPairs.Add(new Tuple<string, VisualStudioVersion>(desiredProjectFilePath, desiredVsVersion));
+                }
+            }
+
+            // Check to see if the files exist.
+            //  If they do, then we have the same situation as distributing information from files of one version of VS to files of another version of VS.
+            //  If they don't , then create these new project files.
+            foreach(string initialProjectPath in projectFilePathVsVersionPairsByInitialProjectPath.Keys)
+            {
+                PhysicalCSharpProject initialProject = initialProjectsByPath[initialProjectPath];
+                List<Tuple<string, VisualStudioVersion>> projectFilePathVsVersionPairs = projectFilePathVsVersionPairsByInitialProjectPath[initialProjectPath];
+
+                foreach(Tuple<string, VisualStudioVersion> projectFilePathVsVersionPair in projectFilePathVsVersionPairs)
+                {
+                    string desiredProjectPath = projectFilePathVsVersionPair.Item1;
+                    VisualStudioVersion desiredVsVersion = projectFilePathVsVersionPair.Item2;
+
+                    PhysicalCSharpProject curVsVersionProject = new PhysicalCSharpProject(initialProject);
+                    curVsVersionProject.VisualStudioVersion = desiredVsVersion;
+
+                    // Any changes to the project items required for Visual Studio project translation should be done here.
+                    // TODO, app.config or App.config? SHOULD be the same file, or perhaps versioned by Visual Studio version.
+
+                    CSharpProjectSerializer.Serialize(desiredProjectPath, curVsVersionProject);
+                }
+            }
+        }
+
+        public static void CreateSolutionSet(NewSolutionSetSpecification solutionSetSpecification)
+        {
+            foreach(VisualStudioVersion vsVersion in solutionSetSpecification.VisualStudioVersions)
+            {
+                NewSolutionSpecification solutionSpecification = new NewSolutionSpecification(solutionSetSpecification.BaseSolutionSpecification);
+                solutionSpecification.VisualStudioVersion = vsVersion;
+
+                Creation.CreateSolution(solutionSpecification);
+            }
+        }
+
+        #endregion
+
+        #region Create Solution
+
         /// <summary>
         /// Creates (both constructs and serializes) a new solution based on the provided specification.
         /// </summary>
@@ -99,10 +231,10 @@ namespace Public.Common.Lib.Code
 
             string solutionDirectoryPath = Creation.CreateSolutionDirectoryPath(specification, solution.Info.NamesInfo);
 
-            List<NewProjectSpecification> projectSpecifications = Creation.GetProjectSpecifications(solutionDirectoryPath, specification);
-            foreach(NewProjectSpecification projectSpecification in projectSpecifications)
+            List<Tuple<NewProjectSpecification, ProjectInfo>> projectSpecifications = Creation.GetProjectSpecifications(solutionDirectoryPath, specification);
+            foreach(Tuple<NewProjectSpecification, ProjectInfo> projectSpecification in projectSpecifications)
             {
-                LogicalProject project = Creation.CreateProject(serializationList, solutionDirectoryPath, projectSpecification);
+                LogicalProject project = Creation.CreateProject(serializationList, solutionDirectoryPath, projectSpecification.Item1, projectSpecification.Item2);
                 string projectFilePath = Creation.GetProjectFilePath(solutionDirectoryPath, project.Info);
                 solution.ProjectsByPath.Add(projectFilePath, project);
 
@@ -116,20 +248,21 @@ namespace Public.Common.Lib.Code
         /// <summary>
         /// Gets project specifications, including any references between projects (which means creating project specifications in a particular order).
         /// </summary>
-        private static List<NewProjectSpecification> GetProjectSpecifications(string solutionDirectoryPath, NewSolutionSpecification solutionSpecification)
+        private static List<Tuple<NewProjectSpecification, ProjectInfo>> GetProjectSpecifications(string solutionDirectoryPath, NewSolutionSpecification solutionSpecification)
         {
-            List<NewProjectSpecification> output = new List<NewProjectSpecification>();
+            List<Tuple<NewProjectSpecification, ProjectInfo>> output = new List<Tuple<NewProjectSpecification, ProjectInfo>>();
 
             NewProjectSpecification librarySpecification = new NewProjectSpecification(solutionSpecification, ProjectType.Library);
             ProjectInfo libraryProjectInfo = Creation.GetProjectInfo(librarySpecification);
             string libraryFileProjectPath = Creation.GetProjectFilePath(solutionDirectoryPath, libraryProjectInfo);
 
-            NewProjectSpecification console = new NewProjectSpecification(solutionSpecification, ProjectType.Console);
-            console.ReferencedProjectsByPath.Add(libraryFileProjectPath, libraryProjectInfo);
+            NewProjectSpecification consoleSpecification = new NewProjectSpecification(solutionSpecification, ProjectType.Console);
+            ProjectInfo consolProjectInfo = Creation.GetProjectInfo(consoleSpecification);
+            consoleSpecification.ReferencedProjectsByPath.Add(libraryFileProjectPath, libraryProjectInfo);
 
             // Add the console project first to see if the startup project can be set.
-            output.Add(console);
-            output.Add(librarySpecification);
+            output.Add(new Tuple<NewProjectSpecification, ProjectInfo>(consoleSpecification, consolProjectInfo));
+            output.Add(new Tuple<NewProjectSpecification, ProjectInfo>(librarySpecification, libraryProjectInfo));
 
             return output;
         }
@@ -148,10 +281,10 @@ namespace Public.Common.Lib.Code
         /// <summary>
         /// Creates (constructs and serializes) a new project, including all code files.
         /// </summary>
-        private static LogicalProject CreateProject(SerializationList serializationList, string solutionDirectoryPath, NewProjectSpecification specification)
+        private static LogicalProject CreateProject(SerializationList serializationList, string solutionDirectoryPath, NewProjectSpecification specification, ProjectInfo info)
         {
             LogicalProject project = new LogicalProject();
-            project.Info = Creation.GetProjectInfo(specification);
+            project.Info = info;
 
             string projectDirectoryPath = Creation.GetProjectDirectoryPath(solutionDirectoryPath, project.Info);
 
@@ -216,13 +349,16 @@ namespace Public.Common.Lib.Code
             Creation.AddProjectReferenceCompilationItems(projectItems, projectDirectoryPath, referencedProjectsByPath);
             Creation.AddContentProjectItems(serializationList, projectItems, projectDirectoryPath, info, solutionType);
             Creation.AddFolderProjectItems(serializationList, projectItems, projectDirectoryPath);
-            Creation.AddNoneProjectItems(serializationList, projectItems, projectDirectoryPath, visualStudioVersion);
+            Creation.AddNoneProjectItems(serializationList, projectItems, projectDirectoryPath, info, visualStudioVersion);
         }
 
-        private static void AddNoneProjectItems(SerializationList serializationList, List<ProjectItem> projectItems, string projectDirectoryPath, VisualStudioVersion visualStudioVersion)
+        private static void AddNoneProjectItems(SerializationList serializationList, List<ProjectItem> projectItems, string projectDirectoryPath, ProjectInfo projectInfo, VisualStudioVersion visualStudioVersion)
         {
-            ProjectItem appConfigItem = Creation.GetAppConfigProjectItem(serializationList, projectDirectoryPath, visualStudioVersion);
-            projectItems.Add(appConfigItem);
+            if (ProjectType.Library != projectInfo.Type)
+            {
+                ProjectItem appConfigItem = Creation.GetAppConfigProjectItem(serializationList, projectDirectoryPath, visualStudioVersion);
+                projectItems.Add(appConfigItem);
+            }
         }
 
         private static ProjectItem GetAppConfigProjectItem(SerializationList serializationList, string projectDirectoryPath, VisualStudioVersion visualStudioVersion)
@@ -248,7 +384,7 @@ namespace Public.Common.Lib.Code
             string filePath = Path.Combine(projectDirectoryPath, fileRelativePath);
             serializationList.AddTextFile(filePath, appConfig);
 
-            ProjectItem output = new ContentProjectItem(fileRelativePath);
+            ProjectItem output = new NoneProjectItem(fileRelativePath);
             return output;
         }
 
@@ -271,6 +407,7 @@ namespace Public.Common.Lib.Code
                     if(ProjectType.Library == info.Type)
                     {
                         ProjectItem projectPlan = Creation.GetProjectPlanProjectItem(serializationList, projectDirectoryPath);
+                        projectItems.Add(projectPlan);
                     }
                     break;
 
@@ -278,6 +415,7 @@ namespace Public.Common.Lib.Code
                     if (ProjectType.Library != info.Type)
                     {
                         ProjectItem projectPlan = Creation.GetProjectPlanProjectItem(serializationList, projectDirectoryPath);
+                        projectItems.Add(projectPlan);
                     }
                     break;
             }
@@ -465,8 +603,6 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        #region Physical
-
         public static PhysicalSolution CreatePhysicalSolution(
             NewSolutionSpecification specification,
             List<ProjectReference> projects,
@@ -515,17 +651,39 @@ namespace Public.Common.Lib.Code
                 ProjectBuildConfigurationSet configSet = new ProjectBuildConfigurationSet(buildConfig);
                 physicalSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration.Add(configSet.BuildConfiguration, configSet);
 
+                Dictionary<Guid, LogicalProject> logicalProjectsByGuid = new Dictionary<Guid, LogicalProject>();
+                foreach(string path in logicalSolution.ProjectsByPath.Keys)
+                {
+                    LogicalProject logicalProject = logicalSolution.ProjectsByPath[path];
+                    logicalProjectsByGuid.Add(logicalProject.Info.GUID, logicalProject);
+                }
+
                 foreach (Guid projectID in physicalSolution.ProjectsByGuid.Keys)
                 {
-                    ProjectReference projectRef = physicalSolution.ProjectsByGuid[projectID];
-                    ProjectType projectType = logicalSolution.ProjectsByPath[projectRef.Name].Info.Type;
+                    ProjectType projectType = logicalProjectsByGuid[projectID].Info.Type;
 
                     bool build = true;
                     if ((ProjectType.Console == projectType && Platform.AnyCPU == buildConfig.Platform) || (ProjectType.Library == projectType && Platform.x86 == buildConfig.Platform))
                     {
                         build = false;
                     }
-                    ProjectBuildConfigurationInfo buildInfo = new ProjectBuildConfigurationInfo(build, buildConfig);
+
+                    ProjectBuildConfigurationInfo buildInfo;
+                    if (ProjectType.Library == projectType)
+                    {
+                        buildInfo = new ProjectBuildConfigurationInfo(build, new BuildConfiguration(buildConfig.Configuration, Platform.AnyCPU));
+                    }
+                    else
+                    {
+                        if(Platform.MixedPlatforms == buildConfig.Platform)
+                        {
+                            buildInfo = new ProjectBuildConfigurationInfo(build, new BuildConfiguration(buildConfig.Configuration, Platform.x86));
+                        }
+                        else
+                        {
+                            buildInfo = new ProjectBuildConfigurationInfo(build, buildConfig);
+                        }
+                    }
 
                     configSet.ProjectBuildConfigurationsByProjectGuid.Add(projectID, buildInfo);
                 }
@@ -626,15 +784,12 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        #endregion
-
-        #region Logical
-
         private static void DetermineNamesInfoForProject(ProjectNamesInfo namesInfo, NewProjectSpecification specification)
         {
             string repository = specification.OrganizationalInfo.Repository;
             string domain = specification.OrganizationalInfo.Domain;
             string projectName = specification.ProjectName;
+            string vsVersion = VisualStudioVersionExtensions.ToDefaultString(specification.VisualStudioVersion);
             string fileExtension = ProjectFileLanguageExtensions.ToDefaultString(specification.Language);
 
             switch (specification.SolutionType)
@@ -646,9 +801,9 @@ namespace Public.Common.Lib.Code
                             {
                                 string libConstruction = String.Format(@"{0}.{1}", projectName, Creation.Construction);
                                 string repDomLib = String.Format(@"{0}.{1}.{2}", repository, domain, libConstruction);
-                                namesInfo.Name = repDomLib;
+                                namesInfo.Name = String.Format(@"{0}.{1}", repDomLib, vsVersion);
                                 namesInfo.DirectoryName = Creation.Construction;
-                                namesInfo.FileName = String.Format(@"{0}.{1}.{2}", repDomLib, VisualStudioVersionExtensions.ToDefaultString(specification.VisualStudioVersion), fileExtension);
+                                namesInfo.FileName = String.Format(@"{0}.{1}.{2}", repDomLib, vsVersion, fileExtension);
                                 namesInfo.RootNamespaceName = repDomLib;
                                 namesInfo.AssemblyName = repDomLib;
                             }
@@ -657,9 +812,9 @@ namespace Public.Common.Lib.Code
                         case ProjectType.Library:
                             {
                                 string repDomLib = String.Format(@"{0}.{1}.{2}", repository, domain, projectName);
-                                namesInfo.Name = repDomLib;
+                                namesInfo.Name = String.Format(@"{0}.{1}", repDomLib, vsVersion);
                                 namesInfo.DirectoryName = projectName;
-                                namesInfo.FileName = String.Format(@"{0}.{1}.{2}", repDomLib, VisualStudioVersionExtensions.ToDefaultString(specification.VisualStudioVersion), fileExtension);
+                                namesInfo.FileName = String.Format(@"{0}.{1}.{2}", repDomLib, vsVersion, fileExtension);
                                 namesInfo.RootNamespaceName = repDomLib;
                                 namesInfo.AssemblyName = repDomLib;
                             }
@@ -675,17 +830,17 @@ namespace Public.Common.Lib.Code
                     {
                         case ProjectType.Library: // The support library.
                             string nameWithLib = String.Format(@"{0}.{1}", specification.ProjectName, Creation.Lib);
-                            namesInfo.Name = nameWithLib;
+                            namesInfo.Name = String.Format(@"{0}.{1}", nameWithLib, vsVersion);
                             namesInfo.DirectoryName = Creation.Lib;
-                            namesInfo.FileName = String.Format(@"{0}.{1}.{2}", nameWithLib, VisualStudioVersionExtensions.ToDefaultString(specification.VisualStudioVersion), fileExtension);
+                            namesInfo.FileName = String.Format(@"{0}.{1}.{2}", nameWithLib, vsVersion, fileExtension);
                             namesInfo.RootNamespaceName = String.Format(@"{0}.{1}.{2}", specification.OrganizationalInfo.Repository, specification.OrganizationalInfo.Domain, nameWithLib);
                             namesInfo.AssemblyName = nameWithLib;
                             break;
 
                         case ProjectType.Console:
-                            namesInfo.Name = specification.ProjectName;
+                            namesInfo.Name = String.Format(@"{0}.{1}", specification.ProjectName, vsVersion);
                             namesInfo.DirectoryName = specification.ProjectName;
-                            namesInfo.FileName = String.Format(@"{0}.{1}.{2}", specification.ProjectName, VisualStudioVersionExtensions.ToDefaultString(specification.VisualStudioVersion), fileExtension);
+                            namesInfo.FileName = String.Format(@"{0}.{1}.{2}", specification.ProjectName, vsVersion, fileExtension);
                             namesInfo.RootNamespaceName = String.Format(@"{0}.{1}.{2}", specification.OrganizationalInfo.Repository, specification.OrganizationalInfo.Domain, specification.ProjectName);
                             namesInfo.AssemblyName = specification.ProjectName;
                             break;
@@ -748,7 +903,7 @@ namespace Public.Common.Lib.Code
             string logicalSolutionName = Creation.DetermineLogicalSolutionFileName(solutionName, solutionType, domain, repository);
             string vsVersion = VisualStudioVersionExtensions.ToDefaultString(visualStudioVersion);
 
-            string output = String.Format(@"{0}.{1}.{2}", logicalSolutionName, vsVersion, SolutionSerializer.SolutionFileExtension);
+            string output = String.Format(@"{0}.{1}.{2}", logicalSolutionName, vsVersion, SolutionFileNameInfo.SolutionFileExtension);
             return output;
         }
 

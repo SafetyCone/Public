@@ -8,6 +8,9 @@ namespace Public.Common.Lib.Code
     /// </summary>
     public class ReferenceProjectItem : ProjectItem
     {
+        public bool EmbedInteropTypes { get; set; }
+
+
         public ReferenceProjectItem()
         {
         }
@@ -15,6 +18,12 @@ namespace Public.Common.Lib.Code
         public ReferenceProjectItem(string assemblyName)
             : base(assemblyName)
         {
+        }
+
+        public ReferenceProjectItem(string assemblyName, bool embedInteropTypes)
+            : base(assemblyName)
+        {
+            this.EmbedInteropTypes = embedInteropTypes;
         }
     }
 }

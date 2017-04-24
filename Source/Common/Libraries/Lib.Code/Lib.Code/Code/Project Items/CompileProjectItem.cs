@@ -8,6 +8,12 @@ namespace Public.Common.Lib.Code
     /// </summary>
     public class CompileProjectItem : ProjectItem
     {
+        public bool AutoGen { get; set; }
+        public string DependentUpon { get; set; }
+        public bool DesignTime { get; set; }
+        public bool DesignTimeSharedInput { get; set; }
+
+
         public CompileProjectItem()
         {
         }
@@ -15,6 +21,15 @@ namespace Public.Common.Lib.Code
         public CompileProjectItem(string includePath)
             : base(includePath)
         {
+        }
+
+        public CompileProjectItem(string includePath, bool autoGen, string dependentUpon, bool designTime, bool designTimeSharedInput)
+            : base(includePath)
+        {
+            this.AutoGen = autoGen;
+            this.DependentUpon = dependentUpon;
+            this.DesignTime = designTime;
+            this.DesignTimeSharedInput = designTimeSharedInput;
         }
     }
 }

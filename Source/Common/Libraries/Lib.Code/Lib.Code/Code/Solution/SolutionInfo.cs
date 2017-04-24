@@ -32,5 +32,10 @@ namespace Public.Common.Lib.Code
             : this(type, new SolutionNamesInfo())
         {
         }
+
+        public SolutionInfo(SolutionInfo other)
+            : this(other.Type, new SolutionNamesInfo(other.NamesInfo))
+        {
+        }
     }
 }

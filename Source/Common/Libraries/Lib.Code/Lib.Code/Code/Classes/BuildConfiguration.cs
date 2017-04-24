@@ -84,6 +84,11 @@ namespace Public.Common.Lib.Code
             this.Platform = platform;
         }
 
+        public BuildConfiguration(BuildConfiguration other)
+            : this(other.Configuration, other.Platform)
+        {
+        }
+
         public override bool Equals(object obj)
         {
             return this.Equals(obj as BuildConfiguration);

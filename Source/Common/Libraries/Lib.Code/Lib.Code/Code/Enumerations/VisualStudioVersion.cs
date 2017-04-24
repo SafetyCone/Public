@@ -64,11 +64,7 @@ namespace Public.Common.Lib.Code.Physical
             VisualStudioVersion output;
             if (!VisualStudioVersionExtensions.TryFromDefault(visualStudioVersion, out output))
             {
-#if (CSharp_6)
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", nameof(output));
-#else
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.", "output");
-#endif  
+                throw new ArgumentException(@"Unrecognized Visual Studio version string.");
             }
 
             return output;

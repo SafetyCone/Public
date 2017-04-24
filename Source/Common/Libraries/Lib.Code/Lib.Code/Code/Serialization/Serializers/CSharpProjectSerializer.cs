@@ -83,6 +83,7 @@ namespace Public.Common.Lib.Code.Serialization
             ItemGroups groups = new ItemGroups(project.ProjectItemsByRelativePath);
             CSharpProjectSerializer.CreateReferenceItemGroup(projectNode, groups.References);
             CSharpProjectSerializer.CreateCompileItemGroup(projectNode, groups.Compiles);
+            CSharpProjectSerializer.CreateEmbeddedResourceItemGroup(projectNode, groups.Embeddeds);
             CSharpProjectSerializer.CreateProjectReferenceItemGroup(projectNode, groups.ProjectReferences);
             CSharpProjectSerializer.CreateContentItemGroup(projectNode, groups.Contents);
             CSharpProjectSerializer.CreateFolderItemGroup(projectNode, groups.Folders);
@@ -200,7 +201,7 @@ namespace Public.Common.Lib.Code.Serialization
             XmlElement projectReferenceNode = XmlHelper.CreateElement(itemGroupNode, "ProjectReference", new Tuple<string, string>[] { new Tuple<string, string>("Include", projectReference.IncludePath) });
             itemGroupNode.AppendChild(projectReferenceNode);
 
-            XmlHelper.AddChildElement(projectReferenceNode, "Project", String.Format(@"{{{0}}}", projectReference.GUID.ToString()));
+            XmlHelper.AddChildElement(projectReferenceNode, "Project", String.Format(@"{{{0}}}", projectReference.GUID.ToString().ToUpperInvariant()));
             XmlHelper.AddChildElement(projectReferenceNode, "Name", projectReference.Name);
         }
 
@@ -213,7 +214,45 @@ namespace Public.Common.Lib.Code.Serialization
 
                 foreach (NoneProjectItem none in nones)
                 {
-                    XmlHelper.AddChildElement(itemGroupNode, "None", new Tuple<string, string>[] { new Tuple<string, string>("Include", none.IncludePath) });
+                    XmlNode noneNode = XmlHelper.CreateElement(itemGroupNode, "None", new Tuple<string, string>[] { new Tuple<string, string>("Include", none.IncludePath) });
+                    itemGroupNode.AppendChild(noneNode);
+
+                    if(!String.IsNullOrEmpty(none.Generator))
+                    {
+                        XmlHelper.AddChildElement(noneNode, "Generator", none.Generator);
+                    }
+
+                    if (!String.IsNullOrEmpty(none.LastGenOutput))
+                    {
+                        XmlHelper.AddChildElement(noneNode, "LastGenOutput", none.LastGenOutput);
+                    }
+                }
+            }
+        }
+
+        private static void CreateEmbeddedResourceItemGroup(XmlElement projectNode, List<EmbededResourceProjectItem> embeddeds)
+        {
+            XmlElement itemGroupNode = projectNode.OwnerDocument.CreateElement("ItemGroup");
+            projectNode.AppendChild(itemGroupNode);
+
+            foreach (EmbededResourceProjectItem embedded in embeddeds)
+            {
+                XmlNode embeddedNode = XmlHelper.CreateElement(itemGroupNode, "EmbeddedResource", new Tuple<string, string>[] { new Tuple<string, string>("Include", embedded.IncludePath) });
+                itemGroupNode.AppendChild(embeddedNode);
+
+                if (String.IsNullOrEmpty(embedded.Generator))
+                {
+                    XmlHelper.AddChildElement(embeddedNode, "Generator", embedded.Generator);
+                }
+
+                if (String.IsNullOrEmpty(embedded.LastGenOutput))
+                {
+                    XmlHelper.AddChildElement(embeddedNode, "LastGenOutput", embedded.LastGenOutput);
+                }
+
+                if (String.IsNullOrEmpty(embedded.SubType))
+                {
+                    XmlHelper.AddChildElement(embeddedNode, "SubType", embedded.SubType);
                 }
             }
         }
@@ -225,7 +264,28 @@ namespace Public.Common.Lib.Code.Serialization
 
             foreach (CompileProjectItem compile in compiles)
             {
-                XmlHelper.AddChildElement(itemGroupNode, "Compile", new Tuple<string, string>[] { new Tuple<string, string>("Include", compile.IncludePath) });
+                XmlNode compileNode = XmlHelper.CreateElement(itemGroupNode, "Compile", new Tuple<string, string>[] { new Tuple<string, string>("Include", compile.IncludePath) });
+                itemGroupNode.AppendChild(compileNode);
+
+                if(compile.AutoGen)
+                {
+                    XmlHelper.AddChildElement(compileNode, "AutoGen", compile.AutoGen.ToString());
+                }
+
+                if(!String.IsNullOrEmpty(compile.DependentUpon))
+                {
+                    XmlHelper.AddChildElement(compileNode, "DependentUpon", compile.DependentUpon);
+                }
+
+                if (compile.DesignTime)
+                {
+                    XmlHelper.AddChildElement(compileNode, "DesignTime", compile.DesignTime.ToString());
+                }
+
+                if (compile.DesignTimeSharedInput)
+                {
+                    XmlHelper.AddChildElement(compileNode, "DesignTimeSharedInput", compile.DesignTimeSharedInput.ToString());
+                }
             }
         }
 
@@ -236,7 +296,13 @@ namespace Public.Common.Lib.Code.Serialization
 
             foreach(ReferenceProjectItem assemblyReference in references)
             {
-                XmlHelper.AddChildElement(itemGroupNode, "Reference", new Tuple<string, string>[] { new Tuple<string, string>("Include", assemblyReference.IncludePath) });
+                XmlNode referenceNode = XmlHelper.CreateElement(itemGroupNode, "Reference", new Tuple<string, string>[] { new Tuple<string, string>("Include", assemblyReference.IncludePath) });
+                itemGroupNode.AppendChild(referenceNode);
+
+                if(assemblyReference.EmbedInteropTypes)
+                {
+                    XmlHelper.AddChildElement(referenceNode, "EmbedInteropTypes", assemblyReference.EmbedInteropTypes.ToStringLower());
+                }
             }
         }
 
@@ -404,7 +470,7 @@ namespace Public.Common.Lib.Code.Serialization
             string fullFileDirectoryPath = Path.GetDirectoryName(filePath);
             output.Info.NamesInfo.DirectoryName = Path.GetFileName(fullFileDirectoryPath); // Treats directory as file.
 
-            string fileExtension = Path.GetExtension(filePath);
+            string fileExtension = PathExtensions.GetExtensionOnly(filePath);
             output.Info.Language = ProjectFileLanguageExtensions.FromDefault(fileExtension);
 
             foreach (XmlNode child in doc.ChildNodes)
@@ -485,8 +551,12 @@ namespace Public.Common.Lib.Code.Serialization
                         CSharpProjectSerializer.DeserializeFolder(project, child);
                         break;
 
+                    case @"EmbeddedResource":
+                        CSharpProjectSerializer.DeserializeEmbeddedResource(project, child);
+                        break;
+
                     case @"None":
-                        CSharpProjectSerializer.DeserializeAppConfig(project, child);
+                        CSharpProjectSerializer.DeserializeNone(project, child);
                         break;
 
                     default:
@@ -495,12 +565,48 @@ namespace Public.Common.Lib.Code.Serialization
             }
         }
 
-        private static void DeserializeAppConfig(Project project, XmlNode node)
+        private static void DeserializeEmbeddedResource(Project project, XmlNode node)
         {
-            string appconfigRelativePath = node.Attributes["Include"].Value;
-            NoneProjectItem none = new NoneProjectItem(appconfigRelativePath);
+            string includePath = node.Attributes["Include"].Value;
+            EmbededResourceProjectItem embedded = new EmbededResourceProjectItem(includePath);
+            project.ProjectItemsByRelativePath.Add(embedded.IncludePath, embedded);
 
+            XmlNode generatorNode = node.SelectSingleNode("Generator");
+            if (null != generatorNode)
+            {
+                embedded.Generator = generatorNode.InnerText;
+            }
+
+            XmlNode lastGenOutputNode = node.SelectSingleNode("LastGenOutput");
+            if (null != lastGenOutputNode)
+            {
+                embedded.LastGenOutput = lastGenOutputNode.InnerText;
+            }
+
+            XmlNode subTypeNode = node.SelectSingleNode("SubType");
+            if (null != subTypeNode)
+            {
+                embedded.SubType = subTypeNode.InnerText;
+            }
+        }
+
+        private static void DeserializeNone(Project project, XmlNode node)
+        {
+            string includePath = node.Attributes["Include"].Value;
+            NoneProjectItem none = new NoneProjectItem(includePath);
             project.ProjectItemsByRelativePath.Add(none.IncludePath, none);
+
+            XmlNode generatorNode = node.SelectSingleNode("Generator");
+            if(null != generatorNode)
+            {
+                none.Generator = generatorNode.InnerText;
+            }
+
+            XmlNode lastGenOutputNode = node.SelectSingleNode("LastGenOutput");
+            if (null != lastGenOutputNode)
+            {
+                none.LastGenOutput = lastGenOutputNode.InnerText;
+            }
         }
 
         private static void DeserializeFolder(Project project, XmlNode node)
@@ -544,6 +650,30 @@ namespace Public.Common.Lib.Code.Serialization
             string relativePath = node.Attributes["Include"].Value;
             CompileProjectItem compile = new CompileProjectItem(relativePath);
 
+            XmlNode autoGenNode = node.SelectSingleNode("AutoGen");
+            if(null != autoGenNode)
+            {
+                compile.AutoGen = Boolean.Parse(autoGenNode.InnerText);
+            }
+
+            XmlNode dependentUponNode = node.SelectSingleNode("DependentUpon");
+            if (null != dependentUponNode)
+            {
+                compile.DependentUpon = dependentUponNode.InnerText;
+            }
+
+            XmlNode designTimeNode = node.SelectSingleNode("DesignTime");
+            if (null != designTimeNode)
+            {
+                compile.DesignTime = Boolean.Parse(designTimeNode.InnerText);
+            }
+
+            XmlNode designTimeSharedInputNode = node.SelectSingleNode("DesignTimeSharedInput");
+            if (null != designTimeSharedInputNode)
+            {
+                compile.DesignTimeSharedInput = Boolean.Parse(designTimeSharedInputNode.InnerText);
+            }
+
             project.ProjectItemsByRelativePath.Add(compile.IncludePath, compile);
         }
 
@@ -551,6 +681,13 @@ namespace Public.Common.Lib.Code.Serialization
         {
             string assemblyName = referenceNode.Attributes["Include"].Value;
             ReferenceProjectItem reference = new ReferenceProjectItem(assemblyName);
+
+            XmlNode embedInteropTypes = referenceNode.SelectSingleNode("EmbedInteropTypes");
+            if(null != embedInteropTypes)
+            {
+                bool value = Boolean.Parse(embedInteropTypes.InnerText);
+                reference.EmbedInteropTypes = value;
+            }
 
             project.ProjectItemsByRelativePath.Add(reference.IncludePath, reference); // OK to treat assembly name like a relative path.
         }

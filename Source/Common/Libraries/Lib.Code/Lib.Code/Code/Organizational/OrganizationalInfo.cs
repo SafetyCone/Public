@@ -23,5 +23,12 @@ namespace Public.Common.Lib.Code
             this.Repository = repository;
             this.Domain = domain;
         }
+
+        public OrganizationalInfo(OrganizationalInfo other)
+        {
+            this.Organization = other.Organization;
+            this.Repository = other.Repository;
+            this.Domain = other.Domain;
+        }
     }
 }

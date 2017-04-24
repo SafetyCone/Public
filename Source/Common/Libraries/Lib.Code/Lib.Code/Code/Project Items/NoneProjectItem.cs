@@ -8,6 +8,10 @@ namespace Public.Common.Lib.Code
     /// </summary>
     public class NoneProjectItem : ProjectItem
     {
+        public string Generator { get; set; }
+        public string LastGenOutput { get; set; }
+
+
         public NoneProjectItem()
         {
         }
@@ -15,6 +19,13 @@ namespace Public.Common.Lib.Code
         public NoneProjectItem(string appConfigFileName)
             : base(appConfigFileName)
         {
+        }
+
+        public NoneProjectItem(string appConfigFileName, string generator, string lastGenOutput)
+            : base(appConfigFileName)
+        {
+            this.Generator = generator;
+            this.LastGenOutput = lastGenOutput;
         }
     }
 }

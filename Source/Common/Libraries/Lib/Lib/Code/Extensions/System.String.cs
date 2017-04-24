@@ -29,6 +29,18 @@ namespace Public.Common.Lib.Extensions
         /// <remarks>
         /// This is more than just string concatenation. Some optimizations with regard to the length of the tokens array are performed.
         /// </remarks>
+        public static string LinearizeTokens(this string[] tokens, char separator)
+        {
+            string output = tokens.LinearizeTokens(separator.ToString());
+            return output;
+        }
+
+        /// <summary>
+        /// Concatenates tokens into a single line using a separator.
+        /// </summary>
+        /// <remarks>
+        /// This is more than just string concatenation. Some optimizations with regard to the length of the tokens array are performed.
+        /// </remarks>
         public static string LinearizeTokens(this string[] tokens, string separator)
         {
             if (0 == tokens.Length)
@@ -52,6 +64,18 @@ namespace Public.Common.Lib.Extensions
             return output;
         }
 
+        /// <summary>
+        /// String concatenation optimized for the length of the substring array.
+        /// </summary>
+        public static string Concatenate(this string[] subStrings, char separator)
+        {
+            string output = StringExtensions.Concatenate(subStrings, separator.ToString());
+            return output;
+        }
+
+        /// <summary>
+        /// String concatenation optimized for the length of the substring array.
+        /// </summary>
         public static string Concatenate(this string[] subStrings, string separator)
         {
             string output = StringExtensions.LinearizeTokens(subStrings, separator);

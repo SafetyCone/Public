@@ -23,5 +23,10 @@ namespace Public.Common.Lib.Code
             this.RelativePath = relativePath;
             this.GUID = guid;
         }
+
+        public ProjectReference(ProjectReference other)
+            : this(other.Name, other.RelativePath, other.GUID)
+        {
+        }
     }
 }

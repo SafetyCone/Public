@@ -14,14 +14,26 @@ namespace Public.Common.Lib.Code.Serialization
     /// </summary>
     public class SolutionSerializer : SerializerBase<SolutionSerializationUnit>
     {
-        public const string SolutionFileExtension = @"sln";
-
-
         #region Static
+
+        public static VisualStudioVersion DetermineSolutionFileVsVersion(string solutionFilePath)
+        {
+            VisualStudioVersion output;
+            using (StreamReader reader = new StreamReader(solutionFilePath))
+            {
+                reader.ReadLine(); // Blank line.
+                reader.ReadLine(); // File format version line.
+
+                string vsVersionLine = reader.ReadLine();
+                output = VisualStudioVersionSolutionFileExtensions.FromDefault(vsVersionLine);
+            }
+
+            return output;
+        }
 
         public static string GetSolutionFilePath(string solutionDirectoryPath, Solution solution)
         {
-            string fileName = String.Format(@"{0}.{1}", solution.Info.NamesInfo.Name, SolutionSerializer.SolutionFileExtension);
+            string fileName = String.Format(@"{0}.{1}", solution.Info.NamesInfo.Name, SolutionFileNameInfo.SolutionFileExtension);
 
             string output = Path.Combine(solutionDirectoryPath, fileName);
             return output;

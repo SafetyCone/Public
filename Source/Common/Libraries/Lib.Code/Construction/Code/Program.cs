@@ -24,7 +24,9 @@ namespace Public.Common.Lib.Code.Construction
 
         private static void Test()
         {
-            Program.TestNewSolutionCreation();
+            Program.TestCreateSolutionSetFromInitialVsVersionFile();
+            //Program.TestNewSolutionSetCreation();
+            //Program.TestNewSolutionCreation();
             //Program.TestSolutionTextFileSerialization();
             //Program.TestProjectXmlSerialization();
             //Program.TestProjectXmlDeserialization();
@@ -34,6 +36,47 @@ namespace Public.Common.Lib.Code.Construction
             //Program.TestPathInfoNode();
             //Program.TestOrganizationsDirectoryPathIdentificationCustom();
             //Program.TestOrganizationsDirectoryPathIdentificationDefault();
+        }
+
+        private static void TestCreateSolutionSetFromInitialVsVersionFile()
+        {
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Minex\Source\Common\Libraries\Test\Excel.Construction.sln";
+
+            VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
+            {
+                VisualStudioVersion.VS2010,
+                VisualStudioVersion.VS2013,
+                VisualStudioVersion.VS2015,
+                VisualStudioVersion.VS2017,
+            };
+
+            Creation.CreateSolutionSet(initialSolutionFilePath, desiredVsVersions);
+        }
+
+        private static void TestNewSolutionSetCreation()
+        {
+            NewSolutionSpecification specification = new NewSolutionSpecification(
+                @"C:\temp\Orgs",
+                @"TheOrg",
+                @"TheRepo",
+                @"Common",
+                SolutionType.Experiment,
+                @"SecondConsole",
+                ProjectType.Console,
+                VisualStudioVersion.VS2015,
+                Language.CSharp);
+
+            VisualStudioVersion[] vsVersions = new VisualStudioVersion[]
+            {
+                VisualStudioVersion.VS2010,
+                VisualStudioVersion.VS2013,
+                VisualStudioVersion.VS2015,
+                VisualStudioVersion.VS2017,
+            };
+
+            NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
+
+            Creation.CreateSolutionSet(setSpecification);
         }
 
         private static void TestNewSolutionCreation()

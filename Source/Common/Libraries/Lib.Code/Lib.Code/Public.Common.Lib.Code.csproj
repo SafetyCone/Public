@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Classes\NewSolutionSetSpecification.cs" />
     <Compile Include="Code\Domains\Domains.cs" />
     <Compile Include="Code\IO\CodeFileWriter.cs" />
     <Compile Include="Code\IO\CSharpCodeFileWriter.cs" />
@@ -60,11 +61,13 @@
     <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationSet.cs" />
     <Compile Include="Code\Project Items\CompileProjectItem.cs" />
     <Compile Include="Code\Project Items\ContentProjectItem.cs" />
+    <Compile Include="Code\Project Items\EmbededResourceProjectItem.cs" />
     <Compile Include="Code\Project Items\FolderProjectItem.cs" />
     <Compile Include="Code\Project Items\NoneProjectItem.cs" />
     <Compile Include="Code\Project Items\ProjectItem.cs" />
     <Compile Include="Code\Project Items\ProjectReferenceProjectItem.cs" />
     <Compile Include="Code\Project Items\ReferenceProjectItem.cs" />
+    <Compile Include="Code\Project\ProjectFileNameInfo.cs" />
     <Compile Include="Code\Project\ProjectReference.cs" />
     <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationInfo.cs" />
     <Compile Include="Code\Logical\Visual Studio\Solution.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Code\Repositories\IRepository.cs" />
     <Compile Include="Code\Repositories\MinexRepository.cs" />
     <Compile Include="Code\Repositories\PublicRepository.cs" />
+    <Compile Include="Code\Solution\SolutionFileNameInfo.cs" />
     <Compile Include="Code\Solution\SolutionInfo.cs" />
     <Compile Include="Code\Solution\SolutionNamesInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

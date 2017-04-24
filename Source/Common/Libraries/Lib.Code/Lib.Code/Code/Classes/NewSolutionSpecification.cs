@@ -68,5 +68,16 @@ namespace Public.Common.Lib.Code
                   Language.CSharp)
         {
         }
+
+        public NewSolutionSpecification(NewSolutionSpecification other)
+        {
+            this.Language = other.Language;
+            this.OrganizationalInfo = new OrganizationalInfo(other.OrganizationalInfo);
+            this.OrganizationsDirectoryPath = other.OrganizationsDirectoryPath;
+            this.ProjectType = other.ProjectType;
+            this.SolutionName = other.SolutionName;
+            this.SolutionType = other.SolutionType;
+            this.VisualStudioVersion = other.VisualStudioVersion;
+        }
     }
 }
