@@ -236,16 +236,20 @@ namespace Public.Common.Lib.Code
                 foreach(Tuple<string, VisualStudioVersion> projectFilePathVsVersionPair in projectFilePathVsVersionPairs)
                 {
                     string desiredProjectPath = projectFilePathVsVersionPair.Item1;
-                    VisualStudioVersion desiredVsVersion = projectFilePathVsVersionPair.Item2;
 
-                    PhysicalCSharpProject curVsVersionProject = new PhysicalCSharpProject(initialProject);
-                    curVsVersionProject.VisualStudioVersion = desiredVsVersion;
-                    curVsVersionProject.TargetFrameworkVersion = Creation.GetDefaultNetFrameworkVersion(desiredVsVersion);
+                    if (!File.Exists(desiredProjectPath))
+                    {
+                        VisualStudioVersion desiredVsVersion = projectFilePathVsVersionPair.Item2;
 
-                    // Any changes to the project items required for Visual Studio project translation should be done here.
-                    // TODO, app.config or App.config? SHOULD be the same file, or perhaps versioned by Visual Studio version.
+                        PhysicalCSharpProject curVsVersionProject = new PhysicalCSharpProject(initialProject);
+                        curVsVersionProject.VisualStudioVersion = desiredVsVersion;
+                        curVsVersionProject.TargetFrameworkVersion = Creation.GetDefaultNetFrameworkVersion(desiredVsVersion);
 
-                    CSharpProjectSerializer.Serialize(desiredProjectPath, curVsVersionProject);
+                        // Any changes to the project items required for Visual Studio project translation should be done here.
+                        // TODO, app.config or App.config? SHOULD be the same file, or perhaps versioned by Visual Studio version.
+
+                        CSharpProjectSerializer.Serialize(desiredProjectPath, curVsVersionProject);
+                    }
                 }
             }
         }

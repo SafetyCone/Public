@@ -39,6 +39,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Classes\NewSolutionSetSpecification.cs" />
     <Compile Include="Code\Domains\Domains.cs" />
@@ -145,20 +146,20 @@
     <Compile Include="Code\Solution\SolutionNamesInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2015.csproj">
-      <Project>{3a83375a-2842-4e23-a89d-66dc0a147ff3}</Project>
+      <Project>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</Project>
       <Name>Public.Common.WindowsShell.VS2015</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\Tools\VersionSpecificSymbols.Common.prop" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

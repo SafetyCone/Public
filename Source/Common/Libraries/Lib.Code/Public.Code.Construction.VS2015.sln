@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Code.Construction", "Construction\Public.Common.Lib.Code.Construction.csproj", "{29003A48-0967-4BB2-8AA0-2CB58F0454F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Code.Construction", "Construction\Public.Common.Lib.Code.Construction.VS2015.csproj", "{29003A48-0967-4BB2-8AA0-2CB58F0454F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Code", "Lib.Code\Public.Common.Lib.Code.csproj", "{FD507E5F-F561-41FC-B543-8FF7EF178FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Code", "Lib.Code\Public.Common.Lib.Code.VS2015.csproj", "{FD507E5F-F561-41FC-B543-8FF7EF178FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib", "..\Lib\Lib\Public.Common.Lib.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib", "..\Lib\Lib\Public.Common.Lib.VS2015.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.VS2015", "..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2015.csproj", "{3A83375A-2842-4E23-A89D-66DC0A147FF3}"
 EndProject

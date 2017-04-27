@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Public.Common.Lib.Code</RootNamespace>
+    <AssemblyName>Public.Common.Lib.Code</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Classes\NewSolutionSetSpecification.cs" />
+    <Compile Include="Code\Domains\Domains.cs" />
+    <Compile Include="Code\IO\CodeFileWriter.cs" />
+    <Compile Include="Code\IO\CSharpCodeFileWriter.cs" />
+    <Compile Include="Code\Classes\NewProjectSpecification.cs" />
+    <Compile Include="Code\Enumerations\Configuration.cs" />
+    <Compile Include="Code\Enumerations\CopyToOutputDirectory.cs" />
+    <Compile Include="Code\Enumerations\DebugType.cs" />
+    <Compile Include="Code\Enumerations\NetFrameworkVersion.cs" />
+    <Compile Include="Code\Enumerations\NetRuntimeVersion.cs" />
+    <Compile Include="Code\Enumerations\Platform.cs" />
+    <Compile Include="Code\Enumerations\ProjectOutputType.cs" />
+    <Compile Include="Code\Enumerations\VisualStudioVersion.cs" />
+    <Compile Include="Code\Logical\Code\Classes\EmptyType.cs" />
+    <Compile Include="Code\Logical\Code\Namespaces.cs" />
+    <Compile Include="Code\Classes\BuildConfiguration.cs" />
+    <Compile Include="Code\Classes\Creation.cs" />
+    <Compile Include="Code\Logical\Visual Studio\Project.cs" />
+    <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationSet.cs" />
+    <Compile Include="Code\Project Items\CompileProjectItem.cs" />
+    <Compile Include="Code\Project Items\COMReferenceProjectItem.cs" />
+    <Compile Include="Code\Project Items\ContentProjectItem.cs" />
+    <Compile Include="Code\Project Items\EmbededResourceProjectItem.cs" />
+    <Compile Include="Code\Project Items\FolderProjectItem.cs" />
+    <Compile Include="Code\Project Items\NoneProjectItem.cs" />
+    <Compile Include="Code\Project Items\ProjectItem.cs" />
+    <Compile Include="Code\Project Items\ProjectReferenceProjectItem.cs" />
+    <Compile Include="Code\Project Items\ReferenceProjectItem.cs" />
+    <Compile Include="Code\Project\ProjectFileNameInfo.cs" />
+    <Compile Include="Code\Project\ProjectReference.cs" />
+    <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationInfo.cs" />
+    <Compile Include="Code\Logical\Visual Studio\Solution.cs" />
+    <Compile Include="Code\Organizational\OrganizationalInfo.cs" />
+    <Compile Include="Code\Physical\Visual Studio\ProjectFileLanguageExtensions.cs" />
+    <Compile Include="Code\Project\ProjectInfo.cs" />
+    <Compile Include="Code\Project\ProjectNamesInfo.cs" />
+    <Compile Include="Code\Physical\CodeFileBase.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\AliasDeclaration.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\Methods.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\Types.cs" />
+    <Compile Include="Code\Physical\Visual Studio\BuildConfigurationInfo.cs" />
+    <Compile Include="Code\Repositories\Repositories.cs" />
+    <Compile Include="Code\Serialization\Classes\ItemGroups.cs" />
+    <Compile Include="Code\Serialization\Serialization Units\CSharpCodeFileSerializationUnit.cs" />
+    <Compile Include="Code\Serialization\Serialization Units\CSharpProjectSerializationUnit.cs" />
+    <Compile Include="Code\Serialization\Serialization Units\SolutionSerializationUnit.cs" />
+    <Compile Include="Code\Serialization\SerializationListExtensions.cs" />
+    <Compile Include="Code\Serialization\Serializers\CSharpCodeFileSerializer.cs" />
+    <Compile Include="Code\Serialization\Serializers\CSharpProjectSerializer.cs" />
+    <Compile Include="Code\Physical\Visual Studio\SolutionPlatformExtensions.cs" />
+    <Compile Include="Code\Physical\Visual Studio\VisualStudioVersionToolsVersionExtensions.cs" />
+    <Compile Include="Code\Physical\Visual Studio\Import.cs" />
+    <Compile Include="Code\Physical\Scopes\Classes\Scope.cs" />
+    <Compile Include="Code\Physical\Scopes\Classes\NamespaceScope.cs" />
+    <Compile Include="Code\Physical\Scopes\Classes\Base Classes\ScopeBase.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\UsingDeclaration.cs" />
+    <Compile Include="Code\Classes\NewSolutionSpecification.cs" />
+    <Compile Include="Code\Enumerations\Accessibility.cs" />
+    <Compile Include="Code\Enumerations\ArgumentPassType.cs" />
+    <Compile Include="Code\Enumerations\Language.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Base Classes\LogicalStructuralTypeObjectBase.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Base Classes\LogicalTypeObjectBase.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Delegate.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Enumeration.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Global.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Struct.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\AccessibilityExtensions.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\ArgumentPassTypeExtensions.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\CodeFile.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\Constants.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Base Classes\LogicalObjectBase.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Class.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Assembly.cs" />
+    <Compile Include="Code\Logical\Code\Classes\InitializedMember.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Member.cs" />
+    <Compile Include="Code\Logical\Code\Classes\Method.cs" />
+    <Compile Include="Code\Logical\Code\Classes\MethodArgument.cs" />
+    <Compile Include="Code\Logical\Code\Classes\PropertyMember.cs" />
+    <Compile Include="Code\Logical\Code\Constants.cs" />
+    <Compile Include="Code\Logical\Code\Methods.cs" />
+    <Compile Include="Code\Logical\Code\Types.cs" />
+    <Compile Include="Code\Organizational\OrganizationalPaths.cs" />
+    <Compile Include="Code\Domains\CommonDomain.cs" />
+    <Compile Include="Code\Domains\ExamplesDomain.cs" />
+    <Compile Include="Code\Domains\ExperimentsDomain.cs" />
+    <Compile Include="Code\Domains\IDomain.cs" />
+    <Compile Include="Code\Enumerations\ProjectType.cs" />
+    <Compile Include="Code\Enumerations\SolutionType.cs" />
+    <Compile Include="Code\Organizations\IOrganization.cs" />
+    <Compile Include="Code\Organizations\MinexOrganization.cs" />
+    <Compile Include="Code\Organizations\Organizations.cs" />
+    <Compile Include="Code\Physical\Languages\CSharp\Header.cs" />
+    <Compile Include="Code\Physical\Visual Studio\CSharp\Project.cs" />
+    <Compile Include="Code\Physical\Visual Studio\Solution.cs" />
+    <Compile Include="Code\Serialization\Serializers\SolutionSerializer.cs" />
+    <Compile Include="Code\Physical\Visual Studio\VisualStudioVersionSolutionFileExtensions.cs" />
+    <Compile Include="Code\Repositories\ExplorationRepository.cs" />
+    <Compile Include="Code\Repositories\IRepository.cs" />
+    <Compile Include="Code\Repositories\MinexRepository.cs" />
+    <Compile Include="Code\Repositories\PublicRepository.cs" />
+    <Compile Include="Code\Solution\SolutionFileNameInfo.cs" />
+    <Compile Include="Code\Solution\SolutionInfo.cs" />
+    <Compile Include="Code\Solution\SolutionNamesInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
+      <Name>Public.Common.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2015.csproj">
+      <Project>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</Project>
+      <Name>Public.Common.WindowsShell.VS2015</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Project Plan.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\..\..\Tools\VersionSpecificSymbols.Common.prop" />
+</Project>

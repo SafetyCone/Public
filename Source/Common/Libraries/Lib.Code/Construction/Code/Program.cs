@@ -62,8 +62,8 @@ namespace Public.Common.Lib.Code.Construction
         {
             //Program.TestDetermineDefaultVsVersion();
             //Program.TestUrlShortcut();
-            //Program.TestSetDefaultVisualStudioVersion();
-            Program.TestCreateSolutionSetFromInitialVsVersionFile();
+            Program.TestSetDefaultVisualStudioVersion();
+            //Program.TestCreateSolutionSetFromInitialVsVersionFile();
             //Program.TestNewSolutionSetCreation();
             //Program.TestNewSolutionCreation();
             //Program.TestSolutionTextFileSerialization();
@@ -95,14 +95,14 @@ namespace Public.Common.Lib.Code.Construction
 
         private static void TestSetDefaultVisualStudioVersion()
         {
-            string solutionDirecstoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\";
+            string solutionDirecstoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
 
-            Creation.SetDefaultVisualStudioVersion(solutionDirecstoryPath, VisualStudioVersion.VS2013);
+            Creation.SetDefaultVisualStudioVersion(solutionDirecstoryPath, VisualStudioVersion.VS2015);
         }
 
         private static void TestCreateSolutionSetFromInitialVsVersionFile()
         {
-            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Examples\Libraries\Code\Examples.Code.Construction.VS2015.sln";
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code\Public.Code.Construction.sln";
 
             VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
             {
