@@ -6,7 +6,7 @@ namespace Public.Common.Lib.Code
     /// <summary>
     /// The base class for all project items.
     /// </summary>
-    public abstract class ProjectItem
+    public abstract class ProjectItem : ICloneable<ProjectItem>
     {
         public const string Compile = @"Compile";
         public const string Content = @"Content";
@@ -26,6 +26,18 @@ namespace Public.Common.Lib.Code
         public ProjectItem(string includePath)
         {
             this.IncludePath = includePath;
+        }
+
+        protected ProjectItem(ProjectItem other)
+            : this(other.IncludePath)
+        {
+        }
+
+        public abstract ProjectItem Clone();
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 }

@@ -25,5 +25,15 @@ namespace Public.Common.Lib.Code
         {
             this.EmbedInteropTypes = embedInteropTypes;
         }
+
+        public ReferenceProjectItem(ReferenceProjectItem other)
+            : this(other.IncludePath, other.EmbedInteropTypes)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new ReferenceProjectItem(this);
+        }
     }
 }

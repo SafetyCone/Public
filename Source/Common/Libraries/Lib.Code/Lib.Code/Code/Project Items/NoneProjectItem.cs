@@ -27,5 +27,15 @@ namespace Public.Common.Lib.Code
             this.Generator = generator;
             this.LastGenOutput = lastGenOutput;
         }
+
+        public NoneProjectItem(NoneProjectItem other)
+            : this(other.IncludePath, other.Generator, other.LastGenOutput)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new NoneProjectItem(this);
+        }
     }
 }

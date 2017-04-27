@@ -16,5 +16,15 @@ namespace Public.Common.Lib.Code
             : base(includePath)
         {
         }
+
+        public FolderProjectItem(FolderProjectItem other)
+            : this(other.IncludePath)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new FolderProjectItem(this);
+        }
     }
 }

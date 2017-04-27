@@ -1,0 +1,7 @@
+The WindowsShell Library
+
+This library is a simple wrapper around the Windows Script Host Object Model COM reference.
+
+This library contains functionality that allows:
+
+	* Creation of Windows shortcut links to files.

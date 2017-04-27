@@ -82,6 +82,7 @@ namespace Public.Common.Lib.Code.Serialization
 
             ItemGroups groups = new ItemGroups(project.ProjectItemsByRelativePath);
             CSharpProjectSerializer.CreateReferenceItemGroup(projectNode, groups.References);
+            CSharpProjectSerializer.CreateCOMReferenceItemGroup(projectNode, groups.COMReferences);
             CSharpProjectSerializer.CreateCompileItemGroup(projectNode, groups.Compiles);
             CSharpProjectSerializer.CreateEmbeddedResourceItemGroup(projectNode, groups.Embeddeds);
             CSharpProjectSerializer.CreateProjectReferenceItemGroup(projectNode, groups.ProjectReferences);
@@ -289,6 +290,26 @@ namespace Public.Common.Lib.Code.Serialization
             }
         }
 
+        private static void CreateCOMReferenceItemGroup(XmlElement projectNode, List<COMReferenceProjectItem> comReferences)
+        {
+            XmlElement itemGroupNode = projectNode.OwnerDocument.CreateElement("ItemGroup");
+            projectNode.AppendChild(itemGroupNode);
+
+            foreach (COMReferenceProjectItem comReference in comReferences)
+            {
+                XmlNode referenceNode = XmlHelper.CreateElement(itemGroupNode, "COMReference", new Tuple<string, string>[] { new Tuple<string, string>("Include", comReference.IncludePath) });
+                itemGroupNode.AppendChild(referenceNode);
+
+                XmlHelper.AddChildElement(referenceNode, "Guid", comReference.GUID.ToString().ToUpperInvariant());
+                XmlHelper.AddChildElement(referenceNode, "VersionMajor", comReference.VersionMajor.ToString());
+                XmlHelper.AddChildElement(referenceNode, "VersionMinor", comReference.VersionMinor.ToString());
+                XmlHelper.AddChildElement(referenceNode, "Lcid", comReference.LCID.ToString());
+                XmlHelper.AddChildElement(referenceNode, "WrapperTool", comReference.WrapperTool);
+                XmlHelper.AddChildElement(referenceNode, "Isolated", comReference.Isolated.ToString());
+                XmlHelper.AddChildElement(referenceNode, "EmbedInteropTypes", comReference.EmbedInteropTypes.ToString());
+            }
+        }
+
         private static void CreateReferenceItemGroup(XmlElement projectNode, List<ReferenceProjectItem> references)
         {
             XmlElement itemGroupNode = projectNode.OwnerDocument.CreateElement("ItemGroup");
@@ -301,7 +322,7 @@ namespace Public.Common.Lib.Code.Serialization
 
                 if(assemblyReference.EmbedInteropTypes)
                 {
-                    XmlHelper.AddChildElement(referenceNode, "EmbedInteropTypes", assemblyReference.EmbedInteropTypes.ToStringLower());
+                    XmlHelper.AddChildElement(referenceNode, "EmbedInteropTypes", assemblyReference.EmbedInteropTypes.ToString());
                 }
             }
         }
@@ -535,6 +556,10 @@ namespace Public.Common.Lib.Code.Serialization
                         CSharpProjectSerializer.DeserializeReference(project, child);
                         break;
 
+                    case @"COMReference":
+                        CSharpProjectSerializer.DeserializeCOMReference(project, child);
+                        break;
+
                     case @"ProjectReference":
                         CSharpProjectSerializer.DeserializeProjectReference(project, child);
                         break;
@@ -569,7 +594,6 @@ namespace Public.Common.Lib.Code.Serialization
         {
             string includePath = node.Attributes["Include"].Value;
             EmbededResourceProjectItem embedded = new EmbededResourceProjectItem(includePath);
-            project.ProjectItemsByRelativePath.Add(embedded.IncludePath, embedded);
 
             XmlNode generatorNode = node.SelectSingleNode("Generator");
             if (null != generatorNode)
@@ -588,13 +612,14 @@ namespace Public.Common.Lib.Code.Serialization
             {
                 embedded.SubType = subTypeNode.InnerText;
             }
+
+            project.ProjectItemsByRelativePath.Add(embedded.IncludePath, embedded);
         }
 
         private static void DeserializeNone(Project project, XmlNode node)
         {
             string includePath = node.Attributes["Include"].Value;
             NoneProjectItem none = new NoneProjectItem(includePath);
-            project.ProjectItemsByRelativePath.Add(none.IncludePath, none);
 
             XmlNode generatorNode = node.SelectSingleNode("Generator");
             if(null != generatorNode)
@@ -607,6 +632,8 @@ namespace Public.Common.Lib.Code.Serialization
             {
                 none.LastGenOutput = lastGenOutputNode.InnerText;
             }
+
+            project.ProjectItemsByRelativePath.Add(none.IncludePath, none);
         }
 
         private static void DeserializeFolder(Project project, XmlNode node)
@@ -675,6 +702,35 @@ namespace Public.Common.Lib.Code.Serialization
             }
 
             project.ProjectItemsByRelativePath.Add(compile.IncludePath, compile);
+        }
+
+        private static void DeserializeCOMReference(Project project, XmlNode node)
+        {
+            string assemblyName = node.Attributes["Include"].Value;
+            COMReferenceProjectItem reference = new COMReferenceProjectItem(assemblyName);
+
+            XmlNode guidNode = node.SelectSingleNode("Guid");
+            reference.GUID = Guid.Parse(guidNode.InnerText);
+
+            XmlNode versionMajorNode = node.SelectSingleNode("VersionMajor");
+            reference.VersionMajor = Int32.Parse(versionMajorNode.InnerText);
+
+            XmlNode versionMinorNode = node.SelectSingleNode("VersionMinor");
+            reference.VersionMinor = Int32.Parse(versionMinorNode.InnerText);
+
+            XmlNode lcidNode = node.SelectSingleNode("Lcid");
+            reference.LCID = Int32.Parse(lcidNode.InnerText);
+
+            XmlNode wrapperToolNode = node.SelectSingleNode("WrapperTool");
+            reference.WrapperTool = wrapperToolNode.InnerText;
+
+            XmlNode isolatedNode = node.SelectSingleNode("Isolated");
+            reference.Isolated = Boolean.Parse(isolatedNode.InnerText);
+
+            XmlNode embedInteropTypes = node.SelectSingleNode("EmbedInteropTypes");
+            reference.EmbedInteropTypes = Boolean.Parse(embedInteropTypes.InnerText);
+
+            project.ProjectItemsByRelativePath.Add(reference.IncludePath, reference);
         }
 
         private static void DeserializeReference(Project project, XmlNode referenceNode)

@@ -19,11 +19,50 @@ namespace Public.Common.Lib.Code.Construction
     {
         static void Main(string[] args)
         {
+            //Program.CreateShortCut();
+            //Program.CreateNewSolutionSet();
             Program.Test();
+        }
+
+        private static void CreateShortCut()
+        {
+            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\WindowsShell";
+            VisualStudioVersion defaultVersion = VisualStudioVersion.VS2015;
+
+            Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
+        }
+
+        private static void CreateNewSolutionSet()
+        {
+            NewSolutionSpecification specification = new NewSolutionSpecification(
+                @"C:\Organizations",
+                @"Minex",
+                @"Public",
+                @"Common",
+                SolutionType.Library,
+                @"Excel",
+                ProjectType.Library,
+                VisualStudioVersion.VS2015,
+                Language.CSharp);
+
+            VisualStudioVersion[] vsVersions = new VisualStudioVersion[]
+            {
+                VisualStudioVersion.VS2010,
+                VisualStudioVersion.VS2013,
+                VisualStudioVersion.VS2015,
+                VisualStudioVersion.VS2017,
+            };
+
+            NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
+
+            Creation.CreateSolutionSetWithDefault(setSpecification, VisualStudioVersion.VS2015);
         }
 
         private static void Test()
         {
+            //Program.TestDetermineDefaultVsVersion();
+            //Program.TestUrlShortcut();
+            //Program.TestSetDefaultVisualStudioVersion();
             Program.TestCreateSolutionSetFromInitialVsVersionFile();
             //Program.TestNewSolutionSetCreation();
             //Program.TestNewSolutionCreation();
@@ -38,9 +77,32 @@ namespace Public.Common.Lib.Code.Construction
             //Program.TestOrganizationsDirectoryPathIdentificationDefault();
         }
 
+        private static void TestDetermineDefaultVsVersion()
+        {
+            string shortcutFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\Public.Excel.Construction.sln";
+
+            VisualStudioVersion defaultVsVersion = Creation.DetermineDefaultSolutionVisualStudioVersion(shortcutFilePath);
+        }
+
+        private static void TestUrlShortcut()
+        {
+            string directoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\";
+            string fileNameBase = @"Public.Excel.Construction";
+
+            string targetFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\Public.Excel.Construction.VS2015.sln";
+            Public.Common.Lib.IO.UrlShortcuts.CreateFileShortcut(directoryPath, fileNameBase, targetFilePath);
+        }
+
+        private static void TestSetDefaultVisualStudioVersion()
+        {
+            string solutionDirecstoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\";
+
+            Creation.SetDefaultVisualStudioVersion(solutionDirecstoryPath, VisualStudioVersion.VS2013);
+        }
+
         private static void TestCreateSolutionSetFromInitialVsVersionFile()
         {
-            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Minex\Source\Common\Libraries\Test\Excel.Construction.sln";
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Examples\Libraries\Code\Examples.Code.Construction.VS2015.sln";
 
             VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
             {

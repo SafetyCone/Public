@@ -31,5 +31,15 @@ namespace Public.Common.Lib.Code
             this.DesignTime = designTime;
             this.DesignTimeSharedInput = designTimeSharedInput;
         }
+
+        public CompileProjectItem(CompileProjectItem other)
+            :this(other.IncludePath, other.AutoGen, other.DependentUpon, other.DesignTime, other.DesignTimeSharedInput)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new CompileProjectItem(this);
+        }
     }
 }

@@ -24,5 +24,10 @@ namespace Public.Common.Lib.Code.Physical
             this.Build = build;
             this.ProjectActiveConfiguration = projectActiveConfiguration;
         }
+
+        public ProjectBuildConfigurationInfo(ProjectBuildConfigurationInfo other)
+            : this(other.Build, other.ProjectActiveConfiguration)
+        {
+        }
     }
 }

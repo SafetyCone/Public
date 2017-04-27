@@ -15,6 +15,7 @@ using Public.Common.Lib.Extensions;
 using Public.Common.Lib.IO;
 using Public.Common.Lib.IO.Serialization;
 using Public.Common.Lib.IO.Serialization.Extensions;
+using Public.Common.WindowsShell;
 
 
 namespace Public.Common.Lib.Code
@@ -30,8 +31,109 @@ namespace Public.Common.Lib.Code
 
         #region Static
 
+        #region Distribute Project Items
+
+        public static void DistributeChanges(string sourceSolutionPath, string destinationSolutionPath)
+        {
+            PhysicalSolution sourceSolution = SolutionSerializer.Deserialize(sourceSolutionPath);
+            PhysicalSolution destinationSolution = SolutionSerializer.Deserialize(destinationSolutionPath);
+
+            string solutionsDirectoryPath = Path.GetDirectoryName(sourceSolutionPath);
+
+            Creation.DistributeChanges(solutionsDirectoryPath, sourceSolution, destinationSolution);
+        }
+
+        /// <remarks>
+        /// For two solution files in the same directory (meaning all realtive paths would be the same), distribute changes in projects and files from one solution to another.
+        /// This is useful for transfering changes from the default Visual Studio version solution to all others.
+        /// </remarks>
+        public static void DistributeChanges(string solutionsDirectoryPath, PhysicalSolution sourceSolution, PhysicalSolution destinationSolution)
+        {
+            // Account for any project additions or subtractions.
+            SetDifference<Guid> guidDifferences = SetDifference<Guid>.Calculate(sourceSolution.ProjectsByGuid.Keys, destinationSolution.ProjectsByGuid.Keys);
+
+            // Add projects to destination if new projects exist in the source.
+            foreach (Guid guidToAdd in guidDifferences.InSet1Only)
+            {
+                ProjectReference projectToAdd = new ProjectReference(sourceSolution.ProjectsByGuid[guidToAdd]);
+                destinationSolution.ProjectsByGuid.Add(guidToAdd, projectToAdd);
+
+                foreach(BuildConfiguration buildConfig in sourceSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration.Keys)
+                {
+                    ProjectBuildConfigurationSet sourceConfigSet = sourceSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration[buildConfig];
+                    ProjectBuildConfigurationSet destinationConfigSet = destinationSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration[buildConfig];
+
+                    ProjectBuildConfigurationInfo buildConfigInfoToAdd = new ProjectBuildConfigurationInfo(sourceConfigSet.ProjectBuildConfigurationsByProjectGuid[guidToAdd]);
+                    destinationConfigSet.ProjectBuildConfigurationsByProjectGuid.Add(guidToAdd, buildConfigInfoToAdd);
+                }
+            }
+
+            // Remove project from destination if it has projects not present in the source.
+            foreach (Guid guidToRemove in guidDifferences.InSet2Only)
+            {
+                destinationSolution.ProjectsByGuid.Remove(guidToRemove);
+
+                foreach(BuildConfiguration buildConfig in destinationSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration.Keys)
+                {
+                    ProjectBuildConfigurationSet destinationBuildSet = destinationSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration[buildConfig];
+                    destinationBuildSet.ProjectBuildConfigurationsByProjectGuid.Remove(guidToRemove);
+                }
+            }
+
+            // Foreach project, distribute changes from source project to destination project.
+            foreach (Guid projectId in sourceSolution.ProjectsByGuid.Keys)
+            {
+                ProjectReference sourceProjectReference = sourceSolution.ProjectsByGuid[projectId];
+                ProjectReference destinationProjectReference = destinationSolution.ProjectsByGuid[projectId];
+
+                string sourceProjectFileUnresolvedPath = Path.Combine(solutionsDirectoryPath, sourceProjectReference.RelativePath);
+                string sourceProjectFilePath = PathExtensions.GetResolvedPath(sourceProjectFileUnresolvedPath);
+
+                string destinationProjectFileUnresolvedPath = Path.Combine(solutionsDirectoryPath, destinationProjectReference.RelativePath);
+                string destinationProjectFilePath = PathExtensions.GetResolvedPath(destinationProjectFileUnresolvedPath);
+
+                PhysicalCSharpProject sourceProject = CSharpProjectSerializer.Deserialize(sourceProjectFilePath);
+                PhysicalCSharpProject destinationProject = CSharpProjectSerializer.Deserialize(destinationProjectFilePath);
+
+                Creation.DistributeChanges(sourceProject, destinationProject);
+
+                CSharpProjectSerializer.Serialize(sourceProjectFilePath, sourceProject);
+                CSharpProjectSerializer.Serialize(destinationProjectFilePath, destinationProject);
+            }
+        }
+
+        /// <remarks>
+        /// Clear all project items from the destination project, add all from the source project.
+        /// </remarks>
+        public static void DistributeChanges(PhysicalCSharpProject sourceProject, PhysicalCSharpProject destinationProject)
+        {
+            destinationProject.ProjectItemsByRelativePath.Clear();
+
+            foreach (string relativePath in sourceProject.ProjectItemsByRelativePath.Keys)
+            {
+                ProjectItem item = sourceProject.ProjectItemsByRelativePath[relativePath];
+                ProjectItem clone = item.Clone();
+
+                destinationProject.ProjectItemsByRelativePath.Add(relativePath, clone);
+            }
+        }
+
+        #endregion
+
         #region Create Solution Set
 
+        /// <summary>
+        /// Create a solution set of Visual Studio versions based on an initial solution.
+        /// </summary>
+        public static void CreateSolutionSet(string initialSolutionFilepath)
+        {
+            IEnumerable<VisualStudioVersion> vsVersions = VisualStudioVersionExtensions.GetAllVisualStudioVersions();
+            Creation.CreateSolutionSet(initialSolutionFilepath, vsVersions);
+        }
+
+        /// <summary>
+        /// Create a solution set of specific Visual Studio versions based on an initial solution.
+        /// </summary>
         public static void CreateSolutionSet(string initialSolutionFilePath, IEnumerable<VisualStudioVersion> desiredVsVersions)
         {
             string solutionDirectoryPath = Path.GetDirectoryName(initialSolutionFilePath);
@@ -138,11 +240,54 @@ namespace Public.Common.Lib.Code
 
                     PhysicalCSharpProject curVsVersionProject = new PhysicalCSharpProject(initialProject);
                     curVsVersionProject.VisualStudioVersion = desiredVsVersion;
+                    curVsVersionProject.TargetFrameworkVersion = Creation.GetDefaultNetFrameworkVersion(desiredVsVersion);
 
                     // Any changes to the project items required for Visual Studio project translation should be done here.
                     // TODO, app.config or App.config? SHOULD be the same file, or perhaps versioned by Visual Studio version.
 
                     CSharpProjectSerializer.Serialize(desiredProjectPath, curVsVersionProject);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Examine the shortcut to the default Visual Studio solution file created with the solution set, and get thus get the path of the default solution.
+        /// </remarks>
+        public static VisualStudioVersion DetermineDefaultSolutionVisualStudioVersion(string defaultSolutionShortcutFilePath)
+        {
+            string defaultSolutionFilePath = WindowsShellRuntimeWrapper.GetShortcutTargetPath(defaultSolutionShortcutFilePath);
+
+            SolutionFileNameInfo solutionFileNameInfo = SolutionFileNameInfo.Parse(defaultSolutionFilePath);
+            return solutionFileNameInfo.VisualStudioVersion;
+        }
+
+        /// <summary>
+        /// Create a solution set of all Visual Studio versions, but with a shortcut pointing to one specific version as the default.
+        /// </summary>
+        public static void CreateSolutionSetWithDefault(NewSolutionSetSpecification solutionSetSpecifcation, VisualStudioVersion defaultVisualStudioVersion)
+        {
+            Creation.CreateSolutionSet(solutionSetSpecifcation);
+
+            string solutionDirectoryPath = Creation.DetermineSolutionDirectoryPath(solutionSetSpecifcation.BaseSolutionSpecification);
+            Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVisualStudioVersion);
+        }
+
+        /// <remarks>
+        /// This method assumes there are multiple VS version labeled solution files in the solution directory.
+        /// </remarks>
+        public static void SetDefaultVisualStudioVersion(string solutionDirectoryPath, VisualStudioVersion defaultVisualStudioVersion)
+        {
+            string[] solutionFilePaths = Directory.GetFiles(solutionDirectoryPath, @"*.sln", SearchOption.TopDirectoryOnly);
+            foreach(string solutionFilePath in solutionFilePaths)
+            {
+                SolutionFileNameInfo fileNameInfo = SolutionFileNameInfo.Parse(solutionFilePath);
+                if(defaultVisualStudioVersion == fileNameInfo.VisualStudioVersion)
+                {
+                    // Make the shortcut.
+                    string shortCutFileName = String.Format(@"{0}.{1}", fileNameInfo.FileNameBase, SolutionFileNameInfo.SolutionFileExtension);
+                    string shortCutFilePath = Path.Combine(solutionDirectoryPath, shortCutFileName);
+                    
+                    WindowsShellRuntimeWrapper.CreateShortcut(shortCutFilePath, solutionFilePath);
                 }
             }
         }
@@ -886,6 +1031,14 @@ namespace Public.Common.Lib.Code
         public static string DetermineSolutionDirectoryPath(string solutionTypeDirectoryPath, NewSolutionSpecification specification)
         {
             string output = Path.Combine(solutionTypeDirectoryPath, specification.SolutionName);
+            return output;
+        }
+
+        public static string DetermineSolutionDirectoryPath(NewSolutionSpecification specification)
+        {
+            string solutionTypeDirectoryPath = Creation.DetermineSolutionTypeDirectoryPath(specification);
+
+            string output = Creation.DetermineSolutionDirectoryPath(solutionTypeDirectoryPath, specification);
             return output;
         }
 

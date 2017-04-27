@@ -11,7 +11,6 @@ namespace Public.Common.Lib.Code
 
 
         public EmbededResourceProjectItem()
-            : this(null)
         {
         }
 
@@ -26,6 +25,16 @@ namespace Public.Common.Lib.Code
             this.Generator = generator;
             this.LastGenOutput = lastGenOutput;
             this.SubType = subType;
+        }
+
+        public EmbededResourceProjectItem(EmbededResourceProjectItem other)
+            : this(other.IncludePath, other.Generator, other. LastGenOutput, other.SubType)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new EmbededResourceProjectItem(this);
         }
     }
 }

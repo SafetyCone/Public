@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Public.Common.Lib;
 
@@ -30,6 +31,18 @@ namespace Public.Common.Lib.Code.Physical
         public const string VS2015 = @"VS2015";
         public const string VS2017 = @"VS2017";
 
+
+        public static IEnumerable<VisualStudioVersion> GetAllVisualStudioVersions()
+        {
+            VisualStudioVersion[] output = new VisualStudioVersion[]
+            {
+                VisualStudioVersion.VS2010,
+                VisualStudioVersion.VS2013,
+                VisualStudioVersion.VS2015,
+                VisualStudioVersion.VS2017,
+            };
+            return output;
+        }
 
         public static string ToDefaultString(this VisualStudioVersion visualStudioVersion)
         {

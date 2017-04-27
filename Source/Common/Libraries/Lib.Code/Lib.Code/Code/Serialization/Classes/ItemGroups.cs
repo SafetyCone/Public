@@ -15,6 +15,7 @@ namespace Public.Common.Lib.Code.Serialization
         {
             Dictionary<string, Action<ProjectItem>> distributors = new Dictionary<string, Action<ProjectItem>>();
             distributors.Add(typeof(CompileProjectItem).FullName, (x) => groups.Compiles.Add((CompileProjectItem)x));
+            distributors.Add(typeof(COMReferenceProjectItem).FullName, (x) => groups.COMReferences.Add((COMReferenceProjectItem)x));
             distributors.Add(typeof(ContentProjectItem).FullName, (x) => groups.Contents.Add((ContentProjectItem)x));
             distributors.Add(typeof(EmbededResourceProjectItem).FullName, (x) => groups.Embeddeds.Add((EmbededResourceProjectItem)x));
             distributors.Add(typeof(FolderProjectItem).FullName, (x) => groups.Folders.Add((FolderProjectItem)x));
@@ -32,6 +33,7 @@ namespace Public.Common.Lib.Code.Serialization
 
 
         public List<ReferenceProjectItem> References { get; set; }
+        public List<COMReferenceProjectItem> COMReferences { get; set; }
         public List<CompileProjectItem> Compiles { get; set; }
         public List<EmbededResourceProjectItem> Embeddeds { get; set; }
         public List<ProjectReferenceProjectItem> ProjectReferences { get; set; }
@@ -43,6 +45,7 @@ namespace Public.Common.Lib.Code.Serialization
         public ItemGroups()
         {
             this.References = new List<ReferenceProjectItem>();
+            this.COMReferences = new List<COMReferenceProjectItem>();
             this.Compiles = new List<CompileProjectItem>();
             this.Embeddeds = new List<EmbededResourceProjectItem>();
             this.ProjectReferences = new List<ProjectReferenceProjectItem>();

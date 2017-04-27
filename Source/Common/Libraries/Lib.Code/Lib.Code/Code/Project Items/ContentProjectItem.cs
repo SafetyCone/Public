@@ -12,7 +12,6 @@ namespace Public.Common.Lib.Code
 
 
         public ContentProjectItem()
-            : this(null)
         {
         }
 
@@ -26,6 +25,16 @@ namespace Public.Common.Lib.Code
             : base(includePath)
         {
             this.CopyToOutputDirectory = copyToOutputDirectory;
+        }
+
+        public ContentProjectItem(ContentProjectItem other)
+            : this(other.IncludePath, other.CopyToOutputDirectory)
+        {
+        }
+
+        public override ProjectItem Clone()
+        {
+            return new ContentProjectItem(this);
         }
     }
 }
