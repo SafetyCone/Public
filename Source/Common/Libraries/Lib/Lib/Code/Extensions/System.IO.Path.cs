@@ -48,5 +48,17 @@ namespace Public.Common.Lib.Extensions
             string output = fileExtensionWithSeparator.Substring(1); // Skip the first char.
             return output;
         }
+
+        /// <summary>
+        /// Returns the path to a file given the path of a base file and the relative path of the file.
+        /// </summary>
+        public static string GetPath(string baseFilePath, string relativeFilePath)
+        {
+            string directoryName = Path.GetDirectoryName(baseFilePath);
+            string unresolvedFilePath = Path.Combine(directoryName, relativeFilePath);
+
+            string output = PathExtensions.GetResolvedPath(unresolvedFilePath);
+            return output;
+        }
     }
 }

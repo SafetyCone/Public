@@ -33,29 +33,87 @@ namespace Public.Common.Lib.Code
 
         #region Distribute Project Items
 
+        public static void DistributeChangesFromDefault(string solutionsDirectoryPath)
+        {
+            string defaultSolutionPath = Creation.GetDefaultSolutionFilePath(solutionsDirectoryPath);
+
+            string[] solutionFilePaths = Directory.GetFiles(solutionsDirectoryPath, @"*.sln");
+            foreach(string solutionFilePath in solutionFilePaths)
+            {
+                if(defaultSolutionPath != solutionFilePath)
+                {
+                    Creation.DistributeChanges(defaultSolutionPath, solutionFilePath);
+                }
+            }
+        }
+
         public static void DistributeChanges(string sourceSolutionPath, string destinationSolutionPath)
         {
             PhysicalSolution sourceSolution = SolutionSerializer.Deserialize(sourceSolutionPath);
             PhysicalSolution destinationSolution = SolutionSerializer.Deserialize(destinationSolutionPath);
 
+            ProjectReferenceCollection projectReferenceCollection = new ProjectReferenceCollection();
+            Creation.IncreaseProjectReferenceCollection(projectReferenceCollection, sourceSolution, sourceSolutionPath);
+            Creation.IncreaseProjectReferenceCollection(projectReferenceCollection, destinationSolution, destinationSolutionPath);
+
             string solutionsDirectoryPath = Path.GetDirectoryName(sourceSolutionPath);
 
-            Creation.DistributeChanges(solutionsDirectoryPath, sourceSolution, destinationSolution);
+            Creation.DistributeChanges(sourceSolution, sourceSolutionPath, destinationSolution, destinationSolutionPath, projectReferenceCollection);
+
+            SolutionSerializer.Serialize(destinationSolutionPath, destinationSolution);
+        }
+
+        public static void IncreaseProjectReferenceCollection(ProjectReferenceCollection projectReferenceCollection, PhysicalSolution solution, string solutionFilePath)
+        {
+            foreach(Guid projectGuid in solution.ProjectsByGuid.Keys)
+            {
+                SolutionProjectReference solutionProjectReference = solution.ProjectsByGuid[projectGuid];
+                string projectPath = PathExtensions.GetPath(solutionFilePath, solutionProjectReference.RelativePath);
+                if (VisualStudioVersionSet.IsVisualStudioVersioned(projectPath))
+                {
+                    // Add project references from project files for all VS Versions.
+                    string[] allVsVersionedProjectPaths = VisualStudioVersionSet.GetAllProjectVisualStudioVersionFilePaths(projectPath);
+                    foreach(string vsVersionedProjectPath in allVsVersionedProjectPaths)
+                    {
+                        ProjectReference curVsVersionedProjectReference = ProjectReference.GetFromProjectFilePath(vsVersionedProjectPath);
+
+                        if (!projectReferenceCollection.ContainsByPath(curVsVersionedProjectReference.Path))
+                        {
+                            projectReferenceCollection.Add(curVsVersionedProjectReference);
+                        }
+                    }
+                }
+                else
+                {
+                    // Only add this project file.
+                    ProjectReference projectReference = new ProjectReference(solutionProjectReference.Name, projectPath, projectGuid);
+                    projectReferenceCollection.Add(projectReference);
+                }
+            }
         }
 
         /// <remarks>
         /// For two solution files in the same directory (meaning all realtive paths would be the same), distribute changes in projects and files from one solution to another.
         /// This is useful for transfering changes from the default Visual Studio version solution to all others.
         /// </remarks>
-        public static void DistributeChanges(string solutionsDirectoryPath, PhysicalSolution sourceSolution, PhysicalSolution destinationSolution)
+        public static void DistributeChanges(PhysicalSolution sourceSolution, string sourceSolutionFilePath, PhysicalSolution destinationSolution, string destinationSolutionFilePath, ProjectReferenceCollection projectReferenceCollection)
         {
+            string solutionsDirectoryPath = Path.GetDirectoryName(sourceSolutionFilePath);
+
+            List<ProjectReferenceDiffItem> sourceProjects = Creation.GetSolutionProjectDiffItems(sourceSolution);
+            List<ProjectReferenceDiffItem> destinationProjects = Creation.GetSolutionProjectDiffItems(destinationSolution);
+
             // Account for any project additions or subtractions.
-            SetDifference<Guid> guidDifferences = SetDifference<Guid>.Calculate(sourceSolution.ProjectsByGuid.Keys, destinationSolution.ProjectsByGuid.Keys);
+            SetDifference<ProjectReferenceDiffItem> guidDifferences = SetDifference<ProjectReferenceDiffItem>.Calculate(sourceProjects, destinationProjects);
 
             // Add projects to destination if new projects exist in the source.
-            foreach (Guid guidToAdd in guidDifferences.InSet1Only)
+            foreach (ProjectReferenceDiffItem diffItem in guidDifferences.InSet1Only)
             {
-                ProjectReference projectToAdd = new ProjectReference(sourceSolution.ProjectsByGuid[guidToAdd]);
+                destinationProjects.Add(diffItem); // Add for later use.
+
+                Guid guidToAdd = diffItem.GUID;
+
+                SolutionProjectReference projectToAdd = new SolutionProjectReference(sourceSolution.ProjectsByGuid[guidToAdd]);
                 destinationSolution.ProjectsByGuid.Add(guidToAdd, projectToAdd);
 
                 foreach(BuildConfiguration buildConfig in sourceSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration.Keys)
@@ -69,8 +127,10 @@ namespace Public.Common.Lib.Code
             }
 
             // Remove project from destination if it has projects not present in the source.
-            foreach (Guid guidToRemove in guidDifferences.InSet2Only)
+            foreach (ProjectReferenceDiffItem diffItem in guidDifferences.InSet2Only)
             {
+                Guid guidToRemove = diffItem.GUID;
+
                 destinationSolution.ProjectsByGuid.Remove(guidToRemove);
 
                 foreach(BuildConfiguration buildConfig in destinationSolution.ProjectBuildConfigurationsBySolutionBuildConfiguration.Keys)
@@ -81,10 +141,26 @@ namespace Public.Common.Lib.Code
             }
 
             // Foreach project, distribute changes from source project to destination project.
+            Dictionary<Guid, ProjectReferenceDiffItem> sourceDiffs = new Dictionary<Guid, ProjectReferenceDiffItem>();
+            foreach(ProjectReferenceDiffItem diffItem in sourceProjects)
+            {
+                sourceDiffs.Add(diffItem.GUID, diffItem);
+            }
+
+            Dictionary<int, ProjectReferenceDiffItem> destinationDiffs = new Dictionary<int, ProjectReferenceDiffItem>();
+            foreach(ProjectReferenceDiffItem diffItem in destinationProjects)
+            {
+                destinationDiffs.Add(diffItem.HashValue, diffItem);
+            }
+
             foreach (Guid projectId in sourceSolution.ProjectsByGuid.Keys)
             {
-                ProjectReference sourceProjectReference = sourceSolution.ProjectsByGuid[projectId];
-                ProjectReference destinationProjectReference = destinationSolution.ProjectsByGuid[projectId];
+                SolutionProjectReference sourceProjectReference = sourceSolution.ProjectsByGuid[projectId];
+
+                ProjectReferenceDiffItem sourceDiffItem = sourceDiffs[projectId];
+                ProjectReferenceDiffItem destinationDiffItem = destinationDiffs[sourceDiffItem.HashValue];
+
+                SolutionProjectReference destinationProjectReference = destinationSolution.ProjectsByGuid[destinationDiffItem.GUID];
 
                 string sourceProjectFileUnresolvedPath = Path.Combine(solutionsDirectoryPath, sourceProjectReference.RelativePath);
                 string sourceProjectFilePath = PathExtensions.GetResolvedPath(sourceProjectFileUnresolvedPath);
@@ -95,17 +171,30 @@ namespace Public.Common.Lib.Code
                 PhysicalCSharpProject sourceProject = CSharpProjectSerializer.Deserialize(sourceProjectFilePath);
                 PhysicalCSharpProject destinationProject = CSharpProjectSerializer.Deserialize(destinationProjectFilePath);
 
-                Creation.DistributeChanges(sourceProject, destinationProject);
+                Creation.DistributeChanges(sourceProject, sourceProjectFilePath, destinationProject, destinationProjectFilePath, projectReferenceCollection);
 
-                CSharpProjectSerializer.Serialize(sourceProjectFilePath, sourceProject);
                 CSharpProjectSerializer.Serialize(destinationProjectFilePath, destinationProject);
             }
+        }
+
+        private static List<ProjectReferenceDiffItem> GetSolutionProjectDiffItems(PhysicalSolution solution)
+        {
+            List<ProjectReferenceDiffItem> output = new List<ProjectReferenceDiffItem>();
+            foreach(Guid guid in solution.ProjectsByGuid.Keys)
+            {
+                SolutionProjectReference project = solution.ProjectsByGuid[guid];
+
+                ProjectReferenceDiffItem diffItem = new ProjectReferenceDiffItem(project.RelativePath, guid);
+                output.Add(diffItem);
+            }
+
+            return output;
         }
 
         /// <remarks>
         /// Clear all project items from the destination project, add all from the source project.
         /// </remarks>
-        public static void DistributeChanges(PhysicalCSharpProject sourceProject, PhysicalCSharpProject destinationProject)
+        public static void DistributeChanges(PhysicalCSharpProject sourceProject, string sourceProjectFilePath, PhysicalCSharpProject destinationProject, string destinationProjectFilePath, ProjectReferenceCollection projectReferenceCollection)
         {
             destinationProject.ProjectItemsByRelativePath.Clear();
 
@@ -114,9 +203,43 @@ namespace Public.Common.Lib.Code
                 ProjectItem item = sourceProject.ProjectItemsByRelativePath[relativePath];
                 ProjectItem clone = item.Clone();
 
+                if(clone is ProjectReferenceProjectItem)
+                {
+                    ProjectReferenceProjectItem cloneAsProjectItem = clone as ProjectReferenceProjectItem;
+                    Creation.AdjustProjectReferenceIfNeeded(cloneAsProjectItem, destinationProject.VisualStudioVersion, destinationProjectFilePath, projectReferenceCollection);
+                }
+
                 destinationProject.ProjectItemsByRelativePath.Add(relativePath, clone);
             }
         }
+
+        public static void AdjustProjectReferenceIfNeeded(ProjectReferenceProjectItem reference, VisualStudioVersion destinationVisualStudioVersion, string destinationProjectFilePath, ProjectReferenceCollection projectReferenceCollection)
+        {
+            string[] referenceNameTokens = reference.Name.Split(PathExtensions.WindowsFileExtensionSeparatorChar);
+
+            string possibleVsVersionToken = referenceNameTokens[referenceNameTokens.Length - 1];
+
+            VisualStudioVersion dummy;
+            if(VisualStudioVersionExtensions.TryFromDefault(possibleVsVersionToken, out dummy))
+            {
+                referenceNameTokens[referenceNameTokens.Length - 1] = VisualStudioVersionExtensions.ToDefaultString(destinationVisualStudioVersion);
+                reference.Name = referenceNameTokens.LinearizeTokens(PathExtensions.WindowsFileExtensionSeparatorChar);
+
+                string referencePath = PathExtensions.GetPath(destinationProjectFilePath, reference.IncludePath);
+                string changedReferencePath = ProjectFilePathInfo.ChangeVisualStudioVersion(referencePath, destinationVisualStudioVersion);
+                string changedRelativePath = PathExtensions.GetRelativePath(destinationProjectFilePath, changedReferencePath);
+                reference.IncludePath = changedRelativePath;
+            }
+        }
+
+        //public static string AdjustProjectRelativePath(string projectRelativePath, VisualStudioVersion desiredVisualStudioVersion)
+        //{
+        //    string directoryName = Path.GetDirectoryName(projectRelativePath);
+        //    string fileName = Path.GetFileName(projectRelativePath);
+
+        //    string[] fileNameTokens = fileName.Split(PathExtensions.WindowsFileExtensionSeparatorChar);
+        //    filen
+        //}
 
         #endregion
 
@@ -145,7 +268,7 @@ namespace Public.Common.Lib.Code
 
             // Determine the paths to each project referenced by the solution object.
             List<string> projectFilePaths = new List<string>();
-            foreach(ProjectReference initialProjectReference in initialSolution.ProjectsByGuid.Values)
+            foreach(SolutionProjectReference initialProjectReference in initialSolution.ProjectsByGuid.Values)
             {
                 string projectFileUnresolvedPath = Path.Combine(solutionDirectoryPath, initialProjectReference.RelativePath);
                 string projectFilePath = PathExtensions.GetResolvedPath(projectFileUnresolvedPath);
@@ -186,7 +309,7 @@ namespace Public.Common.Lib.Code
                     curVsVersionSolution.VisualStudioVersion = desiredVsVersion;
 
                     // Now modify all project file paths to have the proper VS Version token.
-                    foreach(ProjectReference reference in curVsVersionSolution.ProjectsByGuid.Values)
+                    foreach(SolutionProjectReference reference in curVsVersionSolution.ProjectsByGuid.Values)
                     {
                         string relativePath = reference.RelativePath;
                         string relativePathDirectory = Path.GetDirectoryName(relativePath);
@@ -252,6 +375,32 @@ namespace Public.Common.Lib.Code
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the default solution file path.
+        /// </summary>
+        public static string GetDefaultSolutionFilePath(string solutionsDirectoryPath)
+        {
+            string defaultSolutionShortcutFilePath = Creation.GetDefaultSolutionShortcutFilePath(solutionsDirectoryPath);
+            
+            string output = WindowsShellRuntimeWrapper.GetShortcutLinkTargetPath(defaultSolutionShortcutFilePath);
+            return output;
+        }
+
+        /// <summary>
+        /// Get the path of the default solution file link.
+        /// </summary>
+        public static string GetDefaultSolutionShortcutFilePath(string solutionsDirectoryPath)
+        {
+            string[] solutionLinkFiles = Directory.GetFiles(solutionsDirectoryPath, @"*.sln.lnk");
+            if(1 != solutionLinkFiles.Length)
+            {
+                throw new InvalidOperationException(@"Unable to determine default solution from link target due to the presence of multiple links in the solution directory.");
+            }
+
+            string output = solutionLinkFiles[0];
+            return output;
         }
 
         /// <remarks>
@@ -344,7 +493,7 @@ namespace Public.Common.Lib.Code
 
             LogicalSolution solution = Creation.CreateLogicalSolution(serializationList, specification, solutionTypeDirectoryPath);
 
-            List<ProjectReference> projectReferences = Creation.GetProjectReferences(solutionFilePath, solution);
+            List<SolutionProjectReference> projectReferences = Creation.GetProjectReferences(solutionFilePath, solution);
 
             PhysicalSolution physicalSolution = Creation.CreatePhysicalSolution(specification, projectReferences, solution);
             serializationList.AddSolution(solutionFilePath, physicalSolution);
@@ -352,9 +501,9 @@ namespace Public.Common.Lib.Code
             return solution;
         }
 
-        private static List<ProjectReference> GetProjectReferences(string solutionFilePath, LogicalSolution solution)
+        private static List<SolutionProjectReference> GetProjectReferences(string solutionFilePath, LogicalSolution solution)
         {
-            List<ProjectReference> output = new List<ProjectReference>();
+            List<SolutionProjectReference> output = new List<SolutionProjectReference>();
             foreach(string projectPath in solution.ProjectsByPath.Keys)
             {
                 LogicalProject project = solution.ProjectsByPath[projectPath];
@@ -363,7 +512,7 @@ namespace Public.Common.Lib.Code
                 string relativePath = PathExtensions.GetRelativePath(solutionFilePath, projectPath);
                 Guid guid = project.Info.GUID;
 
-                ProjectReference reference = new ProjectReference(name, relativePath, guid);
+                SolutionProjectReference reference = new SolutionProjectReference(name, relativePath, guid);
                 output.Add(reference);
             }
 
@@ -754,14 +903,14 @@ namespace Public.Common.Lib.Code
 
         public static PhysicalSolution CreatePhysicalSolution(
             NewSolutionSpecification specification,
-            List<ProjectReference> projects,
+            List<SolutionProjectReference> projects,
             LogicalSolution logicalSolution)
         {
             PhysicalSolution output = new PhysicalSolution();
             output.Info = logicalSolution.Info;
             output.VisualStudioVersion = specification.VisualStudioVersion;
 
-            foreach (ProjectReference project in projects)
+            foreach (SolutionProjectReference project in projects)
             {
                 output.ProjectsByGuid.Add(project.GUID, project);
             }

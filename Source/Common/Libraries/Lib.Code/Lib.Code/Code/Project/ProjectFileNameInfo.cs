@@ -42,6 +42,35 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
+        /// <summary>
+        /// Return the base file name of a project file (which lacks the Visual Studio version token and the solution file extension).
+        /// </summary>
+        public static string GetFileNameBase(string projectFilePath)
+        {
+            string projectFileName = Path.GetFileName(projectFilePath);
+
+            string[] tokens = projectFileName.Split(PathExtensions.WindowsFileExtensionSeparatorChar);
+
+            string possibleVsVersionToken = tokens[tokens.Length - 2];
+
+            int lastBaseFileNameTokenIndex;
+            VisualStudioVersion vsVersion;
+            if (VisualStudioVersionExtensions.TryFromDefault(possibleVsVersionToken, out vsVersion))
+            {
+                lastBaseFileNameTokenIndex = tokens.Length - 2;
+            }
+            else
+            {
+                lastBaseFileNameTokenIndex = tokens.Length - 1;
+            }
+
+            string[] baseTokens = new string[lastBaseFileNameTokenIndex];
+            Array.Copy(tokens, baseTokens, baseTokens.Length);
+
+            string output = baseTokens.LinearizeTokens(PathExtensions.WindowsFileExtensionSeparatorChar);
+            return output;
+        }
+
         public static string Format(ProjectFileNameInfo info)
         {
             string[] fileNameTokens = new string[3];

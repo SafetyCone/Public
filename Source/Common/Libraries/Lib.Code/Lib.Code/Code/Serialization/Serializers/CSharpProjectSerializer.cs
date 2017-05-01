@@ -82,7 +82,7 @@ namespace Public.Common.Lib.Code.Serialization
 
             ItemGroups groups = new ItemGroups(project.ProjectItemsByRelativePath);
             CSharpProjectSerializer.CreateReferenceItemGroup(projectNode, groups.References);
-            CSharpProjectSerializer.CreateCOMReferenceItemGroup(projectNode, groups.COMReferences);
+            CSharpProjectSerializer.CreateCOMReferenceItemGroup(projectNode, groups.COMReferences, project.VisualStudioVersion);
             CSharpProjectSerializer.CreateCompileItemGroup(projectNode, groups.Compiles);
             CSharpProjectSerializer.CreateEmbeddedResourceItemGroup(projectNode, groups.Embeddeds);
             CSharpProjectSerializer.CreateProjectReferenceItemGroup(projectNode, groups.ProjectReferences);
@@ -290,7 +290,7 @@ namespace Public.Common.Lib.Code.Serialization
             }
         }
 
-        private static void CreateCOMReferenceItemGroup(XmlElement projectNode, List<COMReferenceProjectItem> comReferences)
+        private static void CreateCOMReferenceItemGroup(XmlElement projectNode, List<COMReferenceProjectItem> comReferences, VisualStudioVersion visualStudioVersion)
         {
             XmlElement itemGroupNode = projectNode.OwnerDocument.CreateElement("ItemGroup");
             projectNode.AppendChild(itemGroupNode);
@@ -300,7 +300,18 @@ namespace Public.Common.Lib.Code.Serialization
                 XmlNode referenceNode = XmlHelper.CreateElement(itemGroupNode, "COMReference", new Tuple<string, string>[] { new Tuple<string, string>("Include", comReference.IncludePath) });
                 itemGroupNode.AppendChild(referenceNode);
 
-                XmlHelper.AddChildElement(referenceNode, "Guid", comReference.GUID.ToString().ToUpperInvariant());
+                string guidUpperStr = comReference.GUID.ToString().ToUpperInvariant();
+                string guidStr;
+                if (VisualStudioVersion.VS2010 == visualStudioVersion)
+                {
+                    guidStr = String.Format(@"{{{0}}}", guidUpperStr);
+                }
+                else
+                {
+                    guidStr = guidUpperStr;
+                }
+
+                XmlHelper.AddChildElement(referenceNode, "Guid", guidStr);
                 XmlHelper.AddChildElement(referenceNode, "VersionMajor", comReference.VersionMajor.ToString());
                 XmlHelper.AddChildElement(referenceNode, "VersionMinor", comReference.VersionMinor.ToString());
                 XmlHelper.AddChildElement(referenceNode, "Lcid", comReference.LCID.ToString());
@@ -476,13 +487,7 @@ namespace Public.Common.Lib.Code.Serialization
         {
             // Disable namespaces so node lookup is simple and intuitive.
             XmlDocument doc = new XmlDocument();
-            using (FileStream fStream = new FileStream(filePath, FileMode.Open))
-            {
-                XmlTextReader reader = new XmlTextReader(fStream);
-                reader.Namespaces = false;
-
-                doc.Load(reader);
-            }
+            doc.LoadNoNamespaces(filePath);
 
             Project output = new Project();
             output.Info.NamesInfo.Name = Path.GetFileNameWithoutExtension(filePath);

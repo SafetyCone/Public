@@ -19,12 +19,20 @@ namespace Public.Common.Lib.Code.Construction
     {
         static void Main(string[] args)
         {
-            //Program.CreateShortCut();
+            Program.DistributeChangesFromDefaultVersion();
+            //Program.CreateDefaultVersion();
             //Program.CreateNewSolutionSet();
-            Program.Test();
+            //Program.Test();
         }
 
-        private static void CreateShortCut()
+        private static void DistributeChangesFromDefaultVersion()
+        {
+            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel";
+
+            Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
+        }
+
+        private static void CreateDefaultVersion()
         {
             string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\WindowsShell";
             VisualStudioVersion defaultVersion = VisualStudioVersion.VS2015;
@@ -60,9 +68,11 @@ namespace Public.Common.Lib.Code.Construction
 
         private static void Test()
         {
+            Program.TestDistrubuteChangesFromDefault();
+            //Program.TestGetDefaultSolutionFilePath();
             //Program.TestDetermineDefaultVsVersion();
             //Program.TestUrlShortcut();
-            Program.TestSetDefaultVisualStudioVersion();
+            //Program.TestSetDefaultVisualStudioVersion();
             //Program.TestCreateSolutionSetFromInitialVsVersionFile();
             //Program.TestNewSolutionSetCreation();
             //Program.TestNewSolutionCreation();
@@ -75,6 +85,19 @@ namespace Public.Common.Lib.Code.Construction
             //Program.TestPathInfoNode();
             //Program.TestOrganizationsDirectoryPathIdentificationCustom();
             //Program.TestOrganizationsDirectoryPathIdentificationDefault();
+        }
+
+        private static void TestDistrubuteChangesFromDefault()
+        {
+            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
+            Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
+        }
+
+        private static void TestGetDefaultSolutionFilePath()
+        {
+            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
+
+            string defaultSolutionFilePath = Creation.GetDefaultSolutionFilePath(solutionsDirectoryPath);
         }
 
         private static void TestDetermineDefaultVsVersion()
@@ -102,7 +125,7 @@ namespace Public.Common.Lib.Code.Construction
 
         private static void TestCreateSolutionSetFromInitialVsVersionFile()
         {
-            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code\Public.Code.Construction.sln";
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code\Public.Code.Construction.VS2015.sln";
 
             VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
             {

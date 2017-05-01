@@ -15,14 +15,14 @@ namespace Public.Common.Lib.Code.Physical
         public SolutionInfo Info { get; set; }
         public VisualStudioVersion VisualStudioVersion { get; set; }
 
-        public Dictionary<Guid, ProjectReference> ProjectsByGuid { get; set; }
+        public Dictionary<Guid, SolutionProjectReference> ProjectsByGuid { get; set; }
         public Dictionary<BuildConfiguration, ProjectBuildConfigurationSet> ProjectBuildConfigurationsBySolutionBuildConfiguration { get; protected set; }
 
 
         public Solution()
         {
             this.Info = new SolutionInfo();
-            this.ProjectsByGuid = new Dictionary<Guid, ProjectReference>();
+            this.ProjectsByGuid = new Dictionary<Guid, SolutionProjectReference>();
             this.ProjectBuildConfigurationsBySolutionBuildConfiguration = new Dictionary<BuildConfiguration, ProjectBuildConfigurationSet>();
         }
 
@@ -30,10 +30,10 @@ namespace Public.Common.Lib.Code.Physical
         {
             this.Info = new SolutionInfo(other.Info);
             this.VisualStudioVersion = other.VisualStudioVersion;
-            this.ProjectsByGuid = new Dictionary<Guid, ProjectReference>();
+            this.ProjectsByGuid = new Dictionary<Guid, SolutionProjectReference>();
             foreach(Guid guid in other.ProjectsByGuid.Keys)
             {
-                ProjectReference referenceCopy = new ProjectReference(other.ProjectsByGuid[guid]);
+                SolutionProjectReference referenceCopy = new SolutionProjectReference(other.ProjectsByGuid[guid]);
                 this.ProjectsByGuid.Add(guid, referenceCopy);
             }
             this.ProjectBuildConfigurationsBySolutionBuildConfiguration = new Dictionary<BuildConfiguration, ProjectBuildConfigurationSet>(other.ProjectBuildConfigurationsBySolutionBuildConfiguration);

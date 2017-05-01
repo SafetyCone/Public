@@ -32,7 +32,7 @@ namespace Public.Common.Lib.Code.Physical
         public const string VS2017 = @"VS2017";
 
 
-        public static IEnumerable<VisualStudioVersion> GetAllVisualStudioVersions()
+        public static VisualStudioVersion[] GetAllVisualStudioVersions()
         {
             VisualStudioVersion[] output = new VisualStudioVersion[]
             {

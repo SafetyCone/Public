@@ -153,7 +153,7 @@ namespace Public.Common.Lib.Code.Serialization
         {
             foreach(Guid ID in solution.ProjectsByGuid.Keys)
             {
-                ProjectReference project = solution.ProjectsByGuid[ID];
+                SolutionProjectReference project = solution.ProjectsByGuid[ID];
 
                 string projectLine = String.Format(@"Project(""{{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}}"") = ""{0}"", ""{1}"", ""{{{2}}}""", project.Name, project.RelativePath, project.GUID.ToString().ToUpperInvariant());
                 writer.WriteLine(projectLine);
@@ -393,7 +393,7 @@ namespace Public.Common.Lib.Code.Serialization
 
                 Guid guid = Guid.Parse(guidStr);
 
-                ProjectReference reference = new ProjectReference(name, relativePath, guid);
+                SolutionProjectReference reference = new SolutionProjectReference(name, relativePath, guid);
                 solution.ProjectsByGuid.Add(reference.GUID, reference);
 
                 lineIndex++;

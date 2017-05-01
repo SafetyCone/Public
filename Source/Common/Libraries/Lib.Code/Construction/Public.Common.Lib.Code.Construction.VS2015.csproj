@@ -53,7 +53,7 @@
       <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.csproj">
+    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.VS2015.csproj">
       <Project>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</Project>
       <Name>Public.Common.Lib.Code</Name>
     </ProjectReference>
