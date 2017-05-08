@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Georges.VS2015", "Georges\Georges.VS2015.csproj", "{2BADC6BC-EFF9-4208-BACC-3A1D358FA942}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Georges.Lib.VS2015", "Lib\Georges.Lib.VS2015.csproj", "{9AD0C04D-F7B9-4845-A988-2917F54C8B2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Excel.VS2015", "..\..\Libraries\Excel\Excel\Public.Common.Excel.VS2015.csproj", "{8DF5284B-6383-4F14-A204-3CCFCA58F7B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BADC6BC-EFF9-4208-BACC-3A1D358FA942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BADC6BC-EFF9-4208-BACC-3A1D358FA942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BADC6BC-EFF9-4208-BACC-3A1D358FA942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BADC6BC-EFF9-4208-BACC-3A1D358FA942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AD0C04D-F7B9-4845-A988-2917F54C8B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD0C04D-F7B9-4845-A988-2917F54C8B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD0C04D-F7B9-4845-A988-2917F54C8B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD0C04D-F7B9-4845-A988-2917F54C8B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DF5284B-6383-4F14-A204-3CCFCA58F7B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DF5284B-6383-4F14-A204-3CCFCA58F7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DF5284B-6383-4F14-A204-3CCFCA58F7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF5284B-6383-4F14-A204-3CCFCA58F7B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,24 @@
+The George project aims to experiment with implementing in C# functions for calculating averages, standard deviations, skew and kurtosis.
+
+After implementing these calculators, I want to test them against an Excel file containing values. This allows working with the Excel library.
+After testing versus Excel, I want to test against the Math.NET Numerics statistics functions.
+
+These C# implementations can serve as a comparison for a C++ implementation.
+
+Here are a few resources:
+https://en.wikipedia.org/wiki/Moment_(mathematics)
+http://stats.stackexchange.com/questions/157895/unbiased-estimators-of-skewness-and-kurtosis
+http://modelingwithdata.org/pdfs/moments.pdf (Now at: C:\Organizations\Minex\Documents\Modeling With Data)
+https://support.office.com/en-us/article/SKEW-function-bdf49d86-b1ef-4804-a046-28eaea69c9fa?ui=en-US&rs=en-US&ad=US&fromAR=1
+http://www.macroption.com/kurtosis-excel-kurt/
+https://support.office.com/en-us/article/KURT-function-bc3a265c-5da4-4dcb-b7fd-c237789095ab
+
+
+An example Excel file is:
+C:\Organizations\Minex\Data\Random Value Statistics.xlsx
+
+
+NOTES:
+
+* Math.NET Numerics - See the Public->Common->Experiments->Jules experiment for a basic example in operating the Math.NET numerics library.
+	The Math.NET Numerics statistics code calculates sample variance, sample skew, and sample excess kurtosis. It does so in an incremental, streaming way.
