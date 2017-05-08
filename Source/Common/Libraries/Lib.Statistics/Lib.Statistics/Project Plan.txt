@@ -1,0 +1,10 @@
+Public.Common.Lib.Statistics
+
+The statistics library provides basic implementations of common descriptive statistics:
+* Mean
+* Variance (sample and population)
+* Skewness (sample and population)
+* Kurtosis (sample excess)
+
+
+Additionally, see the Public->Common->Experiment->Georges experiment for how to work with Excel statistics and the Math.NET Numerics statistics library.

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Statistics.Construction.VS2017", "Construction/Public.Common.Lib.Statistics.Construction.VS2017.csproj", "{38DF8577-E811-4454-8549-9905CA3DB663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Statistics.VS2017", "Lib.Statistics/Public.Common.Lib.Statistics.VS2017.csproj", "{840B0535-BDA4-4CE0-91E0-F9BB9DEC6180}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38DF8577-E811-4454-8549-9905CA3DB663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38DF8577-E811-4454-8549-9905CA3DB663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38DF8577-E811-4454-8549-9905CA3DB663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38DF8577-E811-4454-8549-9905CA3DB663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{840B0535-BDA4-4CE0-91E0-F9BB9DEC6180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{840B0535-BDA4-4CE0-91E0-F9BB9DEC6180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{840B0535-BDA4-4CE0-91E0-F9BB9DEC6180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{840B0535-BDA4-4CE0-91E0-F9BB9DEC6180}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
