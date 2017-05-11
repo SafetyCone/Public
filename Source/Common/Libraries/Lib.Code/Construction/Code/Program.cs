@@ -19,25 +19,41 @@ namespace Public.Common.Lib.Code.Construction
     {
         static void Main(string[] args)
         {
-            Program.DistributeChangesFromDefaultVersion();
-            //Program.CreateDefaultVersion();
+            //Program.DistributeChangesFromDefaultVersion();
+            Program.CreateDefaultVersion();
+            //Program.CreateSolutionSetFromInitialVsVersionSolution();
             //Program.CreateNewSolutionSet();
             //Program.Test();
         }
 
         private static void DistributeChangesFromDefaultVersion()
         {
-            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel";
+            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Statistics";
 
             Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
         }
 
         private static void CreateDefaultVersion()
         {
-            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\WindowsShell";
+            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib";
             VisualStudioVersion defaultVersion = VisualStudioVersion.VS2015;
 
             Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
+        }
+
+        private static void CreateSolutionSetFromInitialVsVersionSolution()
+        {
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib\Common.Construction.VS2015.sln";
+
+            VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
+            {
+                VisualStudioVersion.VS2010,
+                VisualStudioVersion.VS2013,
+                VisualStudioVersion.VS2015,
+                VisualStudioVersion.VS2017,
+            };
+
+            Creation.CreateSolutionSet(initialSolutionFilePath, desiredVsVersions);
         }
 
         private static void CreateNewSolutionSet()
@@ -48,7 +64,7 @@ namespace Public.Common.Lib.Code.Construction
                 @"Public",
                 @"Common",
                 SolutionType.Library,
-                @"Excel",
+                @"Lib.Statistics",
                 ProjectType.Library,
                 VisualStudioVersion.VS2015,
                 Language.CSharp);
