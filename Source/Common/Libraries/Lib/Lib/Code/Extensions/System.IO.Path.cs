@@ -50,6 +50,15 @@ namespace Public.Common.Lib.Extensions
         }
 
         /// <summary>
+        /// Combines the file name without extension, the Windows file extention separator, and the extension to produce the full file name.
+        /// </summary>
+        public static string GetFullFileName(string fileNameWithoutExtension, string extension)
+        {
+            string output = fileNameWithoutExtension + PathExtensions.WindowsFileExtensionSeparatorChar + extension;
+            return output;
+        }
+
+        /// <summary>
         /// Returns the path to a file given the path of a base file and the relative path of the file.
         /// </summary>
         public static string GetPath(string baseFilePath, string relativeFilePath)
