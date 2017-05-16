@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</ProjectGuid>
+    <ProjectGuid>{AA7E1EA8-218E-484D-8AED-8E973352B058}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Public.Common.WindowsShell</RootNamespace>
@@ -16,8 +16,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\VS2015\Debug</OutputPath>
-    <BaseIntermediateOutputPath>obj\VS2015\</BaseIntermediateOutputPath>
+    <OutputPath>bin\VS2017\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,8 +25,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\VS2015\Release</OutputPath>
-    <BaseIntermediateOutputPath>obj\VS2015\</BaseIntermediateOutputPath>
+    <OutputPath>bin\VS2017\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
-      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <Guid>F935DC20-1CF0-11D0-ADB9-00C04FD58A0B</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
@@ -56,21 +56,15 @@
     <Compile Include="Code\WindowsShellRuntimeWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2015.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
-      <Name>Public.Common.Lib.VS2015</Name>
+    <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2017.csproj">
+      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
+      <Name>Public.Common.Lib.VS2017</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
