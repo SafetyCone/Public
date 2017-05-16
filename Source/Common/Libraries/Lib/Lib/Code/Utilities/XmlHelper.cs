@@ -78,22 +78,50 @@ namespace Public.Common.Lib
             return output;
         }
 
-        public static void AddChildElement(XmlNode parentNode, string nodeName, string nodeInnerText)
+        public static XmlElement AddChildElement(XmlNode parentNode, string nodeName, string nodeInnerText, XmlNode afterNode)
+        {
+            XmlElement child = XmlHelper.CreateElement(parentNode, nodeName, nodeInnerText);
+            parentNode.InsertAfter(child, afterNode);
+
+            return child;
+        }
+
+        public static XmlElement AddChildElement(XmlNode parentNode, string nodeName, XmlNode afterNode)
+        {
+            XmlElement child = parentNode.OwnerDocument.CreateElement(nodeName);
+            parentNode.InsertAfter(child, afterNode);
+
+            return child;
+        }
+
+        public static XmlElement AddChildElement(XmlNode parentNode, string nodeName, string nodeInnerText)
         {
             XmlElement child = XmlHelper.CreateElement(parentNode, nodeName, nodeInnerText);
             parentNode.AppendChild(child);
+
+            return child;
         }
 
-        public static void AddChildElement(XmlNode parentNode, string nodeName, string nodeInnerText, IEnumerable<Tuple<string, string>> attributes)
+        public static XmlElement AddChildElement(XmlNode parentNode, string nodeName, string nodeInnerText, IEnumerable<Tuple<string, string>> attributes)
         {
             XmlElement child = XmlHelper.CreateElement(parentNode, nodeName, nodeInnerText, attributes);
             parentNode.AppendChild(child);
+
+            return child;
         }
 
-        public static void AddChildElement(XmlNode parentNode, string nodeName, IEnumerable<Tuple<string, string>> attributes)
+        public static XmlElement AddChildElement(XmlNode parentNode, string nodeName, IEnumerable<Tuple<string, string>> attributes)
         {
             XmlElement child = XmlHelper.CreateElement(parentNode, nodeName, null, attributes);
             parentNode.AppendChild(child);
+
+            return child;
+        }
+
+        public static void FixXmlDocumentNamespaceForSave(XmlDocument document, string desiredNamespace)
+        {
+            document.FirstChild.NextSibling.Attributes.RemoveNamedItem(@"xmlns");
+            document.DocumentElement.SetAttribute(@"xmlns", desiredNamespace);
         }
 
         #endregion

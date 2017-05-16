@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{34D7A097-C827-472F-8AEC-EE3DC68A9791}</ProjectGuid>
+    <ProjectGuid>{E5653F0E-29B5-4528-8B71-67912B2DD94E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Public.Common.Lib.Construction</RootNamespace>
     <AssemblyName>Public.Common.Lib.Construction</AssemblyName>
@@ -17,7 +17,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\VS2015\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2015\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +27,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\VS2017\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,6 +49,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="../Lib/Public.Common.Lib.VS2017.csproj">
+      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
+      <Name>Public.Common.Lib.VS2017</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>

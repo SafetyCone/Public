@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</ProjectGuid>
+    <ProjectGuid>{40F1D161-F811-4575-B098-69F11EC05E1B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Public.Common.Lib</RootNamespace>
@@ -17,7 +17,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\VS2010\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2010\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +26,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\VS2010\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2010\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,6 +44,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Extensions\System.DateTime.cs" />
+    <Compile Include="Code\Extensions\System.Xml.XmlDocument.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Exceptions\UnexpectedEnumerationValueException.cs" />
     <Compile Include="Code\Extensions\System.Collections.Generic.Dictionary.cs" />
@@ -65,6 +69,7 @@
     <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />
     <Compile Include="Code\IO\UrlShortcuts.cs" />
     <Compile Include="Code\Utilities\HashHelper.cs" />
+    <Compile Include="Code\Utilities\SearchPatternHelper.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifference.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifferenceTextSerializer.cs" />
     <Compile Include="Code\Utilities\Utilities.cs" />
