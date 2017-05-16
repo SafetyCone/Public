@@ -25,6 +25,9 @@ namespace Public.Common.Lib.Code.Serialization
         private const string MicrosoftCSharpTargetsImportKet = @"$(MSBuildToolsPath)\Microsoft.CSharp.targets";
         private const string DefaultAppDesignerFolder = @"Properties";
         private const int DefaultFileAlignment = 512;
+        public const string BaseIntermediateOutputPathNodeName = @"BaseIntermediateOutputPath";
+        public const string OutputPathNodeName = @"OutputPath";
+        public const string MsBuild2003XmlNamespaceName = @"http://schemas.microsoft.com/developer/msbuild/2003";
 
 
         #region Static
@@ -364,7 +367,11 @@ namespace Public.Common.Lib.Code.Serialization
             }
             XmlHelper.AddChildElement(groupNode, "DebugType", info.DebugType.ToDefaultString());
             XmlHelper.AddChildElement(groupNode, "Optimize", info.Optimize.ToStringLower());
-            XmlHelper.AddChildElement(groupNode, "OutputPath", info.OutputPath);
+            XmlHelper.AddChildElement(groupNode, "OutputPath", info.BinOutputPath);
+            if (!String.IsNullOrEmpty(info.ObjIntermediatePath))
+            {
+                XmlHelper.AddChildElement(groupNode, "BaseIntermediateOutputPath", info.ObjIntermediatePath);
+            }
             XmlHelper.AddChildElement(groupNode, "DefineConstants", StringExtensions.Concatenate(info.DefinedConstants.ToArray(), @";"));
             XmlHelper.AddChildElement(groupNode, "ErrorReport", BuildConfigurationInfo.DefaultErrorReport);
             XmlHelper.AddChildElement(groupNode, "WarningLevel", BuildConfigurationInfo.DefaultWarningLevel.ToString());
@@ -464,7 +471,7 @@ namespace Public.Common.Lib.Code.Serialization
             {
                 new Tuple<string, string>("ToolsVersion", toolsVersionStr),
                 new Tuple<string, string>("DefaultTargets", "Build"),
-                new Tuple<string, string>("xmlns", "http://schemas.microsoft.com/developer/msbuild/2003"),
+                new Tuple<string, string>("xmlns", CSharpProjectSerializer.MsBuild2003XmlNamespaceName),
             };
 
             XmlElement projectNode = XmlHelper.CreateElement(document, "Project", attributes);
@@ -790,7 +797,13 @@ namespace Public.Common.Lib.Code.Serialization
             string optimizeStr = node.SelectSingleNode("Optimize").InnerText;
             configInfo.Optimize = Boolean.Parse(optimizeStr);
 
-            configInfo.OutputPath = node.SelectSingleNode("OutputPath").InnerText;
+            configInfo.BinOutputPath = node.SelectSingleNode("OutputPath").InnerText;
+
+            XmlNode baseIntermediatePathNode = node.SelectSingleNode("BaseIntermediateOutputPath");
+            if(null != baseIntermediatePathNode)
+            {
+                configInfo.ObjIntermediatePath = baseIntermediatePathNode.InnerText;
+            }
 
             string defineConstantsStr = node.SelectSingleNode("DefineConstants").InnerText;
             string[] defineConstantsArr = defineConstantsStr.Split(';');

@@ -35,9 +35,9 @@ namespace Public.Common.Lib.Code
 
         public static void DistributeChangesFromDefault(string solutionsDirectoryPath)
         {
-            string defaultSolutionPath = Creation.GetDefaultSolutionFilePath(solutionsDirectoryPath);
+            string defaultSolutionPath = Utilities.GetDefaultSolutionFilePath(solutionsDirectoryPath);
 
-            string[] solutionFilePaths = Directory.GetFiles(solutionsDirectoryPath, @"*.sln");
+            string[] solutionFilePaths = Utilities.GetSolutionFilePaths(solutionsDirectoryPath);
             foreach(string solutionFilePath in solutionFilePaths)
             {
                 if(defaultSolutionPath != solutionFilePath)
@@ -377,32 +377,6 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        /// <summary>
-        /// Get the default solution file path.
-        /// </summary>
-        public static string GetDefaultSolutionFilePath(string solutionsDirectoryPath)
-        {
-            string defaultSolutionShortcutFilePath = Creation.GetDefaultSolutionShortcutFilePath(solutionsDirectoryPath);
-            
-            string output = WindowsShellRuntimeWrapper.GetShortcutLinkTargetPath(defaultSolutionShortcutFilePath);
-            return output;
-        }
-
-        /// <summary>
-        /// Get the path of the default solution file link.
-        /// </summary>
-        public static string GetDefaultSolutionShortcutFilePath(string solutionsDirectoryPath)
-        {
-            string[] solutionLinkFiles = Directory.GetFiles(solutionsDirectoryPath, @"*.sln.lnk");
-            if(1 != solutionLinkFiles.Length)
-            {
-                throw new InvalidOperationException(@"Unable to determine default solution from link target due to the presence of multiple links in the solution directory.");
-            }
-
-            string output = solutionLinkFiles[0];
-            return output;
-        }
-
         /// <remarks>
         /// Examine the shortcut to the default Visual Studio solution file created with the solution set, and get thus get the path of the default solution.
         /// </remarks>
@@ -536,7 +510,7 @@ namespace Public.Common.Lib.Code
                 string projectFilePath = Creation.GetProjectFilePath(solutionDirectoryPath, project.Info);
                 solution.ProjectsByPath.Add(projectFilePath, project);
 
-                PhysicalCSharpProject physicalProject = Creation.CreatePhysicalCSharpProject(serializationList, specification, project);
+                PhysicalCSharpProject physicalProject = Creation.CreatePhysicalCSharpProject(specification.VisualStudioVersion, project);
                 serializationList.AddProject(projectFilePath, physicalProject);
             }
 
@@ -579,7 +553,7 @@ namespace Public.Common.Lib.Code
         /// <summary>
         /// Creates (constructs and serializes) a new project, including all code files.
         /// </summary>
-        private static LogicalProject CreateProject(SerializationList serializationList, string solutionDirectoryPath, NewProjectSpecification specification, ProjectInfo info)
+        public static LogicalProject CreateProject(SerializationList serializationList, string solutionDirectoryPath, NewProjectSpecification specification, ProjectInfo info)
         {
             LogicalProject project = new LogicalProject();
             project.Info = info;
@@ -604,16 +578,16 @@ namespace Public.Common.Lib.Code
             return project;
         }
 
-        private static PhysicalCSharpProject CreatePhysicalCSharpProject(SerializationList serializationList, NewSolutionSpecification solutionSpecification, LogicalProject logicalProject)
+        public static PhysicalCSharpProject CreatePhysicalCSharpProject(VisualStudioVersion visualStudioVersion, LogicalProject logicalProject)
         {
             PhysicalCSharpProject output = new PhysicalCSharpProject(logicalProject);
 
-            output.VisualStudioVersion = solutionSpecification.VisualStudioVersion;
-            output.TargetFrameworkVersion = Creation.GetDefaultNetFrameworkVersion(solutionSpecification.VisualStudioVersion);
+            output.VisualStudioVersion = visualStudioVersion;
+            output.TargetFrameworkVersion = Creation.GetDefaultNetFrameworkVersion(visualStudioVersion);
             output.OutputType = logicalProject.Info.Type.ToDefaultOutputType();
-            output.ActiveConfiguration = Creation.GetDefaultActiveConfiguration(logicalProject, solutionSpecification.VisualStudioVersion);
+            output.ActiveConfiguration = Creation.GetDefaultActiveConfiguration(logicalProject, visualStudioVersion);
 
-            Creation.AddBuildConfigurationInfos(output, solutionSpecification.VisualStudioVersion);
+            Creation.AddBuildConfigurationInfos(output, visualStudioVersion);
             // No need to worry about imports here, just the default so far.
 
             return output;
@@ -625,7 +599,7 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
-        private static string GetProjectFilePath(string solutionDirectoryPath, ProjectInfo info)
+        public static string GetProjectFilePath(string solutionDirectoryPath, ProjectInfo info)
         {
             string projectDirectoryPath = Creation.GetProjectDirectoryPath(solutionDirectoryPath, info);
 
@@ -890,7 +864,7 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        private static ProjectInfo GetProjectInfo(NewProjectSpecification specification)
+        public static ProjectInfo GetProjectInfo(NewProjectSpecification specification)
         {
             ProjectInfo output = new ProjectInfo();
             Creation.DetermineNamesInfoForProject(output.NamesInfo, specification);

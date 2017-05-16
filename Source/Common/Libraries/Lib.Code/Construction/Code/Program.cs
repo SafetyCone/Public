@@ -20,22 +20,22 @@ namespace Public.Common.Lib.Code.Construction
         static void Main(string[] args)
         {
             //Program.DistributeChangesFromDefaultVersion();
-            Program.CreateDefaultVersion();
+            //Program.CreateDefaultVersion();
             //Program.CreateSolutionSetFromInitialVsVersionSolution();
-            //Program.CreateNewSolutionSet();
+            Program.CreateNewSolutionSet();
             //Program.Test();
         }
 
         private static void DistributeChangesFromDefaultVersion()
         {
-            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Statistics";
+            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
 
             Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
         }
 
         private static void CreateDefaultVersion()
         {
-            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib";
+            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant";
             VisualStudioVersion defaultVersion = VisualStudioVersion.VS2015;
 
             Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
@@ -43,7 +43,7 @@ namespace Public.Common.Lib.Code.Construction
 
         private static void CreateSolutionSetFromInitialVsVersionSolution()
         {
-            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib\Common.Construction.VS2015.sln";
+            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant\Nahant.VS2015.sln";
 
             VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
             {
@@ -63,19 +63,13 @@ namespace Public.Common.Lib.Code.Construction
                 @"Minex",
                 @"Public",
                 @"Common",
-                SolutionType.Library,
-                @"Lib.Statistics",
-                ProjectType.Library,
+                SolutionType.Script,
+                @"Avon",
+                ProjectType.Console,
                 VisualStudioVersion.VS2015,
                 Language.CSharp);
 
-            VisualStudioVersion[] vsVersions = new VisualStudioVersion[]
-            {
-                VisualStudioVersion.VS2010,
-                VisualStudioVersion.VS2013,
-                VisualStudioVersion.VS2015,
-                VisualStudioVersion.VS2017,
-            };
+            VisualStudioVersion[] vsVersions = VisualStudioVersionExtensions.GetAllVisualStudioVersions();
 
             NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
 
@@ -113,7 +107,7 @@ namespace Public.Common.Lib.Code.Construction
         {
             string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
 
-            string defaultSolutionFilePath = Creation.GetDefaultSolutionFilePath(solutionsDirectoryPath);
+            string defaultSolutionFilePath = Utilities.GetDefaultSolutionFilePath(solutionsDirectoryPath);
         }
 
         private static void TestDetermineDefaultVsVersion()

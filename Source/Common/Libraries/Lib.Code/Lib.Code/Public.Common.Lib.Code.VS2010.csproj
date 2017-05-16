@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</ProjectGuid>
+    <ProjectGuid>{94831367-4E37-4457-B041-843362F1C5E7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Public.Common.Lib.Code</RootNamespace>
@@ -17,7 +17,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\VS2010\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2010\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +26,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\VS2010\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2010\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -149,7 +151,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2010.csproj">
       <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib</Name>
     </ProjectReference>

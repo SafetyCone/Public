@@ -17,7 +17,7 @@ namespace Public.Common.Lib.Code
             ProjectReference output = new ProjectReference();
             ProjectReference.ModifyForPath(output, projectFilePath);
             ProjectReference.ModifyForName(output, projectFilePath);
-            ProjectReference.ModifyForGuid(output, projectFilePath);
+            ProjectReference.ModifyForGuidAndOutputType(output, projectFilePath);
 
             return output;
         }
@@ -51,14 +51,25 @@ namespace Public.Common.Lib.Code
             }
         }
 
-        private static void ModifyForGuid(ProjectReference reference, string projectFilePath)
+        private static void ModifyForGuidAndOutputType(ProjectReference reference, string projectFilePath)
         {
             XmlDocument document = new XmlDocument();
             document.LoadNoNamespaces(projectFilePath);
 
-            string guidStr = document.SelectSingleNode(@"Project/PropertyGroup/ProjectGuid").InnerText;
+            ProjectReference.ModifyForGuid(reference, document);
+            ProjectReference.ModifyForOutputType(reference, document);
+        }
 
+        private static void ModifyForGuid(ProjectReference reference, XmlDocument document)
+        {
+            string guidStr = document.SelectSingleNode(@"Project/PropertyGroup/ProjectGuid").InnerText;
             reference.GUID = Guid.Parse(guidStr);
+        }
+
+        public static void ModifyForOutputType(ProjectReference reference, XmlDocument document)
+        {
+            string outputTypeStr = document.SelectSingleNode(@"Project/PropertyGroup/OutputType").InnerText;
+            reference.OutputType = ProjectOutputTypeExtensions.FromDefault(outputTypeStr);
         }
 
         #endregion
@@ -67,6 +78,7 @@ namespace Public.Common.Lib.Code
         public string Name { get; set; }
         public string Path { get; set; }
         public Guid GUID { get; set; }
+        public ProjectOutputType OutputType { get; set; }
 
 
         public ProjectReference()

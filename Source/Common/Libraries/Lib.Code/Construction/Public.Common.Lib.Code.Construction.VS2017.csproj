@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{29003A48-0967-4BB2-8AA0-2CB58F0454F1}</ProjectGuid>
+    <ProjectGuid>{74B35EF2-7D48-4977-B9DE-87F85EC87E49}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Public.Common.Lib.Code.Construction</RootNamespace>
     <AssemblyName>Public.Common.Lib.Code.Construction</AssemblyName>
@@ -17,7 +17,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\VS2017\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +27,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\VS2017\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
