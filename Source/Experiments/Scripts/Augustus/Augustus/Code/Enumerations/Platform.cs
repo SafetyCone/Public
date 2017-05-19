@@ -66,7 +66,7 @@ namespace Augustus.Extensions
             Platform output;
             if(!PlatformExtensions.TryFromDefault(platform, out output))
             {
-                throw new ArgumentException(@"Unrecognized build platform string.", nameof(Platform));
+                throw new ArgumentException(@"Unrecognized build platform string.", "Platform");
             }
 
             return output;

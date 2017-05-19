@@ -35,7 +35,7 @@ namespace Augustus
             if (2 > tokens.Length)
             {
                 var message = String.Format(@"Missing build file path or platform for build item specification: '{0}'.", buildItemSpecification);
-                throw new ArgumentException(message, nameof(buildItemSpecification));
+                throw new ArgumentException(message, "buildItemSpecification");
             }
 
             buildFilePath = BuildItem.GetBuildFilePathToken(tokens);
@@ -52,7 +52,7 @@ namespace Augustus
                 if (OsEnvironment.Cygwin == platform && Augustus.Platform.Default != architecture)
                 {
                     var message = String.Format(@"Specification of architecture other than {0} not allowed for platform {1}.", Augustus.Platform.Default.ToDefaultString(), platform.ToDefaultString());
-                    throw new ArgumentException(message, nameof(buildItemSpecification));
+                    throw new ArgumentException(message, "buildItemSpecification");
                 }
             }
         }

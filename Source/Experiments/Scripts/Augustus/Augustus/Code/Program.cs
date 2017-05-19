@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 using Public.Common.Lib;
+using Public.Common.Lib.Extensions;
 
 
 namespace Augustus
@@ -13,24 +14,117 @@ namespace Augustus
     {
         static void Main(string[] args)
         {
-            Program.SubMain();
+            //Construction.SubMain();
+
+            Program.SubMain(args);
         }
 
-        private static void SubMain()
+        private static void SubMain(string[] args)
         {
-            var buildItemSpecifications = Program.GetBuildItemSpecifications();
-            var buildItems = Program.GetBuildItems(buildItemSpecifications);
-            var successByBuildItemPath = Program.RunBuildItems(buildItems, Console.Out);
+            Configuration config = Program.ParseArguments(args);
 
-            Program.WriteResults(successByBuildItemPath);
-            Program.OpenResults();
+            List<BuildItem> buildItems = Program.GetBuildItems(config.BuildListFilePath);
+            Dictionary<string, bool> successByBuildItemPath = Program.RunBuildItems(buildItems, Console.Out);
+
+            Program.CreateOutputDirectory(config.OutputFilePath);
+            Program.WriteResults(config.OutputFilePath, successByBuildItemPath);
+            Program.OpenResults(config.OutputFilePath);
         }
 
-        private static void OpenResults()
+        private static void CreateOutputDirectory(string outputFilePath)
         {
-            string resultsFilePath = Program.GetResultsFilePath();
+            string directoryPath = Path.GetDirectoryName(outputFilePath);
+            if(!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+        }
 
-            Process.Start(Constants.ResultsViewerPath, resultsFilePath);
+        /// <remarks>
+        /// The input arguments are:
+        /// 
+        /// 1. Build list file path.
+        /// 2. Output file path.
+        /// 
+        /// If no input arguments are supplied, the default build list file path is used, and a dated default output file path is used.
+        /// </remarks>
+        private static Configuration ParseArguments(string[] args)
+        {
+            Configuration output = new Configuration();
+
+            int argCount = args.Length;
+            if(0 == argCount)
+            {
+                // Use the default paths.
+                output.BuildListFilePath = Configuration.DefaultBuildListFilePath;
+                output.OutputFilePath = Program.GetDatedDefaultOutputFilePath();
+            }
+
+            if(1 == argCount)
+            {
+                output.BuildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
+                output.OutputFilePath = Program.GetDatedDefaultOutputFilePath();
+            }
+            
+            if(2 == argCount)
+            {
+                output.BuildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
+                output.OutputFilePath = Program.VerifyFileExistence(args[1], @"Specified output file not found: {0}");
+            }
+
+            if(2 < argCount)
+            {
+                string message = String.Format(@"Too many input arguments. Found: {0}. Usage: Augustus.exe (optional)[build list file path] (optional)[output file path]", argCount);
+                throw new InvalidOperationException(message);
+            }
+
+            return output;
+        }
+
+        private static string VerifyFileExistence(string filePath, string fileNotFoundExceptionMessageMask)
+        {
+            if (!File.Exists(filePath))
+            {
+                string message = String.Format(fileNotFoundExceptionMessageMask, filePath);
+                throw new FileNotFoundException(message);
+            }
+
+            return filePath;
+        }
+
+        /// <remarks>
+        /// I will want the output files (basically logs) to be dated.
+        /// </remarks>
+        private static string GetDatedDefaultOutputFilePath()
+        {
+            string output = Program.DateMarkPath(Configuration.DefaultOutputFilePath);
+            return output;
+        }
+
+        private static string DateMarkPath(string path)
+        {
+            string todayYYYYMMDD = DateTime.Today.ToYYYYMMDDStr();
+
+            string directoryPath = Path.GetDirectoryName(path);
+            string fileNameOnly = Path.GetFileNameWithoutExtension(path);
+            string extension = PathExtensions.GetExtensionOnly(path);
+
+            string datedFileName = String.Format(@"{0} - {1}", fileNameOnly, todayYYYYMMDD);
+            string fullDatedFileName = PathExtensions.GetFullFileName(datedFileName, extension);
+
+            string output = Path.Combine(directoryPath, fullDatedFileName);
+            return output;
+        }
+
+        public static void OpenResults(string outputFilePath)
+        {
+            Process.Start(Constants.ResultsViewerPath, outputFilePath);
+        }
+
+        public static void OpenResults()
+        {
+            string outputFilePath = Program.GetResultsFilePath();
+            Program.OpenResults(outputFilePath);   
         }
 
         private static string WriteResultLine(string buildItemPath, bool success)
@@ -39,11 +133,9 @@ namespace Augustus
             return output;
         }
 
-        private static void WriteResults(Dictionary<string, bool> successByBuildItemPath)
+        public static void WriteResults(string outputFilePath, Dictionary<string, bool> successByBuildItemPath)
         {
-            string resultsFilePath = Program.GetResultsFilePath();
-
-            using (StreamWriter writer = new StreamWriter(resultsFilePath))
+            using (StreamWriter writer = new StreamWriter(outputFilePath))
             {
                 foreach (string buildItemPath in successByBuildItemPath.Keys)
                 {
@@ -53,6 +145,13 @@ namespace Augustus
                     writer.WriteLine(line);
                 }
             }
+        }
+
+        public static void WriteResults(Dictionary<string, bool> successByBuildItemPath)
+        {
+            string outputFilePath = Program.GetResultsFilePath();
+
+            Program.WriteResults(outputFilePath, successByBuildItemPath);
         }
 
         private static string GetResultsFilePath()
@@ -192,7 +291,7 @@ namespace Augustus
             return output;
         }
 
-        private static Dictionary<string, bool> RunBuildItems(IEnumerable<BuildItem> buildItems, TextWriter inspectionStream)
+        public static Dictionary<string, bool> RunBuildItems(IEnumerable<BuildItem> buildItems, TextWriter inspectionStream)
         {
             var output = new Dictionary<string, bool>();
             foreach (BuildItem buildItem in buildItems)
@@ -210,7 +309,15 @@ namespace Augustus
             return output;
         }
 
-        private static List<BuildItem> GetBuildItems(IEnumerable<string> buildItemSpecifications)
+        private static List<BuildItem> GetBuildItems(string buildListFilePath)
+        {
+            List<string> buildItemSpecifications = Program.GetBuildItemSpecifications(buildListFilePath);
+
+            List<BuildItem> output = Program.GetBuildItems(buildItemSpecifications);
+            return output;
+        }
+
+        public static List<BuildItem> GetBuildItems(IEnumerable<string> buildItemSpecifications)
         {
             var output = new List<BuildItem>();
             foreach (string buildItemSpecification in buildItemSpecifications)
@@ -222,21 +329,14 @@ namespace Augustus
             return output;
         }
 
-        private static List<string> GetBuildItemSpecifications()
+        public static List<string> GetBuildItemSpecifications(string buildListFilePath)
         {
-#if (DEBUG)
-            //string buildListFileRelativePath = Constants.DebugBuildFileListFileRelativePath;
-            string buildListFileRelativePath = Constants.BuildFileListFileRelativePath;
-#else
-            string buildListFileRelativePath = Constants.BuildFileListFileRelativePath;
-#endif
-
-            string[] lines = File.ReadAllLines(buildListFileRelativePath);
+            string[] lines = File.ReadAllLines(buildListFilePath);
 
             var output = new List<string>();
-            foreach(string line in lines)
+            foreach (string line in lines)
             {
-                if(!String.IsNullOrEmpty(line))
+                if (!String.IsNullOrEmpty(line))
                 {
                     output.Add(line);
                 }

@@ -58,7 +58,7 @@ namespace Augustus.Extensions
             OsEnvironment output;
             if (!OsEnvironmentExtensions.TryFromDefault(osEnvironment, out output))
             {
-                throw new ArgumentException(@"Unrecognized OS environment string.", nameof(osEnvironment));
+                throw new ArgumentException(@"Unrecognized OS environment string.", "osEnvironment");
             }
 
             return output;
