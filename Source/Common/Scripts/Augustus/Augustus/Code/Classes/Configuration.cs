@@ -8,7 +8,7 @@ namespace Public.Common.Augustus
 {
     public class Configuration
     {
-        public const string DefaultBuildListFileName = @"Default Augustus Build List.txt";
+        public const string DefaultBuildListFileName = @"Augustus Build List.txt";
         public const string DefaultOutputFilePath = @"C:\temp\logs\Augustus\Log.txt"; // Will be made into a dated path.
 
 
