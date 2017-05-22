@@ -1,0 +1,15 @@
+Avon is a set of scripts which wrap the Public.Common.Lib.Code functionality for:
+
+* Create a new Visual Studio versioned solution set of a particular solution type and project type.
+* Create a Visual Studio versioned solution set from an initial Visual Studio version solution file.
+* Set or modify the default Visual Studio version solution.
+* Distribute changes from the default Visual Studio version of a solution to all other Visual Studio verion solutions.
+* Evaluate/Verify/Update/Fix problems among different Visual Studio versioned solution set files.
+
+Avon scripts are front-ends to the functionality contained in the Public.Common.Lib.Code library.
+
+Also see: Public->Common->Experiments->Nahant for examples that build on the Public.Common.Lib.Code library.
+
+
+Copying of output binaries:
+xcopy $(ProjectDir)\$(OutDir)* $(SolutionDir)..\..\..\..\..\..\Binaries\$(TargetName)\$(ProjectName)\$(ConfigurationName)\ /e /i /y
