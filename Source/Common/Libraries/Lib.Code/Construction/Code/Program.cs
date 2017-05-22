@@ -20,9 +20,6 @@ namespace Public.Common.Lib.Code.Construction
         static void Main(string[] args)
         {
             //Program.DistributeChangesFromDefaultVersion();
-            //Program.CreateDefaultVersion();
-            //Program.CreateSolutionSetFromInitialVsVersionSolution();
-            Program.CreateNewSolutionSet();
             //Program.Test();
         }
 
@@ -31,49 +28,6 @@ namespace Public.Common.Lib.Code.Construction
             string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
 
             Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
-        }
-
-        private static void CreateDefaultVersion()
-        {
-            string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant";
-            VisualStudioVersion defaultVersion = VisualStudioVersion.VS2015;
-
-            Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
-        }
-
-        private static void CreateSolutionSetFromInitialVsVersionSolution()
-        {
-            string initialSolutionFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant\Nahant.VS2015.sln";
-
-            VisualStudioVersion[] desiredVsVersions = new VisualStudioVersion[]
-            {
-                VisualStudioVersion.VS2010,
-                VisualStudioVersion.VS2013,
-                VisualStudioVersion.VS2015,
-                VisualStudioVersion.VS2017,
-            };
-
-            Creation.CreateSolutionSet(initialSolutionFilePath, desiredVsVersions);
-        }
-
-        private static void CreateNewSolutionSet()
-        {
-            NewSolutionSpecification specification = new NewSolutionSpecification(
-                @"C:\Organizations",
-                @"Minex",
-                @"Public",
-                @"Common",
-                SolutionType.Script,
-                @"Avon",
-                ProjectType.Console,
-                VisualStudioVersion.VS2015,
-                Language.CSharp);
-
-            VisualStudioVersion[] vsVersions = VisualStudioVersionExtensions.GetAllVisualStudioVersions();
-
-            NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
-
-            Creation.CreateSolutionSetWithDefault(setSpecification, VisualStudioVersion.VS2015);
         }
 
         private static void Test()

@@ -8,3 +8,8 @@ Goals:
 * Creat a commonly-named shortcut to the "default" Visual Studio solution for a solution set.
 
 This library contains functionality for creating new Console solutions and Library solutions.
+
+See also:
+* Public->Common->Scripts->Avon for front-end examples of using this functionality.
+* Public->Common->Experiments->Nahant for front-end experiments in using this functionality.
+* Minex->Experiments->Experiments->Setupper, this was a first stab at creating new projects using file masks instead of writing files out explicitly.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
+using Public.Common.Lib.Code.Physical;
 using Solution = Public.Common.Lib.Code.Physical.Solution;
 using Public.Common.Lib.Extensions;
 using Public.Common.WindowsShell;
@@ -21,6 +22,29 @@ namespace Public.Common.Lib.Code
             string searchPattern = String.Format(@"{0}{1}{2}", SearchPatternHelper.Wildcard, PathExtensions.WindowsFileExtensionSeparatorChar, SolutionFileNameInfo.SolutionFileExtension);
 
             string[] output = Directory.GetFiles(solutionDirectoryPath, searchPattern, SearchOption.TopDirectoryOnly);
+            return output;
+        }
+
+        public static bool GetSolutionFilePath(string solutionDirectoryPath, VisualStudioVersion visualStudioVersion, out string visualStudioVersionSolutionFilePath)
+        {
+            // *.sln
+            string searchPattern = String.Format(@"{0}{1}{2}", SearchPatternHelper.Wildcard, PathExtensions.WindowsFileExtensionSeparatorChar, SolutionFileNameInfo.SolutionFileExtension);
+            string[] solutionFilePaths = Directory.GetFiles(solutionDirectoryPath, searchPattern, SearchOption.TopDirectoryOnly);
+
+            visualStudioVersionSolutionFilePath = String.Empty;
+            bool output = false;
+            foreach(string solutionFilePath in solutionFilePaths)
+            {
+                SolutionFileNameInfo solutionInfo = SolutionFileNameInfo.Parse(solutionFilePath);
+                if(visualStudioVersion == solutionInfo.VisualStudioVersion)
+                {
+                    visualStudioVersionSolutionFilePath = solutionFilePath;
+
+                    output = true;
+                    break;
+                }
+            }
+
             return output;
         }
 

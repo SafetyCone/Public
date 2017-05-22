@@ -45,6 +45,11 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Classes\NewSolutionSetSpecification.cs" />
+    <Compile Include="Code\Classes\ProjectReference.cs" />
+    <Compile Include="Code\Classes\ProjectReferenceCollection.cs" />
+    <Compile Include="Code\Classes\ProjectReferenceDiffItem.cs" />
+    <Compile Include="Code\Classes\Utilities.cs" />
+    <Compile Include="Code\Classes\VisualStudioVersionSet.cs" />
     <Compile Include="Code\Domains\Domains.cs" />
     <Compile Include="Code\IO\CodeFileWriter.cs" />
     <Compile Include="Code\IO\CSharpCodeFileWriter.cs" />
@@ -72,8 +77,9 @@
     <Compile Include="Code\Project Items\ProjectItem.cs" />
     <Compile Include="Code\Project Items\ProjectReferenceProjectItem.cs" />
     <Compile Include="Code\Project Items\ReferenceProjectItem.cs" />
+    <Compile Include="Code\Project\ProjectFilePathInfo.cs" />
     <Compile Include="Code\Project\ProjectFileNameInfo.cs" />
-    <Compile Include="Code\Project\ProjectReference.cs" />
+    <Compile Include="Code\Project\SolutionProjectReference.cs" />
     <Compile Include="Code\Physical\Visual Studio\ProjectBuildConfigurationInfo.cs" />
     <Compile Include="Code\Logical\Visual Studio\Solution.cs" />
     <Compile Include="Code\Organizational\OrganizationalInfo.cs" />
@@ -151,13 +157,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2010.csproj">
-      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
-      <Name>Public.Common.Lib</Name>
+    <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2010.csproj">
+      <Project>{40F1D161-F811-4575-B098-69F11EC05E1B}</Project>
+      <Name>Public.Common.Lib.VS2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2015.csproj">
-      <Project>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</Project>
-      <Name>Public.Common.WindowsShell.VS2015</Name>
+    <ProjectReference Include="../../WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2010.csproj">
+      <Project>{AC4C2822-995C-4126-AF91-37DDEF37F1DB}</Project>
+      <Name>Public.Common.WindowsShell.VS2010</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

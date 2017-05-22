@@ -90,7 +90,7 @@ namespace Public.Common.Lib.Code.Physical.CSharp
             return output;
 #else
             return
-                (this.ToString() == other.ToString())
+                (this.ToString() == other.ToString());
 #endif
         }
 

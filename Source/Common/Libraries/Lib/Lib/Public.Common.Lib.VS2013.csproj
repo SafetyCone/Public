@@ -52,6 +52,9 @@
     <Compile Include="Code\Interfaces\ICloneable.cs" />
     <Compile Include="Code\Interfaces\IDeepCloneable.cs" />
     <Compile Include="Code\Interfaces\ShallowClone.cs" />
+    <Compile Include="Code\IO\Email\Gmail.cs" />
+    <Compile Include="Code\IO\Email\SmtpEmail.cs" />
+    <Compile Include="Code\IO\Paths\Utilities.cs" />
     <Compile Include="Code\IO\TextFileWriter.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />
@@ -67,6 +70,9 @@
     <Compile Include="Code\IO\Files\TextFile.cs" />
     <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />
     <Compile Include="Code\IO\UrlShortcuts.cs" />
+    <Compile Include="Code\Production\Production.cs" />
+    <Compile Include="Code\Security\Authentications\Authentication.cs" />
+    <Compile Include="Code\Security\Authentications\AuthenticationsTextFile.cs" />
     <Compile Include="Code\Utilities\HashHelper.cs" />
     <Compile Include="Code\Utilities\SearchPatternHelper.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifference.cs" />

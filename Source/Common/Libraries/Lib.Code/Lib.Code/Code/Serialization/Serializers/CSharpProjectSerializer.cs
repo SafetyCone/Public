@@ -305,7 +305,7 @@ namespace Public.Common.Lib.Code.Serialization
 
                 string guidUpperStr = comReference.GUID.ToString().ToUpperInvariant();
                 string guidStr;
-                if (VisualStudioVersion.VS2010 == visualStudioVersion)
+                if (VisualStudioVersion.VS2010 == visualStudioVersion || VisualStudioVersion.VS2013 == visualStudioVersion)
                 {
                     guidStr = String.Format(@"{{{0}}}", guidUpperStr);
                 }

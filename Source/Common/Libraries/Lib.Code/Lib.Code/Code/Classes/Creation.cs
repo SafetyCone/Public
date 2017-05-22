@@ -666,7 +666,7 @@ namespace Public.Common.Lib.Code
             string codeDirectoryPath = Path.Combine(projectDirectoryPath, @"Code");
             string relativePath = PathExtensions.GetRelativePath(tempFilePath, codeDirectoryPath);
 
-            serializationList.AddCreateDirectory(relativePath);
+            serializationList.AddCreateDirectory(codeDirectoryPath);
 
             projectItems.Add(new FolderProjectItem(relativePath));
         }

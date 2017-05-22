@@ -44,6 +44,19 @@ namespace Public.Common.Lib.Code.Physical
             return output;
         }
 
+        public static string[] GetAllVisualStudioVersionStrings()
+        {
+            string[] output = new string[]
+            {
+                VisualStudioVersionExtensions.VS2010,
+                VisualStudioVersionExtensions.VS2013,
+                VisualStudioVersionExtensions.VS2015,
+                VisualStudioVersionExtensions.VS2017,
+            };
+
+            return output;
+        }
+
         public static string ToDefaultString(this VisualStudioVersion visualStudioVersion)
         {
             string output;
@@ -77,7 +90,8 @@ namespace Public.Common.Lib.Code.Physical
             VisualStudioVersion output;
             if (!VisualStudioVersionExtensions.TryFromDefault(visualStudioVersion, out output))
             {
-                throw new ArgumentException(@"Unrecognized Visual Studio version string.");
+                string message = String.Format(@"Unrecognized Visual Studio version string: {0}.", visualStudioVersion);
+                throw new ArgumentException(message);
             }
 
             return output;

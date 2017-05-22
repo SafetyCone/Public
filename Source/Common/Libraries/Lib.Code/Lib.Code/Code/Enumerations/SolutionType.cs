@@ -26,6 +26,19 @@ namespace Public.Common.Lib.Code.Logical
         public const string Script = @"Script";
 
 
+        public static string[] GetAllStrings()
+        {
+            string[] output = new string[]
+            {
+                SolutionTypeExtensions.Application,
+                SolutionTypeExtensions.Experiment,
+                SolutionTypeExtensions.Library,
+                SolutionTypeExtensions.Script,
+            };
+
+            return output;
+        }
+
         public static string ToDefaultString(this SolutionType solutionType)
         {
             string output;

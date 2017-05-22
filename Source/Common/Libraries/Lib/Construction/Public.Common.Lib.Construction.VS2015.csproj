@@ -44,17 +44,18 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Lib\Public.Common.Lib.VS2015.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
-      <Name>Public.Common.Lib.VS2015</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="../Lib/Public.Common.Lib.VS2015.csproj">
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
+      <Name>Public.Common.Lib.VS2015</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>

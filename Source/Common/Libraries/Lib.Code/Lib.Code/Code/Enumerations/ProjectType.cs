@@ -32,6 +32,18 @@ namespace Public.Common.Lib.Code.Logical
         public const string WindowsForms = @"WindowsForms";
 
 
+        public static string[] GetAllStrings()
+        {
+            string[] output = new string[]
+            {
+                ProjectTypeExtensions.Console,
+                ProjectTypeExtensions.Library,
+                ProjectTypeExtensions.WindowsForms,
+            };
+
+            return output;
+        }
+
         public static string ToDefaultString(this ProjectType projectType)
         {
             string output;
