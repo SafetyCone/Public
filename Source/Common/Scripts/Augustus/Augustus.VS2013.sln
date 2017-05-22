@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augustus.VS2013", "Augustus\Augustus.VS2013.csproj", "{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2013", "..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.VS2013.csproj", "{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
