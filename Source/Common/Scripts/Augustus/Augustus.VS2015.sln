@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augustus", "Augustus\Augustus.VS2015.csproj", "{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augustus.VS2015", "Augustus\Augustus.VS2015.csproj", "{FCAA388A-8C43-4B05-A022-0518FED05F5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2015", "..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.VS2015.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augustus.Lib.VS2015", "Lib\Augustus.Lib.VS2015.csproj", "{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2015", "..\..\Libraries\Lib\Lib\Public.Common.Lib.VS2015.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +15,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCAA388A-8C43-4B05-A022-0518FED05F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCAA388A-8C43-4B05-A022-0518FED05F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCAA388A-8C43-4B05-A022-0518FED05F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCAA388A-8C43-4B05-A022-0518FED05F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -8,7 +8,7 @@ using Public.Common.Lib;
 using Public.Common.Lib.Extensions;
 
 
-namespace Augustus
+namespace Public.Common.Augustus
 {
     class Program
     {

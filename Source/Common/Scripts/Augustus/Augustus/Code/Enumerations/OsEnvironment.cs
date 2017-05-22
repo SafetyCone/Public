@@ -2,7 +2,7 @@
 using Public.Common.Lib;
 
 
-namespace Augustus
+namespace Public.Common.Augustus
 {
     /// <summary>
     /// The operating system environmnet for the build file.
@@ -25,7 +25,7 @@ namespace Augustus
 }
 
 
-namespace Augustus.Extensions
+namespace Public.Common.Augustus.Extensions
 {
     public static class OsEnvironmentExtensions
     {

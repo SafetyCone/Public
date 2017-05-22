@@ -1,12 +1,30 @@
 ﻿using System;
+using System.IO;
+
+using Public.Common.Lib.Production;
 
 
-namespace Augustus
+namespace Public.Common.Augustus
 {
     public class Configuration
     {
-        public const string DefaultBuildListFilePath = @"C:\Organizations\Minex\Data\Default Augustus Build List.txt";
+        public const string DefaultBuildListFileName = @"Default Augustus Build List.txt";
         public const string DefaultOutputFilePath = @"C:\temp\logs\Augustus\Log.txt"; // Will be made into a dated path.
+
+
+        #region Static
+
+        public static string DefaultBuildListFilePath
+        {
+            get
+            {
+                string output = Path.Combine(Production.UserConfigurationDataDirectoryPath, Configuration.DefaultBuildListFileName);
+                return output;
+            }
+        }
+
+        #endregion
+
 
 
         public string BuildListFilePath { get; set; }

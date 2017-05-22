@@ -1,9 +1,9 @@
 ﻿using System;
 
-using Augustus.Extensions;
+using Public.Common.Augustus.Extensions;
 
 
-namespace Augustus
+namespace Public.Common.Augustus
 {
     public class BuildItem
     {

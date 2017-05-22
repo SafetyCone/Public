@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EDEAD8E5-29A4-445C-A50D-A2AFD517CB7F}</ProjectGuid>
+    <ProjectGuid>{ACA16756-963D-4421-92F6-9A0144FDB7B1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Augustus</RootNamespace>
+    <RootNamespace>Public.Common.Augustus</RootNamespace>
     <AssemblyName>Augustus</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,24 +43,29 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.VS2013.csproj">
-      <Project>{c6b9aee9-bfb7-4e2b-8aa5-e522ca65dc2f}</Project>
-      <Name>Public.Common.Lib.VS2013</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Classes\BuildInfo.cs" />
     <Compile Include="Code\Classes\BuildItem.cs" />
     <Compile Include="Code\Classes\Configuration.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Construction.cs" />
-    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Code\Enumerations\OsEnvironment.cs" />
+    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="../Lib/Augustus.Lib.VS2013.csproj">
+      <Project>{FB7A9395-DE85-4F96-B267-FFB9564773AB}</Project>
+      <Name>Augustus.Lib.VS2013</Name>
+    </ProjectReference>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2013.csproj">
+      <Project>{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}</Project>
+      <Name>Public.Common.Lib.VS2013</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Files\Example Build List File.txt" />
     <Content Include="Project Plan.txt" />

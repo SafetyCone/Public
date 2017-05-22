@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Augustus.VS2017")]
+[assembly: AssemblyTitle("Augustus.Lib.VS2017")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ba81bacf-85b7-4850-9f0c-f9282579bdfc")]
+[assembly: Guid("acfbb5cd-8fc3-40f2-a3e7-46e1ddec0f45")]
 
 // Version information for an assembly consists of the following four values:
 //

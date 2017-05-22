@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BA81BACF-85B7-4850-9F0C-F9282579BDFC}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Public.Common.Augustus</RootNamespace>
-    <AssemblyName>Augustus</AssemblyName>
+    <ProjectGuid>{ACFBB5CD-8FC3-40F2-A3E7-46E1DDEC0F45}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Public.Common.Augustus.Lib</RootNamespace>
+    <AssemblyName>Augustus.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\VS2017\Release</OutputPath>
@@ -45,33 +43,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Code\Classes\BuildInfo.cs" />
-    <Compile Include="Code\Classes\BuildItem.cs" />
-    <Compile Include="Code\Classes\Configuration.cs" />
-    <Compile Include="Code\Constants.cs" />
-    <Compile Include="Code\Construction.cs" />
-    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
-    <Compile Include="Code\Enumerations\Platform.cs" />
-    <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="../Lib/Augustus.Lib.VS2017.csproj">
-      <Project>{ACFBB5CD-8FC3-40F2-A3E7-46E1DDEC0F45}</Project>
-      <Name>Augustus.Lib.VS2017</Name>
-    </ProjectReference>
-    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2017.csproj">
-      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
-      <Name>Public.Common.Lib.VS2017</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Files\Example Build List File.txt" />
-    <Content Include="Project Plan.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

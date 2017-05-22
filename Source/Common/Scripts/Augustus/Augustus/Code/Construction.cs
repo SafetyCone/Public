@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Augustus
+namespace Public.Common.Augustus
 {
     public static class Construction
     {
