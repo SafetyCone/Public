@@ -1,2 +1,0 @@
-﻿C:\Organizations\Minex\Repositories\Exploration\Source\Mark Joshi\Chapter 1\SimpleMC1\SimpleMC1.sln|Windows|x86
-C:\Organizations\Minex\Repositories\Exploration\Source\Mark Joshi\Chapter 1\SimpleMC1\SimpleMC1\makefile|Cygwin
