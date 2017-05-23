@@ -72,8 +72,7 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
+                outputStream.WriteLineAndBlankLine(ex.Message);
 
                 output = false;
                 Configuration.DisplayUsage(outputStream);

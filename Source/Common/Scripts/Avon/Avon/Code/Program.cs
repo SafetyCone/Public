@@ -30,6 +30,7 @@ namespace Public.Common.Avon
                 catch (Exception ex)
                 {
                     outputStream.WriteLine(@"ERROR executing action.");
+                    outputStream.WriteLine(ex.Message);
                 }
             }
         }
@@ -113,7 +114,7 @@ namespace Public.Common.Avon
 
             NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
 
-            Creation.CreateSolutionSetWithDefault(setSpecification, VisualStudioVersion.VS2015);
+            Creation.CreateSolutionSetWithDefault(setSpecification, specification.VisualStudioVersion);
         }
     }
 }
