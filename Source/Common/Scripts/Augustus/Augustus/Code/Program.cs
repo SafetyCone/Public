@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using Public.Common.Lib;
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO.Email;
+using Public.Common.Lib.Security;
 
 
 namespace Public.Common.Augustus
@@ -14,25 +17,50 @@ namespace Public.Common.Augustus
     {
         static void Main(string[] args)
         {
+            //Program.SubMain(args);
+            Testing.SubMain();
             //Construction.SubMain();
-
-            Program.SubMain(args);
         }
 
-        private static void SubMain(string[] args)
+        public static void SubMain(string[] args)
         {
             TextWriter outputStream = Console.Out;
 
             Configuration config;
-            if(Program.ParseArguments(out config, args, outputStream))
+            if(Configuration.ParseArguments(out config, args, outputStream))
             {
                 List<BuildItem> buildItems = Program.GetBuildItems(config.BuildListFilePath);
                 Dictionary<string, bool> successByBuildItemPath = Program.RunBuildItems(buildItems, outputStream);
 
                 Program.CreateOutputDirectory(config.OutputFilePath);
                 Program.WriteResults(config.OutputFilePath, successByBuildItemPath);
-                Program.OpenResults(config.OutputFilePath);
+
+                if (config.OpenResults)
+                {
+                    Program.OpenResults(config.OutputFilePath);
+                }
+
+                if(config.EmailResults)
+                {
+                    Program.SendResultsEmail(config.OutputFilePath, successByBuildItemPath);
+                }
             }   
+        }
+
+        private static void SendResultsEmail(string outputFilePath, Dictionary<string, bool> successByBuildItemPath)
+        {
+            // Get authentication for GMail.
+            Dictionary<string, Authentication> auths = AuthenticationsTextFile.DeserializeTextAuthenticationsByName();
+            Authentication gmailAuth = auths[Authentication.MinexGmailAuthenticationName];
+
+            // Build the output.
+            StringBuilder results = Program.WriteResults(successByBuildItemPath);
+
+            string subject = String.Format(@"Augustus Build - {0}", DateTime.Today.ToYYYYMMDDStr());
+            string labeledSubject = Gmail.ApplyAutomationLabel(subject);
+            string body = results.ToString();
+
+            Gmail.SendEmail(gmailAuth.UserName, gmailAuth.UserName, labeledSubject, body, gmailAuth, new string[] { outputFilePath });
         }
 
         private static void CreateOutputDirectory(string outputFilePath)
@@ -42,107 +70,6 @@ namespace Public.Common.Augustus
             {
                 Directory.CreateDirectory(directoryPath);
             }
-        }
-
-        /// <remarks>
-        /// The input arguments are:
-        /// 
-        /// 1. Build list file path.
-        /// 2. Output file path.
-        /// 
-        /// If no input arguments are supplied, the default build list file path is used, and a dated default output file path is used.
-        /// </remarks>
-        private static bool ParseArguments(out Configuration configuration, string[] args, TextWriter outputStream)
-        {
-            bool output = true;
-
-            configuration = new Configuration();
-
-            try
-            {
-                int argCount = args.Length;
-                string buildListFilePath;
-                string outputFilePath;
-                switch(argCount)
-                {
-                    case 0:
-                        // Use the default paths.
-                        outputStream.WriteLine(@"Using default build list file.");
-                        buildListFilePath = Configuration.DefaultBuildListFilePath;
-                        outputStream.WriteLine(@"Using default output file.");
-                        outputFilePath = Program.GetDatedDefaultOutputFilePath();
-                        break;
-
-                    case 1:
-                        buildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                        outputStream.WriteLine(@"Using default output file.");
-                        outputFilePath = Program.GetDatedDefaultOutputFilePath();
-                        break;
-
-                    case 2:
-                        buildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                        outputFilePath = Program.VerifyFileExistence(args[1], @"Specified output file not found: {0}");
-                        break;
-
-                    default:
-                        string message = String.Format(@"Too many input arguments. Found: {0}. Usage: Augustus.exe (optional)[build list file path] (optional)[output file path]", argCount);
-                        throw new InvalidOperationException(message);
-                }
-
-                outputStream.WriteLine();
-
-                string line;
-                line = String.Format(@"Using build list file: {0}", buildListFilePath);
-                outputStream.WriteLine(line);
-                configuration.BuildListFilePath = buildListFilePath;
-
-                line = String.Format(@"Using output file: {0}", outputFilePath);
-                outputStream.WriteLine(line);
-                configuration.OutputFilePath = outputFilePath;
-            }
-            catch(Exception ex)
-            {
-                outputStream.WriteLineAndBlankLine(ex.Message);
-
-                output = false;
-            }
-
-            return output;
-        }
-
-        private static string VerifyFileExistence(string filePath, string fileNotFoundExceptionMessageMask)
-        {
-            if (!File.Exists(filePath))
-            {
-                string message = String.Format(fileNotFoundExceptionMessageMask, filePath);
-                throw new FileNotFoundException(message);
-            }
-
-            return filePath;
-        }
-
-        /// <remarks>
-        /// I will want the output files (basically logs) to be dated.
-        /// </remarks>
-        private static string GetDatedDefaultOutputFilePath()
-        {
-            string output = Program.DateMarkPath(Configuration.DefaultOutputFilePath);
-            return output;
-        }
-
-        private static string DateMarkPath(string path)
-        {
-            string todayYYYYMMDD = DateTime.Today.ToYYYYMMDDStr();
-
-            string directoryPath = Path.GetDirectoryName(path);
-            string fileNameOnly = Path.GetFileNameWithoutExtension(path);
-            string extension = PathExtensions.GetExtensionOnly(path);
-
-            string datedFileName = String.Format(@"{0} - {1}", fileNameOnly, todayYYYYMMDD);
-            string fullDatedFileName = PathExtensions.GetFullFileName(datedFileName, extension);
-
-            string output = Path.Combine(directoryPath, fullDatedFileName);
-            return output;
         }
 
         public static void OpenResults(string outputFilePath)
@@ -156,31 +83,33 @@ namespace Public.Common.Augustus
             Program.OpenResults(outputFilePath);   
         }
 
+        public static void WriteResults(string outputFilePath, Dictionary<string, bool> successByBuildItemPath)
+        {
+            StringBuilder results = Program.WriteResults(successByBuildItemPath);
+            using (StreamWriter writer = new StreamWriter(outputFilePath))
+            {
+                writer.Write(results.ToString());
+            }
+        }
+
+        public static StringBuilder WriteResults(Dictionary<string, bool> successByBuildItemPath)
+        {
+            StringBuilder output = new StringBuilder();
+            foreach (string buildItemPath in successByBuildItemPath.Keys)
+            {
+                bool success = successByBuildItemPath[buildItemPath];
+
+                string line = Program.WriteResultLine(buildItemPath, success);
+                output.AppendLine(line);
+            }
+
+            return output;
+        }
+
         private static string WriteResultLine(string buildItemPath, bool success)
         {
             string output = String.Format(@"{0} - {1}", success, buildItemPath);
             return output;
-        }
-
-        public static void WriteResults(string outputFilePath, Dictionary<string, bool> successByBuildItemPath)
-        {
-            using (StreamWriter writer = new StreamWriter(outputFilePath))
-            {
-                foreach (string buildItemPath in successByBuildItemPath.Keys)
-                {
-                    bool success = successByBuildItemPath[buildItemPath];
-
-                    string line = Program.WriteResultLine(buildItemPath, success);
-                    writer.WriteLine(line);
-                }
-            }
-        }
-
-        public static void WriteResults(Dictionary<string, bool> successByBuildItemPath)
-        {
-            string outputFilePath = Program.GetResultsFilePath();
-
-            Program.WriteResults(outputFilePath, successByBuildItemPath);
         }
 
         private static string GetResultsFilePath()
