@@ -43,18 +43,36 @@ namespace Public.Examples.Code.Extensions
         public static Enumeration FromDefault(string enumeration)
         {
             Enumeration output;
+            if(!EnumerationExtensions.TryFromDefault(enumeration, out output))
+            {
+#if (NETFX_40) // Make sure the Public/Tools/VersionSpecificSymbols.Common.prop import is included in the project file.
+                string varName = nameof(output);
+                throw new ArgumentException(@"Unrecognized enumeration string.", nameof(enumeration));
+#else
+                throw new ArgumentException(@"Unrecognized enumeration string.", "enumeration");
+#endif
+            }
+
+            return output;
+        }
+
+        public static bool TryFromDefault(string enumeration, out Enumeration value)
+        {
+            bool output = true;
             switch (enumeration)
             {
                 case EnumerationExtensions.A:
-                    output = Enumeration.A;
+                    value = Enumeration.A;
                     break;
 
                 case EnumerationExtensions.B:
-                    output = Enumeration.B;
+                    value = Enumeration.B;
                     break;
 
                 default:
-                    throw new ArgumentException(@"Unrecognized enumeration string.", nameof(enumeration));
+                    output = false;
+                    value = Enumeration.A; // Or other appropriate default.
+                    break;
             }
 
             return output;

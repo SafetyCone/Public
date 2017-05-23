@@ -44,15 +44,25 @@
     <Compile Include="Code\Enumeration.cs" />
     <Compile Include="Code\EqualsClass.cs" />
     <Compile Include="Code\EqualsStruct.cs" />
+    <Compile Include="Code\Extension.cs" />
+    <Compile Include="Code\FactoryClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.DesignPatterns\Lib.DesignPatterns\Public.Common.Lib.DesignPatterns.csproj">
+      <Project>{6f255787-e1e7-454d-831b-527bcddee741}</Project>
+      <Name>Public.Common.Lib.DesignPatterns</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.csproj">
       <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
       <Name>Public.Common.Lib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Solutions and Projects\Directory and File Hierarchy.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\..\..\Tools\VersionSpecificSymbols.Common.prop" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

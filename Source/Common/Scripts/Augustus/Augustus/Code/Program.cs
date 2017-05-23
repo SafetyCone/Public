@@ -21,14 +21,18 @@ namespace Public.Common.Augustus
 
         private static void SubMain(string[] args)
         {
-            Configuration config = Program.ParseArguments(args);
+            TextWriter outputStream = Console.Out;
 
-            List<BuildItem> buildItems = Program.GetBuildItems(config.BuildListFilePath);
-            Dictionary<string, bool> successByBuildItemPath = Program.RunBuildItems(buildItems, Console.Out);
+            Configuration config;
+            if(Program.ParseArguments(out config, args, outputStream))
+            {
+                List<BuildItem> buildItems = Program.GetBuildItems(config.BuildListFilePath);
+                Dictionary<string, bool> successByBuildItemPath = Program.RunBuildItems(buildItems, outputStream);
 
-            Program.CreateOutputDirectory(config.OutputFilePath);
-            Program.WriteResults(config.OutputFilePath, successByBuildItemPath);
-            Program.OpenResults(config.OutputFilePath);
+                Program.CreateOutputDirectory(config.OutputFilePath);
+                Program.WriteResults(config.OutputFilePath, successByBuildItemPath);
+                Program.OpenResults(config.OutputFilePath);
+            }   
         }
 
         private static void CreateOutputDirectory(string outputFilePath)
@@ -48,34 +52,59 @@ namespace Public.Common.Augustus
         /// 
         /// If no input arguments are supplied, the default build list file path is used, and a dated default output file path is used.
         /// </remarks>
-        private static Configuration ParseArguments(string[] args)
+        private static bool ParseArguments(out Configuration configuration, string[] args, TextWriter outputStream)
         {
-            Configuration output = new Configuration();
+            bool output = true;
 
-            int argCount = args.Length;
-            if(0 == argCount)
-            {
-                // Use the default paths.
-                output.BuildListFilePath = Configuration.DefaultBuildListFilePath;
-                output.OutputFilePath = Program.GetDatedDefaultOutputFilePath();
-            }
+            configuration = new Configuration();
 
-            if(1 == argCount)
+            try
             {
-                output.BuildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                output.OutputFilePath = Program.GetDatedDefaultOutputFilePath();
-            }
-            
-            if(2 == argCount)
-            {
-                output.BuildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                output.OutputFilePath = Program.VerifyFileExistence(args[1], @"Specified output file not found: {0}");
-            }
+                int argCount = args.Length;
+                string buildListFilePath;
+                string outputFilePath;
+                switch(argCount)
+                {
+                    case 0:
+                        // Use the default paths.
+                        outputStream.WriteLine(@"Using default build list file.");
+                        buildListFilePath = Configuration.DefaultBuildListFilePath;
+                        outputStream.WriteLine(@"Using default output file.");
+                        outputFilePath = Program.GetDatedDefaultOutputFilePath();
+                        break;
 
-            if(2 < argCount)
+                    case 1:
+                        buildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
+                        outputStream.WriteLine(@"Using default output file.");
+                        outputFilePath = Program.GetDatedDefaultOutputFilePath();
+                        break;
+
+                    case 2:
+                        buildListFilePath = Program.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
+                        outputFilePath = Program.VerifyFileExistence(args[1], @"Specified output file not found: {0}");
+                        break;
+
+                    default:
+                        string message = String.Format(@"Too many input arguments. Found: {0}. Usage: Augustus.exe (optional)[build list file path] (optional)[output file path]", argCount);
+                        throw new InvalidOperationException(message);
+                }
+
+                outputStream.WriteLine();
+
+                string line;
+                line = String.Format(@"Using build list file: {0}", buildListFilePath);
+                outputStream.WriteLine(line);
+                configuration.BuildListFilePath = buildListFilePath;
+
+                line = String.Format(@"Using output file: {0}", outputFilePath);
+                outputStream.WriteLine(line);
+                configuration.OutputFilePath = outputFilePath;
+            }
+            catch(Exception ex)
             {
-                string message = String.Format(@"Too many input arguments. Found: {0}. Usage: Augustus.exe (optional)[build list file path] (optional)[output file path]", argCount);
-                throw new InvalidOperationException(message);
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
+                output = false;
             }
 
             return output;

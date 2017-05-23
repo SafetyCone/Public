@@ -5,6 +5,9 @@ namespace Public.Common.Lib.Security
 {
     public class Authentication
     {
+        public const string MinexGmailAuthenticationName = @"MinexGmail";
+
+
         public string Name { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }

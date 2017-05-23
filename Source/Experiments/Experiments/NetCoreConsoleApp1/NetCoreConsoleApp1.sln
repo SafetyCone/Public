@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D60C6F03-D0F4-4C3B-BD2E-06970148D07D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AABEF31A-132F-421C-B84B-48452F598963}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetCoreConsoleApp1", "src\NetCoreConsoleApp1\NetCoreConsoleApp1.xproj", "{8C07C0C6-87CD-4570-9752-9F67B7D23BFC}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetCoreClassLibrary1", "src\NetCoreClassLibrary1\NetCoreClassLibrary1.xproj", "{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C07C0C6-87CD-4570-9752-9F67B7D23BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C07C0C6-87CD-4570-9752-9F67B7D23BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C07C0C6-87CD-4570-9752-9F67B7D23BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C07C0C6-87CD-4570-9752-9F67B7D23BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8C07C0C6-87CD-4570-9752-9F67B7D23BFC} = {D60C6F03-D0F4-4C3B-BD2E-06970148D07D}
+		{20DE12D9-6C2A-4B76-97BA-0B66F8EC0BB7} = {D60C6F03-D0F4-4C3B-BD2E-06970148D07D}
+	EndGlobalSection
+EndGlobal

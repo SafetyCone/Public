@@ -41,7 +41,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.IO.TextWriter.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Extensions\System.DateTime.cs" />
     <Compile Include="Code\Extensions\System.Xml.XmlDocument.cs" />
