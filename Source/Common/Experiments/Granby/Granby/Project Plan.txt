@@ -1,0 +1,103 @@
+Granby is an experimental project to create my own scheduler.
+
+It builds on work done in Minex->Common->Experiments->SchedulerSimple. This work has been brought over to Public repository since a scheduler should be public.
+
+I want to start simple, then get more complicated.
+
+Schduler Features:
+* Input arguments
+	* Specify scheduled tasks specification file path.
+	* Specify local timezone.
+* Schedule and Task Specification
+	* Deserialization/Serialization
+		* Text file
+		* XML file
+		* Late binding of ISchedule and ITask from assembly file path, namespace name, and class name.
+	* Interactive
+		* GUI for addition/edit of schedules and tasks.
+* Interactivity
+	* GUI
+	* Show list of current scheduled tasks.
+	* Add/Edit/Remove scheduled tasks.
+		* Reschedule all tasks and reset next task wait time.
+		* Ensure tasks are not missed in rescheduling by pausing wait timer while rescheduling, then running through task list to see if anything should have happened.
+	* Run selected scheduled task now.
+	* Change "current" time using an offset.
+* Schedules
+	* Dummy fixed time schedule. (DONE)
+	* Dummy in X seconds schedule. (DONE)
+	* Daily simple schedule at certain time. (DONE)
+	* Daily schedule at certain time, in a timezone, on certain days of the week, using specified holiday calendars. (TODO)
+* Tasks
+	* Dummy message box message. (DONE)
+	* Dummy output stream (Debug/Console/File/Multiple (DONE)) with message.
+	* Action wrapping task. (DONE)
+	* Run Executable with input arguments. (DONE)
+	* Late binding of ITask. (TODO)
+* Logging
+	* Log to output stream (debug, console, file, multiple). (Debug (DONE) / Console (DONE) / StreamWriter i.e. File (DONE) / Multiple (DONE))
+	* Log to file.
+	* Also log to structured statistics text file.
+	* Also log to structured XML file.
+* Testing
+	* Ensure event was fired within delta of known time.
+
+
+* Comments:
+If any addition/alteration/removal of items from the schedule is to be allowed, multi-threading is required (alternative would be waiting until previously scheduled action time has passed and then updating the schedule, which is not OK).
+
+
+* Apple Scheduler:
+The most basic scheduler, this is nothing but a List<Tuple<DateTime, Action>>, a list of tuples of times at which a task should be performed, and the corresponding task as an action.
+Uses Thread.Sleep().
+The list of action-time tuples is created programmatically, perhaps hard-coded, perhaps from reading a file.
+The list of action-time tuples is fed into the scheduler upon construction, and a new, private, list of action-time tuples is created inside the scheduler. This keeps the action-time tuples list from being altered, meaning we don't have to deal with any rescheduling or multi-threading.
+The list is sorted according to the time at which an action should occur, from earliest to latest.
+The mechanism of action for scheduling is to have a single thread, which waits the amount of time between now and the first action time.
+After waiting the required period, the scheduler gets the current time, runs through the list of scheduled actions, and runs each action if the action time is less than the current time.
+The Apple scheduler does not reschedule any actions.
+
+Pros:
+Extremely simple as an intuitive first example.
+Allows building schedule specification and action specification infrastructure.
+Allows building a logging infrastructure, even if just to the console.
+
+Cons:
+Action objects do not have identifiable names, not sure exactly what is being run.
+Action objects do not maintain references to the objects whose methods they use. This means those objects must be kept alive somewhere else.
+No mechanism for rescheduling actions after being run at their action time, will need to restart the scheduler.
+No handling or logging of action execution exceptions.
+Single-threaded, thus no interactivity while the scheduler is waiting until the next scheduled action.
+No addition of actions. The list of actions must be fully built before starting the scheduler.
+No GUI front-end ability since it is single threaded with no events.
+
+
+* Banana Scheduler
+A basic scheduler, built around a List<Tuple<DateTime, ScheduledTask>>. This is a list of tuples of times at which a task should be performed (from the Schedule component of the scheduled task), and the scheduled task which also contains the task and its associated run method.
+Uses Thread.Sleep().
+A list of scheduled tasks is read from a file (text or XML), and then provided to the scheduler as a constructor arguments.
+The list of scheduled tasks is then turned into a list of time-scheduled task tuples using an initial time as the prior event time, and the scheduler creates an internal, private list of time-scheduled task tuples to keep the list from being altered during run.
+The list of time-scheduled task tuples is sorted according to event time (from earliest to latest), then Scheduled Task Name (alphabetically).
+The mechanism of action for scheduling is to have a single thread, which dequeues the first item of the list, deteremines the amount of time to wait until the event time, waits, runs the event, then uses the prior event time to reschedule the event by adding a new tuple to the end of the list.
+There is some batching of events before rescheduling. This means that all events with an event time less than the current time are run and added to a ToReschedule list. After all events that need to be run are run, then all events in the ToReschedule list are rescheduled.
+The list is then sorted again, and the cycle repeats with the first element of the list.
+
+Pros:
+A simple yet production-ready example.
+Uses the already built schedule and task text-file specification infrastructure.
+Uses the already built OutputStream and Log infrastructure for output and logging.
+Scheduled tasks have identifiable (but allowed to be non-unique) names.
+Scheduled tasks maintain references to their own task objects, which means the task run method can be accessed without specifically needing to keep the task object alive.
+Scheduled tasks are rescheduled upon run. This is a prerequisite for a production scheduler since it does not have be restarted to run the next scheduled event of a task.
+Handling and logging of task run method execution exceptions.
+
+Cons:
+Single-threaded, this no interactivity with the scheduler while it is waiting until the next scheduled action.
+No addition/modifcation/subtraction of actions. The list of actions must be fully built before starting the scheduler.
+No GUI front-end ability since it is single threaded with no events.
+
+
+
+Ideas:
+* Structured logging, what action, when scheduled, when actually run, any exceptions.
+* Log to database.

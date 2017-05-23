@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granby.VS2017", "Granby/Granby.VS2017.csproj", "{E21D078C-0967-43C7-AD1E-3ADB06F3C9EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granby.Lib.VS2017", "Lib/Granby.Lib.VS2017.csproj", "{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E21D078C-0967-43C7-AD1E-3ADB06F3C9EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E21D078C-0967-43C7-AD1E-3ADB06F3C9EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E21D078C-0967-43C7-AD1E-3ADB06F3C9EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E21D078C-0967-43C7-AD1E-3ADB06F3C9EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
