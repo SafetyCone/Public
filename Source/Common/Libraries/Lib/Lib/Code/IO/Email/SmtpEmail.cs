@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 
 using Public.Common.Lib.Security;
 
 
-namespace Public.Common.Lib.Email
+namespace Public.Common.Lib.IO.Email
 {
     public class SmtpEmail
     {
         #region Static
 
-        public static void Send(string to, string from, string subject, string body, string host, int port, Authentication authentication)
+        public static void Send(string to, string from, string subject, string body, string host, int port, Authentication authentication, IEnumerable<string> attachmentFilePaths)
         {
             MailAddress toAddress = new MailAddress(to);
             MailAddress fromAddress = new MailAddress(from);
 
-            SmtpClient smptClient = new SmtpClient
+            SmtpClient smtp = new SmtpClient
             {
                 Host = host,
                 Port = port,
@@ -32,8 +33,19 @@ namespace Public.Common.Lib.Email
                 Body = body,
             })
             {
-                smptClient.Send(message);
+                foreach(string attachmentFilePath in attachmentFilePaths)
+                {
+                    Attachment attachment = new Attachment(attachmentFilePath);
+                    message.Attachments.Add(attachment);
+                }
+
+                smtp.Send(message);
             }
+        }
+
+        public static void Send(string to, string from, string subject, string body, string host, int port, Authentication authentication)
+        {
+            SmtpEmail.Send(to, from, subject, body, host, port, authentication, new string[] { });
         }
 
         #endregion

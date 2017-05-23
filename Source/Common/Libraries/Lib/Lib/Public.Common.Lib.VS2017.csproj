@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Extensions\System.IO.TextWriter.cs" />
     <Compile Include="Code\Extensions\System.DateTime.cs" />
     <Compile Include="Code\Extensions\System.Xml.XmlDocument.cs" />
     <Compile Include="Code\Constants.cs" />

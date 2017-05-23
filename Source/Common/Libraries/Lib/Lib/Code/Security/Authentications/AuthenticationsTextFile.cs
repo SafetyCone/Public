@@ -52,6 +52,14 @@ namespace Public.Common.Lib.Security
             return output;
         }
 
+        public static Dictionary<string, Authentication> DeserializeTextAuthenticationsByName()
+        {
+            string defaultFilePath = AuthenticationsTextFile.DefaultAuthenticationsTextFilePath;
+
+            Dictionary<string, Authentication> output = AuthenticationsTextFile.DeserializeTextAuthenticationsByName(defaultFilePath);
+            return output;
+        }
+
         #endregion
     }
 }
