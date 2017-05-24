@@ -58,6 +58,10 @@
       <Project>{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}</Project>
       <Name>Public.Common.Lib.VS2013</Name>
     </ProjectReference>
+    <ProjectReference Include="../../../Libraries/WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2013.csproj">
+      <Project>{BD06291E-374B-476E-B514-49D582D52F25}</Project>
+      <Name>Public.Common.WindowsShell.VS2013</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

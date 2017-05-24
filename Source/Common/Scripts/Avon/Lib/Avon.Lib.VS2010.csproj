@@ -59,6 +59,10 @@
       <Project>{40F1D161-F811-4575-B098-69F11EC05E1B}</Project>
       <Name>Public.Common.Lib.VS2010</Name>
     </ProjectReference>
+    <ProjectReference Include="../../../Libraries/WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2010.csproj">
+      <Project>{AC4C2822-995C-4126-AF91-37DDEF37F1DB}</Project>
+      <Name>Public.Common.WindowsShell.VS2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,6 +14,7 @@ using Public.Common.Lib.Code.Physical.CSharp;
 using PhysicalProject = Public.Common.Lib.Code.Physical.CSharp.Project;
 using Public.Common.Lib.Code.Serialization;
 using Public.Common.Lib.Extensions;
+using Public.Common.WindowsShell;
 
 
 namespace Public.Common.Avon.Lib
@@ -24,7 +25,7 @@ namespace Public.Common.Avon.Lib
 
         public static void DistributeChangesFromDefaultVsVersionSolution(string solutionDirectoryPath)
         {
-            string defaultSolutionFilePath = CodeUtilities.GetDefaultSolutionFilePath(solutionDirectoryPath);
+            string defaultSolutionFilePath = Utilities.GetDefaultSolutionFilePath(solutionDirectoryPath);
 
             string[] solutionFilePaths = CodeUtilities.GetSolutionFilePaths(solutionDirectoryPath);
             foreach (string solutionFilePath in solutionFilePaths)
@@ -324,6 +325,8 @@ namespace Public.Common.Avon.Lib
 
         #endregion
 
+        #region Ensure VS-Versioned Bin And Obj Project Properties
+
         public static void EnsureVsVersionedBinAndObjProperties(string solutionDirectoryPath, HashSet<string> projectDirectoryPathsAllowedToChange)
         {
             string[] solutionFilePaths = CodeUtilities.GetSolutionFilePaths(solutionDirectoryPath);
@@ -380,5 +383,79 @@ namespace Public.Common.Avon.Lib
             XmlHelper.FixXmlDocumentNamespaceForSave(doc, CSharpProjectSerializer.MsBuild2003XmlNamespaceName);
             doc.Save(projectFilePath);
         }
+
+        #endregion
+
+        #region Create Solution Set With Default
+
+        /// <summary>
+        /// Create a solution set of all Visual Studio versions, but with a shortcut pointing to one specific version as the default.
+        /// </summary>
+        public static void CreateSolutionSetWithDefault(NewSolutionSetSpecification solutionSetSpecifcation, VisualStudioVersion defaultVisualStudioVersion)
+        {
+            Creation.CreateSolutionSet(solutionSetSpecifcation);
+
+            string solutionDirectoryPath = Creation.DetermineSolutionDirectoryPath(solutionSetSpecifcation.BaseSolutionSpecification);
+            Utilities.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVisualStudioVersion);
+        }
+
+        /// <remarks>
+        /// Examine the shortcut to the default Visual Studio solution file created with the solution set, and get thus get the path of the default solution.
+        /// </remarks>
+        public static VisualStudioVersion DetermineDefaultSolutionVisualStudioVersion(string defaultSolutionShortcutFilePath)
+        {
+            string defaultSolutionFilePath = WindowsShellRuntimeWrapper.GetShortcutTargetPath(defaultSolutionShortcutFilePath);
+
+            SolutionFileNameInfo solutionFileNameInfo = SolutionFileNameInfo.Parse(defaultSolutionFilePath);
+            return solutionFileNameInfo.VisualStudioVersion;
+        }
+
+        /// <remarks>
+        /// This method assumes there are multiple VS version labeled solution files in the solution directory.
+        /// </remarks>
+        public static void SetDefaultVisualStudioVersion(string solutionDirectoryPath, VisualStudioVersion defaultVisualStudioVersion)
+        {
+            string[] solutionFilePaths = Directory.GetFiles(solutionDirectoryPath, @"*.sln", SearchOption.TopDirectoryOnly);
+            foreach (string solutionFilePath in solutionFilePaths)
+            {
+                SolutionFileNameInfo fileNameInfo = SolutionFileNameInfo.Parse(solutionFilePath);
+                if (defaultVisualStudioVersion == fileNameInfo.VisualStudioVersion)
+                {
+                    // Make the shortcut.
+                    string shortCutFileName = String.Format(@"{0}.{1}", fileNameInfo.FileNameBase, SolutionFileNameInfo.SolutionFileExtension);
+                    string shortCutFilePath = Path.Combine(solutionDirectoryPath, shortCutFileName);
+
+                    WindowsShellRuntimeWrapper.CreateShortcut(shortCutFilePath, solutionFilePath);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the default solution file path.
+        /// </summary>
+        public static string GetDefaultSolutionFilePath(string solutionsDirectoryPath)
+        {
+            string defaultSolutionShortcutFilePath = Utilities.GetDefaultSolutionShortcutFilePath(solutionsDirectoryPath);
+
+            string output = WindowsShellRuntimeWrapper.GetShortcutLinkTargetPath(defaultSolutionShortcutFilePath);
+            return output;
+        }
+
+        /// <summary>
+        /// Get the path of the default solution file link.
+        /// </summary>
+        public static string GetDefaultSolutionShortcutFilePath(string solutionsDirectoryPath)
+        {
+            string[] solutionLinkFiles = Directory.GetFiles(solutionsDirectoryPath, @"*.sln.lnk");
+            if (1 != solutionLinkFiles.Length)
+            {
+                throw new InvalidOperationException(@"Unable to determine default solution from link target due to the presence of multiple links in the solution directory.");
+            }
+
+            string output = solutionLinkFiles[0];
+            return output;
+        }
+
+        #endregion
     }
 }

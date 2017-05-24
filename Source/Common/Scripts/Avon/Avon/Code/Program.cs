@@ -74,7 +74,7 @@ namespace Public.Common.Avon
             string solutionDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Email";
             VisualStudioVersion defaultVersion = VisualStudioVersion.VS2010;
 
-            Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
+            AvonUtilities.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
         }
 
         public static void CreateSolutionSetFromInitialVsVersionSolution()
@@ -114,7 +114,7 @@ namespace Public.Common.Avon
 
             NewSolutionSetSpecification setSpecification = new NewSolutionSetSpecification(specification, vsVersions);
 
-            Creation.CreateSolutionSetWithDefault(setSpecification, specification.VisualStudioVersion);
+            AvonUtilities.CreateSolutionSetWithDefault(setSpecification, specification.VisualStudioVersion);
         }
     }
 }

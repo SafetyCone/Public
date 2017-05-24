@@ -73,9 +73,11 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
+                output = false;
+
+                outputStream.WriteLineAndBlankLine(@"ERROR parsing input arguments.");
                 outputStream.WriteLineAndBlankLine(ex.Message);
 
-                output = false;
                 Configuration.DisplayUsage(outputStream);
             }
 
@@ -101,7 +103,7 @@ namespace Public.Common.Avon
                         string solutionDirectoryPath = solutionDirectoryPathToken;
                         VisualStudioVersion defaultVersion = vsVersion;
 
-                        Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
+                        AvonUtilities.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
                     };
                 }
                 else
@@ -112,10 +114,10 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplaySetDefaultVsVersionSolutionUsage(outputStream);
             }
 
@@ -173,10 +175,10 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplayEnsureVsVersionedBinAndObjPropertiesUsage(outputStream);
             }
 
@@ -231,10 +233,10 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplayDistributeChangesFromSpecificVsVersionSolutionUseage(outputStream);
             }
 
@@ -285,10 +287,10 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplayDistributeChangesFromDefaultVsVersionSolutionUsage(outputStream);
             }
 
@@ -341,10 +343,10 @@ namespace Public.Common.Avon
             }
             catch(Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplayCreateSolutionSetFromInitialVsVersionSolutionUsage(outputStream);
             }
 
@@ -436,10 +438,10 @@ namespace Public.Common.Avon
             }
             catch (Exception ex)
             {
-                outputStream.WriteLine(ex.Message);
-                outputStream.WriteLine();
-
                 output = false;
+
+                outputStream.WriteLineAndBlankLine(ex.Message);
+
                 Configuration.DisplayCreateNewSolutionSetUsage(outputStream);
             }
 

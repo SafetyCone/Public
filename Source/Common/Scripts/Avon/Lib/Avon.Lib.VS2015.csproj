@@ -50,6 +50,10 @@
       <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
       <Name>Public.Common.Lib.VS2015</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2015.csproj">
+      <Project>{3a83375a-2842-4e23-a89d-66dc0a147ff3}</Project>
+      <Name>Public.Common.WindowsShell.VS2015</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\ProjectSetCollection.cs" />

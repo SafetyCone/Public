@@ -58,6 +58,10 @@
       <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
       <Name>Public.Common.Lib.VS2017</Name>
     </ProjectReference>
+    <ProjectReference Include="../../../Libraries/WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2017.csproj">
+      <Project>{AA7E1EA8-218E-484D-8AED-8E973352B058}</Project>
+      <Name>Public.Common.WindowsShell.VS2017</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
