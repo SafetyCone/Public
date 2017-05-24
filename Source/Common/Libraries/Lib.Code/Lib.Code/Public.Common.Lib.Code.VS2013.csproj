@@ -142,12 +142,8 @@
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2013.csproj">
-      <Project>{5A1AD330-DC68-47A6-A300-014293A63979}</Project>
+      <Project>{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}</Project>
       <Name>Public.Common.Lib.VS2013</Name>
-    </ProjectReference>
-    <ProjectReference Include="../../WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2013.csproj">
-      <Project>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</Project>
-      <Name>Public.Common.WindowsShell.VS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,6 @@ using Public.Common.Lib.IO;
 using Public.Common.Lib.IO.Serialization;
 using Public.Common.Lib.IO.Serialization.Extensions;
 using Public.Common.Lib.Organizational;
-using Public.Common.WindowsShell;
 
 
 namespace Public.Common.Lib.Code
@@ -33,20 +32,6 @@ namespace Public.Common.Lib.Code
         #region Static
 
         #region Distribute Project Items
-
-        public static void DistributeChangesFromDefault(string solutionsDirectoryPath)
-        {
-            string defaultSolutionPath = Utilities.GetDefaultSolutionFilePath(solutionsDirectoryPath);
-
-            string[] solutionFilePaths = Utilities.GetSolutionFilePaths(solutionsDirectoryPath);
-            foreach(string solutionFilePath in solutionFilePaths)
-            {
-                if(defaultSolutionPath != solutionFilePath)
-                {
-                    Creation.DistributeChanges(defaultSolutionPath, solutionFilePath);
-                }
-            }
-        }
 
         public static void DistributeChanges(string sourceSolutionPath, string destinationSolutionPath)
         {
@@ -374,48 +359,6 @@ namespace Public.Common.Lib.Code
 
                         CSharpProjectSerializer.Serialize(desiredProjectPath, curVsVersionProject);
                     }
-                }
-            }
-        }
-
-        /// <remarks>
-        /// Examine the shortcut to the default Visual Studio solution file created with the solution set, and get thus get the path of the default solution.
-        /// </remarks>
-        public static VisualStudioVersion DetermineDefaultSolutionVisualStudioVersion(string defaultSolutionShortcutFilePath)
-        {
-            string defaultSolutionFilePath = WindowsShellRuntimeWrapper.GetShortcutTargetPath(defaultSolutionShortcutFilePath);
-
-            SolutionFileNameInfo solutionFileNameInfo = SolutionFileNameInfo.Parse(defaultSolutionFilePath);
-            return solutionFileNameInfo.VisualStudioVersion;
-        }
-
-        /// <summary>
-        /// Create a solution set of all Visual Studio versions, but with a shortcut pointing to one specific version as the default.
-        /// </summary>
-        public static void CreateSolutionSetWithDefault(NewSolutionSetSpecification solutionSetSpecifcation, VisualStudioVersion defaultVisualStudioVersion)
-        {
-            Creation.CreateSolutionSet(solutionSetSpecifcation);
-
-            string solutionDirectoryPath = Creation.DetermineSolutionDirectoryPath(solutionSetSpecifcation.BaseSolutionSpecification);
-            Creation.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVisualStudioVersion);
-        }
-
-        /// <remarks>
-        /// This method assumes there are multiple VS version labeled solution files in the solution directory.
-        /// </remarks>
-        public static void SetDefaultVisualStudioVersion(string solutionDirectoryPath, VisualStudioVersion defaultVisualStudioVersion)
-        {
-            string[] solutionFilePaths = Directory.GetFiles(solutionDirectoryPath, @"*.sln", SearchOption.TopDirectoryOnly);
-            foreach(string solutionFilePath in solutionFilePaths)
-            {
-                SolutionFileNameInfo fileNameInfo = SolutionFileNameInfo.Parse(solutionFilePath);
-                if(defaultVisualStudioVersion == fileNameInfo.VisualStudioVersion)
-                {
-                    // Make the shortcut.
-                    string shortCutFileName = String.Format(@"{0}.{1}", fileNameInfo.FileNameBase, SolutionFileNameInfo.SolutionFileExtension);
-                    string shortCutFilePath = Path.Combine(solutionDirectoryPath, shortCutFileName);
-                    
-                    WindowsShellRuntimeWrapper.CreateShortcut(shortCutFilePath, solutionFilePath);
                 }
             }
         }

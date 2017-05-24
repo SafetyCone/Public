@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using Public.Common.Lib.Code.Physical;
 using Solution = Public.Common.Lib.Code.Physical.Solution;
 using Public.Common.Lib.Extensions;
-using Public.Common.WindowsShell;
 
 
 namespace Public.Common.Lib.Code
@@ -45,32 +44,6 @@ namespace Public.Common.Lib.Code
                 }
             }
 
-            return output;
-        }
-
-        /// <summary>
-        /// Get the default solution file path.
-        /// </summary>
-        public static string GetDefaultSolutionFilePath(string solutionsDirectoryPath)
-        {
-            string defaultSolutionShortcutFilePath = Utilities.GetDefaultSolutionShortcutFilePath(solutionsDirectoryPath);
-
-            string output = WindowsShellRuntimeWrapper.GetShortcutLinkTargetPath(defaultSolutionShortcutFilePath);
-            return output;
-        }
-
-        /// <summary>
-        /// Get the path of the default solution file link.
-        /// </summary>
-        public static string GetDefaultSolutionShortcutFilePath(string solutionsDirectoryPath)
-        {
-            string[] solutionLinkFiles = Directory.GetFiles(solutionsDirectoryPath, @"*.sln.lnk");
-            if (1 != solutionLinkFiles.Length)
-            {
-                throw new InvalidOperationException(@"Unable to determine default solution from link target due to the presence of multiple links in the solution directory.");
-            }
-
-            string output = solutionLinkFiles[0];
             return output;
         }
 

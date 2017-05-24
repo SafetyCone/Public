@@ -145,10 +145,6 @@
       <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib.VS2015</Name>
     </ProjectReference>
-    <ProjectReference Include="../../WindowsShell/WindowsShell/Public.Common.WindowsShell.VS2015.csproj">
-      <Project>{3A83375A-2842-4E23-A89D-66DC0A147FF3}</Project>
-      <Name>Public.Common.WindowsShell.VS2015</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
