@@ -43,8 +43,23 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Builders\Builder.cs" />
+    <Compile Include="Code\Builders\Classes\CygwinBuilder.cs" />
+    <Compile Include="Code\Builders\Classes\MSBuildBuilder.cs" />
+    <Compile Include="Code\Builders\Interfaces\IBuilder.cs" />
+    <Compile Include="Code\Classes\BuildInfo.cs" />
+    <Compile Include="Code\Classes\BuildItem.cs" />
+    <Compile Include="Code\Classes\BuildItemTextFile.cs" />
+    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
+    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2017.csproj">
+      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
+      <Name>Public.Common.Lib.VS2017</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

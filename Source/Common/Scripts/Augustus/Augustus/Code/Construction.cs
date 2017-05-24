@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Public.Common.Augustus.Lib;
+
 
 namespace Public.Common.Augustus
 {
@@ -9,8 +11,8 @@ namespace Public.Common.Augustus
         public static void SubMain()
         {
             List<string> buildItemSpecifications = Construction.GetBuildItemSpecifications();
-            List<BuildItem> buildItems = Program.GetBuildItems(buildItemSpecifications);
-            Dictionary<string, bool> successByBuildItemPath = Program.RunBuildItems(buildItems, Console.Out);
+            List<BuildItem> buildItems = BuildItem.GetBuildItems(buildItemSpecifications);
+            Dictionary<string, bool> successByBuildItemPath = Builder.Run(buildItems, Console.Out);
 
             Program.WriteResults(successByBuildItemPath);
             Program.OpenResults();
@@ -25,7 +27,7 @@ namespace Public.Common.Augustus
             string buildListFileRelativePath = Constants.BuildFileListFileRelativePath;
 #endif
 
-            List<string> output = Program.GetBuildItemSpecifications(buildListFileRelativePath);
+            List<string> output = BuildItemTextFile.GetBuildItemSpecifications(buildListFileRelativePath);
             return output;
         }
     }

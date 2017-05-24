@@ -83,7 +83,7 @@ namespace Public.Common.Augustus
                         break;
 
                     default:
-                        string message = String.Format(@"Too many input arguments. Found: {0}. Usage: Augustus.exe (optional)[BuildListFilePath=DefaultPath] (optional)[OutputFilePath=DefaultPath] (optional)[HandleResults1=OpenResults[|HandleResults2]]", argCount);
+                        string message = String.Format(@"Too many input arguments. Found: {0}.", argCount);
                         throw new InvalidOperationException(message);
                 }
 
@@ -103,12 +103,24 @@ namespace Public.Common.Augustus
             }
             catch (Exception ex)
             {
+                output = false;
+
+                outputStream.WriteLineAndBlankLine(@"ERROR parsing input arguments.");
                 outputStream.WriteLineAndBlankLine(ex.Message);
 
-                output = false;
+                Configuration.DisplayUsage(outputStream);
             }
 
             return output;
+        }
+
+        private static void DisplayUsage(TextWriter outputStream)
+        {
+            string programName = Constants.ProgramName;
+            outputStream.WriteLineAndBlankLine(programName);
+
+            string line = String.Format(@"Usage: {0}.exe (optional)[BuildListFilePath = DefaultPath] (optional)[OutputFilePath = DefaultPath] (optional)[HandleResults1 = OpenResults[|HandleResults2]]", programName);
+            outputStream.WriteLineAndBlankLine(line);
         }
 
         private static void ParseHandleResultsToken(ref bool openResults, ref bool emailResults, string handleResultsToken, char separator)

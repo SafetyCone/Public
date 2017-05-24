@@ -46,13 +46,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Code\Classes\BuildInfo.cs" />
-    <Compile Include="Code\Classes\BuildItem.cs" />
     <Compile Include="Code\Classes\Configuration.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Construction.cs" />
-    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
-    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Code\Program.cs" />
     <Compile Include="Code\Testing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

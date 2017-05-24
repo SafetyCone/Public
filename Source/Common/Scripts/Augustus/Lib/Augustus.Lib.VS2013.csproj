@@ -43,9 +43,24 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Builders\Builder.cs" />
+    <Compile Include="Code\Builders\Classes\CygwinBuilder.cs" />
+    <Compile Include="Code\Builders\Classes\MSBuildBuilder.cs" />
+    <Compile Include="Code\Builders\Interfaces\IBuilder.cs" />
+    <Compile Include="Code\Classes\BuildInfo.cs" />
+    <Compile Include="Code\Classes\BuildItem.cs" />
+    <Compile Include="Code\Classes\BuildItemTextFile.cs" />
+    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
+    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2013.csproj">
+      <Project>{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}</Project>
+      <Name>Public.Common.Lib.VS2013</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

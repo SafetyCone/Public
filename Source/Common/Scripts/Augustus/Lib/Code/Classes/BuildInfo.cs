@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Public.Common.Augustus
+namespace Public.Common.Augustus.Lib
 {
     public class BuildInfo
     {

@@ -41,8 +41,22 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\Lib\Lib\Public.Common.Lib.VS2015.csproj">
+      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+      <Name>Public.Common.Lib.VS2015</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Builders\Builder.cs" />
+    <Compile Include="Code\Builders\Classes\CygwinBuilder.cs" />
+    <Compile Include="Code\Builders\Classes\MSBuildBuilder.cs" />
+    <Compile Include="Code\Builders\Interfaces\IBuilder.cs" />
+    <Compile Include="Code\Classes\BuildInfo.cs" />
+    <Compile Include="Code\Classes\BuildItem.cs" />
+    <Compile Include="Code\Classes\BuildItemTextFile.cs" />
+    <Compile Include="Code\Enumerations\OsEnvironment.cs" />
+    <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

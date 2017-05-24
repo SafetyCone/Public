@@ -2,7 +2,7 @@
 using Public.Common.Lib;
 
 
-namespace Public.Common.Augustus
+namespace Public.Common.Augustus.Lib
 {
     /// <summary>
     /// The 32- or 64- bit platform for which to build.
@@ -28,7 +28,7 @@ namespace Public.Common.Augustus
 }
 
 
-namespace Public.Common.Augustus.Extensions
+namespace Public.Common.Augustus.Lib.Extensions
 {
     public static class PlatformExtensions
     {

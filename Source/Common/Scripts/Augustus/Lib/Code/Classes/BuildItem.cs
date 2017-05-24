@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
-using Public.Common.Augustus.Extensions;
+using Public.Common.Augustus.Lib.Extensions;
 
 
-namespace Public.Common.Augustus
+namespace Public.Common.Augustus.Lib
 {
     public class BuildItem
     {
@@ -11,6 +12,18 @@ namespace Public.Common.Augustus
 
 
         #region Static
+
+        public static List<BuildItem> GetBuildItems(IEnumerable<string> buildItemSpecifications)
+        {
+            var output = new List<BuildItem>();
+            foreach (string buildItemSpecification in buildItemSpecifications)
+            {
+                var buildItem = BuildItem.Parse(buildItemSpecification);
+                output.Add(buildItem);
+            }
+
+            return output;
+        }
 
         public static BuildItem Parse(string buildItemSpecification)
         {
@@ -43,15 +56,15 @@ namespace Public.Common.Augustus
             var platformToken = BuildItem.GetOsEnvironmentToken(tokens);
             platform = OsEnvironmentExtensions.FromDefault(platformToken);
 
-            architecture = Augustus.Platform.Default;
+            architecture = Platform.Default;
             if (2 < tokens.Length)
             {
                 string architectureToken = BuildItem.GetPlatformToken(tokens);
                 architecture = PlatformExtensions.FromDefault(architectureToken);
 
-                if (OsEnvironment.Cygwin == platform && Augustus.Platform.Default != architecture)
+                if (OsEnvironment.Cygwin == platform && Platform.Default != architecture)
                 {
-                    var message = String.Format(@"Specification of architecture other than {0} not allowed for platform {1}.", Augustus.Platform.Default.ToDefaultString(), platform.ToDefaultString());
+                    var message = String.Format(@"Specification of architecture other than {0} not allowed for platform {1}.", Platform.Default.ToDefaultString(), platform.ToDefaultString());
                     throw new ArgumentException(message, "buildItemSpecification");
                 }
             }
@@ -77,7 +90,7 @@ namespace Public.Common.Augustus
 
         #endregion
 
-        public string BuildFilePath { get; set; }
+        public string FilePath { get; set; }
         public OsEnvironment OsEnvironment { get; set; }
         public Platform Platform { get; set; }
 
@@ -88,14 +101,14 @@ namespace Public.Common.Augustus
 
         public BuildItem(string buildFilePath, OsEnvironment osEnvironment, Platform platform)
         {
-            this.BuildFilePath = buildFilePath;
+            this.FilePath = buildFilePath;
             this.OsEnvironment = osEnvironment;
             this.Platform = platform;
         }
 
         public override string ToString()
         {
-            var output = String.Format(@"{0}{1}{2}{1}{3}", this.BuildFilePath, BuildItem.TokenSeparator, this.OsEnvironment.ToDefaultString(), this.Platform.ToDefaultString());
+            var output = String.Format(@"{0}{1}{2}{1}{3}", this.FilePath, BuildItem.TokenSeparator, this.OsEnvironment.ToDefaultString(), this.Platform.ToDefaultString());
             return output;
         }
     }
