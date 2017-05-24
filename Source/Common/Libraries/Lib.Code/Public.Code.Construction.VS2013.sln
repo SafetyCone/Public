@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Code.VS20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2013", "..\Lib\Lib\Public.Common.Lib.VS2013.csproj", "{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.VS2013", "..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2013.csproj", "{3A83375A-2842-4E23-A89D-66DC0A147FF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.VS2013", "..\WindowsShell\WindowsShell\Public.Common.WindowsShell.VS2013.csproj", "{BD06291E-374B-476E-B514-49D582D52F25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A83375A-2842-4E23-A89D-66DC0A147FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A83375A-2842-4E23-A89D-66DC0A147FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A83375A-2842-4E23-A89D-66DC0A147FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A83375A-2842-4E23-A89D-66DC0A147FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD06291E-374B-476E-B514-49D582D52F25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD06291E-374B-476E-B514-49D582D52F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD06291E-374B-476E-B514-49D582D52F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD06291E-374B-476E-B514-49D582D52F25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
