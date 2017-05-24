@@ -45,7 +45,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Classes\Configuration.cs" />
+    <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\Schedulers\AppleScheduler.cs" />
     <Compile Include="Code\Program.cs" />
+    <Compile Include="Code\Schedulers\BananaScheduler.cs" />
+    <Compile Include="Code\Testing.cs" />
+    <Compile Include="Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -54,15 +60,16 @@
       <Project>{EC3DB68A-AD9C-4ABC-91DF-79C3674A05CC}</Project>
       <Name>Granby.Lib.VS2017</Name>
     </ProjectReference>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2017.csproj">
+      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
+      <Name>Public.Common.Lib.VS2017</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

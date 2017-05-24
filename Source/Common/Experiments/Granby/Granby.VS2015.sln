@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granby.VS2015", "Granby/Gra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granby.Lib.VS2015", "Lib/Granby.Lib.VS2015.csproj", "{6F629FDB-FE03-46BF-BB32-B805F20252A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2015", "../../Libraries/Lib/Lib/Public.Common.Lib.VS2015.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6F629FDB-FE03-46BF-BB32-B805F20252A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F629FDB-FE03-46BF-BB32-B805F20252A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F629FDB-FE03-46BF-BB32-B805F20252A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

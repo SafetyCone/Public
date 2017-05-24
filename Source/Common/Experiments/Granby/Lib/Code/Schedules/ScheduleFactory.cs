@@ -8,6 +8,7 @@ namespace Public.Common.Granby.Lib
     {
         public const string ConstantTimeDummyScheduleKey = @"ConstantTimeSchedule";
         public const string NSecondsAheadDummyScheduledKey = @"NSecondsAhead";
+        public const string SimpleDailyScheduleKey = @"SimpleDaily";
 
 
         #region Static
@@ -16,6 +17,7 @@ namespace Public.Common.Granby.Lib
         {
             constructors.Add(ScheduleFactory.ConstantTimeDummyScheduleKey, ScheduleFactory.GetConstantTimeDummy);
             constructors.Add(ScheduleFactory.NSecondsAheadDummyScheduledKey, ScheduleFactory.GetNSecondsAheadDummy);
+            constructors.Add(ScheduleFactory.SimpleDailyScheduleKey, ScheduleFactory.GetSimpleDailySchedule);
         }
 
         private static ISchedule GetConstantTimeDummy(string[] tokens)
@@ -35,6 +37,16 @@ namespace Public.Common.Granby.Lib
             int numberOfSeconds = Int32.Parse(numberOfSecondsToken);
 
             NSecondAheadDummySchedule output = new NSecondAheadDummySchedule(numberOfSeconds);
+            return output;
+        }
+
+        private static ISchedule GetSimpleDailySchedule(string[] tokens)
+        {
+            string timeToken = tokens[1];
+
+            DateTime time = DateTime.Parse(timeToken);
+
+            SimpleDailySchedule output = new SimpleDailySchedule(time);
             return output;
         }
 

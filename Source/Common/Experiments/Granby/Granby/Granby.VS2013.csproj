@@ -45,7 +45,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Classes\Configuration.cs" />
+    <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\Schedulers\AppleScheduler.cs" />
     <Compile Include="Code\Program.cs" />
+    <Compile Include="Code\Schedulers\BananaScheduler.cs" />
+    <Compile Include="Code\Testing.cs" />
+    <Compile Include="Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -54,15 +60,16 @@
       <Project>{325BF5E4-5FA0-4F06-B1D2-9878AB5CA72E}</Project>
       <Name>Granby.Lib.VS2013</Name>
     </ProjectReference>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2013.csproj">
+      <Project>{C6B9AEE9-BFB7-4E2B-8AA5-E522CA65DC2F}</Project>
+      <Name>Public.Common.Lib.VS2013</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
