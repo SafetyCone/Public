@@ -50,13 +50,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
-      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
-      <Name>Public.Common.Lib</Name>
+    <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2013.csproj">
+      <Project>{5A1AD330-DC68-47A6-A300-014293A63979}</Project>
+      <Name>Public.Common.Lib.VS2013</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.VS2015.csproj">
-      <Project>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</Project>
-      <Name>Public.Common.Lib.Code</Name>
+    <ProjectReference Include="../Lib.Code/Public.Common.Lib.Code.VS2013.csproj">
+      <Project>{FEEC2531-C20E-4769-8A0C-6B214EA39168}</Project>
+      <Name>Public.Common.Lib.Code.VS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

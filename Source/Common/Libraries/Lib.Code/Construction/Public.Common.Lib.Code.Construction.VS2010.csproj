@@ -44,22 +44,21 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2010.csproj">
+      <Project>{40F1D161-F811-4575-B098-69F11EC05E1B}</Project>
+      <Name>Public.Common.Lib.VS2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.VS2010.csproj">
+      <Project>{94831367-4E37-4457-B041-843362F1C5E7}</Project>
+      <Name>Public.Common.Lib.Code.VS2010</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
-      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
-      <Name>Public.Common.Lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.VS2015.csproj">
-      <Project>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</Project>
-      <Name>Public.Common.Lib.Code</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>

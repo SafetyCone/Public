@@ -51,12 +51,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2015.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+    <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2015.csproj">
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib.VS2015</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Lib.Code\Public.Common.Lib.Code.VS2015.csproj">
-      <Project>{fd507e5f-f561-41fc-b543-8ff7ef178fa7}</Project>
+    <ProjectReference Include="../Lib.Code/Public.Common.Lib.Code.VS2015.csproj">
+      <Project>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</Project>
       <Name>Public.Common.Lib.Code.VS2015</Name>
     </ProjectReference>
   </ItemGroup>
