@@ -54,6 +54,7 @@
     <Compile Include="Code\Enumerations\OsEnvironment.cs" />
     <Compile Include="Code\Enumerations\Platform.cs" />
     <Compile Include="Code\Program.cs" />
+    <Compile Include="Code\Testing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
