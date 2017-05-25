@@ -42,6 +42,12 @@ namespace Public.Common.Lib.Code
             return output;
         }
 
+        public static ProjectFileNameInfo Parse(string projectFilePath)
+        {
+            ProjectFileNameInfo output = ProjectFileNameInfo.Parse(projectFilePath, VisualStudioVersion.VS2015);
+            return output;
+        }
+
         /// <summary>
         /// Return the base file name of a project file (which lacks the Visual Studio version token and the solution file extension).
         /// </summary>

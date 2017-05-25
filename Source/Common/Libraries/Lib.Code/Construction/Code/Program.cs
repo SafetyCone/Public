@@ -23,16 +23,8 @@ namespace Public.Common.Lib.Code.Construction
             //Program.Test();
         }
 
-        private static void DistributeChangesFromDefaultVersion()
-        {
-            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
-
-            Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
-        }
-
         private static void Test()
         {
-            Program.TestDistrubuteChangesFromDefault();
             //Program.TestGetDefaultSolutionFilePath();
             //Program.TestDetermineDefaultVsVersion();
             //Program.TestUrlShortcut();
@@ -51,26 +43,6 @@ namespace Public.Common.Lib.Code.Construction
             //Program.TestOrganizationsDirectoryPathIdentificationDefault();
         }
 
-        private static void TestDistrubuteChangesFromDefault()
-        {
-            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
-            Creation.DistributeChangesFromDefault(solutionsDirectoryPath);
-        }
-
-        private static void TestGetDefaultSolutionFilePath()
-        {
-            string solutionsDirectoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
-
-            string defaultSolutionFilePath = Utilities.GetDefaultSolutionFilePath(solutionsDirectoryPath);
-        }
-
-        private static void TestDetermineDefaultVsVersion()
-        {
-            string shortcutFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\Public.Excel.Construction.sln";
-
-            VisualStudioVersion defaultVsVersion = Creation.DetermineDefaultSolutionVisualStudioVersion(shortcutFilePath);
-        }
-
         private static void TestUrlShortcut()
         {
             string directoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\";
@@ -78,13 +50,6 @@ namespace Public.Common.Lib.Code.Construction
 
             string targetFilePath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Excel\Public.Excel.Construction.VS2015.sln";
             Public.Common.Lib.IO.UrlShortcuts.CreateFileShortcut(directoryPath, fileNameBase, targetFilePath);
-        }
-
-        private static void TestSetDefaultVisualStudioVersion()
-        {
-            string solutionDirecstoryPath = @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Code";
-
-            Creation.SetDefaultVisualStudioVersion(solutionDirecstoryPath, VisualStudioVersion.VS2015);
         }
 
         private static void TestCreateSolutionSetFromInitialVsVersionFile()
