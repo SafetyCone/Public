@@ -1,0 +1,1 @@
+*.o *.lo *.la *.al .libs *.so *.so.[0-9]* *.a *.pyc *.pyo __pycache__ *.rej *~ #*# .#* .*.swp .DS_Store bin obj lib build *.suo *.ide *TestResults *.VC.db *.vs Debug Release *.user *.exe *.d ipch *.opensdf *.sdf *.opendb *.log x64 deps
