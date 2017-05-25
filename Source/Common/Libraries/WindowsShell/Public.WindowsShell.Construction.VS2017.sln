@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.Construction.VS2017", "Construction/Public.Common.WindowsShell.Construction.VS2017.csproj", "{C8AE3344-A18A-404F-88CE-4338953D2443}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.Construction.VS2017", "Construction\Public.Common.WindowsShell.Construction.VS2017.csproj", "{C8AE3344-A18A-404F-88CE-4338953D2443}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.VS2017", "WindowsShell/Public.Common.WindowsShell.VS2017.csproj", "{AA7E1EA8-218E-484D-8AED-8E973352B058}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.WindowsShell.VS2017", "WindowsShell\Public.Common.WindowsShell.VS2017.csproj", "{AA7E1EA8-218E-484D-8AED-8E973352B058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2015", "..\Lib\Lib\Public.Common.Lib.VS2015.csproj", "{FBB331C2-8103-4A45-86A4-C72BF3259A32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2017", "..\Lib\Lib\Public.Common.Lib.VS2017.csproj", "{B76FF3DB-E7EC-4B04-A51A-2958EA072645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{AA7E1EA8-218E-484D-8AED-8E973352B058}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7E1EA8-218E-484D-8AED-8E973352B058}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7E1EA8-218E-484D-8AED-8E973352B058}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBB331C2-8103-4A45-86A4-C72BF3259A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B76FF3DB-E7EC-4B04-A51A-2958EA072645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76FF3DB-E7EC-4B04-A51A-2958EA072645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76FF3DB-E7EC-4B04-A51A-2958EA072645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76FF3DB-E7EC-4B04-A51A-2958EA072645}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

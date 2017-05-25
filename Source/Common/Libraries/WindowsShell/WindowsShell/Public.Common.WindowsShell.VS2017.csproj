@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
-      <Guid>F935DC20-1CF0-11D0-ADB9-00C04FD58A0B</Guid>
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
@@ -56,10 +56,9 @@
     <Compile Include="Code\WindowsShellRuntimeWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="../../Lib/Lib/Public.Common.Lib.VS2017.csproj">
-      <Project>{B76FF3DB-E7EC-4B04-A51A-2958EA072645}</Project>
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2017.csproj">
+      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
       <Name>Public.Common.Lib.VS2017</Name>
     </ProjectReference>
   </ItemGroup>
