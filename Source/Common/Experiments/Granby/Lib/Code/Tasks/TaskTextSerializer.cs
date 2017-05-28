@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Public.Common.Lib.Logging;
+
 
 namespace Public.Common.Granby.Lib
 {

@@ -46,16 +46,6 @@
   <ItemGroup>
     <Compile Include="Code\Factories\Classes\Base Classes\AegeanFactoryBase.cs" />
     <Compile Include="Code\Factories\Interfaces\IAegeanFactory.cs" />
-    <Compile Include="Code\Logging\Classes\Log.cs" />
-    <Compile Include="Code\Logging\ILogExtensions.cs" />
-    <Compile Include="Code\Logging\Interfaces\ILog.cs" />
-    <Compile Include="Code\Output Streams\Classes\ConsoleOutputStream.cs" />
-    <Compile Include="Code\Output Streams\Classes\DebugOutputStream.cs" />
-    <Compile Include="Code\Output Streams\Classes\FileOutputStream.cs" />
-    <Compile Include="Code\Output Streams\IOutputStreamExtensions.cs" />
-    <Compile Include="Code\Output Streams\Classes\StringListOutputStream.cs" />
-    <Compile Include="Code\Output Streams\Classes\MultipleOutputStream.cs" />
-    <Compile Include="Code\Output Streams\Interfaces\IOutputStream.cs" />
     <Compile Include="Code\Scheduled Tasks\ScheduledTask.cs" />
     <Compile Include="Code\Scheduled Tasks\ScheduledTaskSerializer.cs" />
     <Compile Include="Code\Schedules\Classes\AlwaysFutureDummySchedule.cs" />

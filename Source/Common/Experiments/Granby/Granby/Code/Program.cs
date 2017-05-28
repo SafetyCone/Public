@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
+using Public.Common.Lib.Logging;
+
 using Public.Common.Granby.Lib;
 
 
@@ -18,36 +22,60 @@ namespace Public.Common.Granby
 
         public static void SubMain(string[] args)
         {
-            TextWriter outputStream = Console.Out;
+            ConsoleOutputStream console = new ConsoleOutputStream();
+            DebugOutputStream debug = new DebugOutputStream();
+            MultipleOutputStream debugAndConsole = new MultipleOutputStream(new IOutputStream[] { console, debug });
+            debugAndConsole.WriteLineAndBlankLine(Constants.ProgramName);
+
+            string logFilePath = Log.GetAndEnsureDefaultLogFilePath(Constants.ProgramName);
+            debugAndConsole.WriteLine(@"Log file path:");
+            debugAndConsole.WriteLineAndBlankLine(logFilePath);
+
+            Log log = new Log(logFilePath);
+            MultipleOutputStream logAndConsole = new MultipleOutputStream(new IOutputStream[] { log.OutputStream, console });
 
             Configuration config;
-            if (Configuration.TryParseArguments(out config, outputStream, args))
+            if (Configuration.TryParseArguments(out config, logAndConsole, args))
             {
                 try
                 {
-                    Program.RunBananaScheduler(config.ScheduledTasksFilePath);
+                    Program.RunBananaScheduler(config.ScheduledTasksFilePath, debugAndConsole, log);
                 }
                 catch (Exception ex)
                 {
-                    outputStream.WriteLine(ex.Message);
+                    logAndConsole.WriteLine(@"ERROR running Banana Scheduler.");
+                    logAndConsole.WriteLine(ex.Message);
                 }
             }
+
+            logAndConsole.WriteLineAndBlankLine(@"Exiting program...");
         }
 
-        private static void RunBananaScheduler(string inputFilePath)
+        private static void RunBananaScheduler(string inputFilePath, IOutputStream outputStream, ILog log)
+        {
+            BananaScheduler bananaScheduler = BananaScheduler.FromScheduledTasksTextFile(inputFilePath, outputStream, log);
+            bananaScheduler.Run();
+        }
+
+        private static void RunBananaScheduler(string inputFilePath, IOutputStream outputStream)
         {
             string logFilePath = Utilities.GetLogFilePath(@"Banana Scheduler");
             string logDirectoryPath = Path.GetDirectoryName(logFilePath);
-            if(!Directory.Exists(logDirectoryPath))
+            if (!Directory.Exists(logDirectoryPath))
             {
                 Directory.CreateDirectory(logDirectoryPath);
             }
 
             Log log = new Log(new FileOutputStream(logFilePath));
 
-            BananaScheduler bananaScheduler = BananaScheduler.FromScheduledTasksTextFile(inputFilePath, log);
+            Program.RunBananaScheduler(inputFilePath, outputStream, log);
+        }
 
-            bananaScheduler.Run();
+        private static void RunBananaScheduler(string inputFilePath)
+        {
+            IOutputStream debugAndConsole = MultipleOutputStream.GetDebugAndConsoleOutputStream();
+
+            Program.RunBananaScheduler(inputFilePath, debugAndConsole);
         }
 
         private static void RunAppleScheduler()

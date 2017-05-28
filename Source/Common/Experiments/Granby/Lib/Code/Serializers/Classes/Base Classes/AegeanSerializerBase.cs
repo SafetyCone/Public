@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 
-using LogLog = Public.Common.Granby.Lib.Log;
+using Public.Common.Lib.Logging;
+using LogLog = Public.Common.Lib.Logging.Log;
 
 
 namespace Public.Common.Granby.Lib

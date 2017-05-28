@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
+using Public.Common.Lib.Logging;
+using LogLog = Public.Common.Lib.Logging.Log;
+using Public.Common.Lib.Logging.Extensions;
+
 using Public.Common.Granby.Lib;
-using LogLog = Public.Common.Granby.Lib.Log;
-using Public.Common.Granby.Lib.Extensions;
 
 
 namespace Public.Common.Granby
@@ -31,6 +35,14 @@ namespace Public.Common.Granby
                 output = tuple1.Item2.Name.CompareTo(tuple2.Item2.Name);
             }
 
+            return output;
+        }
+
+        public static BananaScheduler FromScheduledTasksTextFile(string filePath, IOutputStream outputStream, ILog log)
+        {
+            List<ScheduledTask> scheduledTasks = ScheduledTaskSerializer.DeserializeStatic(filePath);
+
+            BananaScheduler output = new BananaScheduler(scheduledTasks, outputStream, log);
             return output;
         }
 

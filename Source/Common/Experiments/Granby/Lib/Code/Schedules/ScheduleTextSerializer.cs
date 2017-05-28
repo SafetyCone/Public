@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Public.Common.Lib.Logging;
+
 
 namespace Public.Common.Granby.Lib
 {

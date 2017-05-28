@@ -2,6 +2,8 @@
 using System.IO;
 
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
 using Public.Common.Lib.Production;
 
 
@@ -25,7 +27,7 @@ namespace Public.Common.Granby
 
 
 
-        public static bool TryParseArguments(out Configuration configuration, TextWriter outputStream, string[] args)
+        public static bool TryParseArguments(out Configuration configuration, IOutputStream outputStream, string[] args)
         {
             bool output = true;
 
@@ -53,7 +55,8 @@ namespace Public.Common.Granby
             catch (Exception ex)
             {
                 output = false;
-                
+
+                outputStream.WriteLineAndBlankLine(@"ERROR parsing input arguments.");
                 outputStream.WriteLineAndBlankLine(ex.Message);
 
                 Configuration.DisplayUsage(outputStream);
@@ -62,11 +65,12 @@ namespace Public.Common.Granby
             return output;
         }
 
-        private static void DisplayUsage(TextWriter outputStream)
+        private static void DisplayUsage(IOutputStream outputStream)
         {
-            outputStream.WriteLineAndBlankLine(Constants.ProgramName);
+            string programName = Constants.ProgramName;
+            outputStream.WriteLineAndBlankLine(programName);
 
-            string line = String.Format(@"Usage: {0}.exe ScheduledTasksTextFilePath");
+            string line = String.Format(@"Usage: {0}.exe ScheduledTasksTextFilePath", programName);
             outputStream.WriteLineAndBlankLine(line);
         }
 
