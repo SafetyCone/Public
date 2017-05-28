@@ -7,6 +7,8 @@ using Public.Common.Lib.Code;
 using Public.Common.Lib.Code.Logical;
 using Public.Common.Lib.Code.Physical;
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
 using Public.Common.Lib.Organizational;
 
 using AvonUtilities = Public.Common.Avon.Lib.Utilities;
@@ -28,7 +30,7 @@ namespace Public.Common.Avon
 
         #region Static
 
-        public static bool TryParseArguments(string[] args, TextWriter outputStream, out Configuration configuration)
+        public static bool TryParseArguments(string[] args, IOutputStream outputStream, out Configuration configuration)
         {
             bool output = true;
 
@@ -84,7 +86,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static bool HandleSetDefaultVsVersionSolution(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleSetDefaultVsVersionSolution(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -124,7 +126,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplaySetDefaultVsVersionSolutionUsage(TextWriter outputStream)
+        private static void DisplaySetDefaultVsVersionSolutionUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.SetDefaultVsVersionSolutionFunctionName;
@@ -142,7 +144,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static bool HandleEnsureVsVersionedBinAndObjProperties(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleEnsureVsVersionedBinAndObjProperties(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -185,7 +187,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplayEnsureVsVersionedBinAndObjPropertiesUsage(TextWriter outputStream)
+        private static void DisplayEnsureVsVersionedBinAndObjPropertiesUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.EnsureVsVersionedBinAndObjPropertiesFunctionName;
@@ -203,7 +205,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static bool HandleDistributeChangesFromSpecificVsVersionSolution(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleDistributeChangesFromSpecificVsVersionSolution(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -243,7 +245,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplayDistributeChangesFromSpecificVsVersionSolutionUseage(TextWriter outputStream)
+        private static void DisplayDistributeChangesFromSpecificVsVersionSolutionUseage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.DistributeChangesFromSpecificVsVersionSolutionFunctionName;
@@ -261,7 +263,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static bool HandleDistributeChangesFromDefaultVsVersionSolution(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleDistributeChangesFromDefaultVsVersionSolution(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -297,7 +299,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplayDistributeChangesFromDefaultVsVersionSolutionUsage(TextWriter outputStream)
+        private static void DisplayDistributeChangesFromDefaultVsVersionSolutionUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.DistributeChangesFromDefaultVsVersionSolutionFunctionName;
@@ -315,7 +317,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static bool HandleCreateSolutionSetFromInitialVsVersionSolution(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleCreateSolutionSetFromInitialVsVersionSolution(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -374,7 +376,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplayCreateSolutionSetFromInitialVsVersionSolutionUsage(TextWriter outputStream)
+        private static void DisplayCreateSolutionSetFromInitialVsVersionSolutionUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.CreateSolutionSetFromInitialVsVersionSolutionFunctionName;
@@ -392,7 +394,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static bool HandleCreateNewSolutionSet(Configuration configuration, TextWriter outputStream, string[] functionArgs)
+        private static bool HandleCreateNewSolutionSet(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
             bool output = true;
 
@@ -427,7 +429,7 @@ namespace Public.Common.Avon
                             vsVersion,
                             Language.CSharp);
 
-                        Program.CreateNewSolutionSet(specification);
+                        Construction.CreateNewSolutionSet(specification);
                     };
                 }
                 else
@@ -448,7 +450,7 @@ namespace Public.Common.Avon
             return output;
         }
 
-        private static void DisplayCreateNewSolutionSetUsage(TextWriter outputStream)
+        private static void DisplayCreateNewSolutionSetUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             string functionName = Configuration.CreateNewSolutionSetFunctionName;
@@ -469,7 +471,7 @@ namespace Public.Common.Avon
             Configuration.DisplayProjectTypes(outputStream);
         }
 
-        private static void DisplayUsage(TextWriter outputStream)
+        private static void DisplayUsage(IOutputStream outputStream)
         {
             string line;
 
@@ -490,7 +492,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static void DisplayProjectTypes(TextWriter outputStream)
+        private static void DisplayProjectTypes(IOutputStream outputStream)
         {
             outputStream.WriteLine(@"Project Types:");
 
@@ -502,7 +504,7 @@ namespace Public.Common.Avon
             outputStream.WriteLine();
         }
 
-        private static void DisplaySolutionTypes(TextWriter outputStream)
+        private static void DisplaySolutionTypes(IOutputStream outputStream)
         {
             outputStream.WriteLine(@"Solution Types:");
 

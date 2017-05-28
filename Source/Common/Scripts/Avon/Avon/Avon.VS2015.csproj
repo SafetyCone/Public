@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Code\Classes\Configuration.cs" />
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\Construction.cs" />
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,21 +58,21 @@
       <Project>{53CA198E-8436-4B5A-9956-28C616432287}</Project>
       <Name>Avon.Lib.VS2015</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Lib.Code\Lib.Code\Public.Common.Lib.Code.VS2015.csproj">
-      <Project>{fd507e5f-f561-41fc-b543-8ff7ef178fa7}</Project>
+    <ProjectReference Include="../../../Libraries/Lib.Code/Lib.Code/Public.Common.Lib.Code.VS2015.csproj">
+      <Project>{FD507E5F-F561-41FC-B543-8FF7EF178FA7}</Project>
       <Name>Public.Common.Lib.Code.VS2015</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Lib\Lib\Public.Common.Lib.VS2015.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2015.csproj">
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib.VS2015</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Batch Files\Avon.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
