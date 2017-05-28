@@ -2,6 +2,8 @@
 using System.IO;
 
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
 using Public.Common.Lib.Production;
 
 
@@ -13,7 +15,6 @@ namespace Public.Common.Augustus
         public const string OpenResultsToken = @"OpenResults";
         public const string EmailResultsToken = @"EmailResults";
         public const string DefaultBuildListFileName = @"Augustus Build List.txt";
-        public const string DefaultUndatedOutputFilePath = @"C:\temp\logs\Augustus\Log.txt"; // Will be made into a dated path.
 
 
         #region Static
@@ -23,14 +24,6 @@ namespace Public.Common.Augustus
             get
             {
                 string output = Path.Combine(Production.UserConfigurationDataDirectoryPath, Configuration.DefaultBuildListFileName);
-                return output;
-            }
-        }
-        public static string DefaultOutputFilePath
-        {
-            get
-            {
-                string output = Configuration.GetDatedDefaultOutputFilePath();
                 return output;
             }
         }
@@ -44,17 +37,18 @@ namespace Public.Common.Augustus
         /// 
         /// If no input arguments are supplied, the default build list file path is used, and a dated default output file path is used.
         /// </remarks>
-        public static bool ParseArguments(out Configuration configuration, string[] args, TextWriter outputStream)
+        public static bool ParseArguments(out Configuration configuration, Paths paths, string[] args, IOutputStream outputStream)
         {
             bool output = true;
 
             configuration = new Configuration();
+            configuration.Paths = paths;
 
             try
             {
                 int argCount = args.Length;
                 string buildListFilePath = Configuration.DefaultBuildListFilePath;
-                string outputFilePath = Configuration.GetDatedDefaultOutputFilePath();
+                string resultsFilePath = configuration.Paths.ResultsFilePath;
                 bool openResults = false;
                 bool emailResults = true;
                 switch (argCount)
@@ -63,22 +57,22 @@ namespace Public.Common.Augustus
                         // Use the default paths.
                         Configuration.VerifyFileExistence(buildListFilePath, @"Specified build list file not found: {0}");
                         outputStream.WriteLine(@"Using default build list file.");
-                        outputStream.WriteLine(@"Using default output file.");
+                        outputStream.WriteLine(@"Writing to default results file.");
                         break;
 
                     case 1:
                         buildListFilePath = Configuration.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                        outputStream.WriteLine(@"Using default output file.");
+                        outputStream.WriteLine(@"Writing to default results file.");
                         break;
 
                     case 2:
                         buildListFilePath = Configuration.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                        outputFilePath = args[1];
+                        resultsFilePath = args[1];
                         break;
 
                     case 3:
                         buildListFilePath = Configuration.VerifyFileExistence(args[0], @"Specified build list file not found: {0}");
-                        outputFilePath = args[1];
+                        resultsFilePath = args[1];
                         Configuration.ParseHandleResultsToken(ref openResults, ref emailResults, args[2], Configuration.DefaultResultsHandlingTokenSeparator);
                         break;
 
@@ -94,9 +88,9 @@ namespace Public.Common.Augustus
                 outputStream.WriteLineAndBlankLine(line);
                 configuration.BuildListFilePath = buildListFilePath;
 
-                line = String.Format(@"Using output file: {0}", outputFilePath);
+                line = String.Format(@"Writing to results file: {0}", resultsFilePath);
                 outputStream.WriteLineAndBlankLine(line);
-                configuration.OutputFilePath = outputFilePath;
+                configuration.Paths.ResultsFilePath = resultsFilePath;
 
                 configuration.OpenResults = openResults;
                 configuration.EmailResults = emailResults;
@@ -114,7 +108,7 @@ namespace Public.Common.Augustus
             return output;
         }
 
-        private static void DisplayUsage(TextWriter outputStream)
+        private static void DisplayUsage(IOutputStream outputStream)
         {
             string programName = Constants.ProgramName;
             outputStream.WriteLineAndBlankLine(programName);
@@ -154,48 +148,25 @@ namespace Public.Common.Augustus
             return filePath;
         }
 
-        /// <remarks>
-        /// I will want the output files (basically logs) to be dated.
-        /// </remarks>
-        private static string GetDatedDefaultOutputFilePath()
-        {
-            string output = Configuration.DateMarkPath(Configuration.DefaultUndatedOutputFilePath);
-            return output;
-        }
-
-        private static string DateMarkPath(string path)
-        {
-            string todayYYYYMMDD = DateTime.Today.ToYYYYMMDDStr();
-
-            string directoryPath = Path.GetDirectoryName(path);
-            string fileNameOnly = Path.GetFileNameWithoutExtension(path);
-            string extension = PathExtensions.GetExtensionOnly(path);
-
-            string datedFileName = String.Format(@"{0} - {1}", fileNameOnly, todayYYYYMMDD);
-            string fullDatedFileName = PathExtensions.GetFullFileName(datedFileName, extension);
-
-            string output = Path.Combine(directoryPath, fullDatedFileName);
-            return output;
-        }
-
         #endregion
 
 
-
+        public DateTime RunTime { get; private set; }
         public string BuildListFilePath { get; set; }
-        public string OutputFilePath { get; set; }
+        public Paths Paths { get; set; }
         public bool OpenResults { get; set; }
         public bool EmailResults { get; set; }
 
 
         public Configuration()
         {
+            this.RunTime = DateTime.Now;
         }
 
-        public Configuration(string buildListFilePath, string outputFilePath)
+        public Configuration(string buildListFilePath)
+            : this()
         {
             this.BuildListFilePath = buildListFilePath;
-            this.OutputFilePath = outputFilePath;
         }
     }
 }

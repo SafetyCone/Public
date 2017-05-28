@@ -10,6 +10,33 @@ namespace Public.Common.Augustus.Lib
         public const string MSBuildExecutablePath = @"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe";
         public const string MSBuildSuccessRegexPattern = @"^Build succeeded.";
 
+
+        #region Static
+
+        public static string GetDefaultOutputLogFilePath(string buildFilePath)
+        {
+            string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildFilePath);
+            string buildDirectoryPath = Path.GetDirectoryName(buildFilePath);
+
+            string outputLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Builder.OutputLogFileSuffix);
+
+            string output = Path.Combine(buildDirectoryPath, outputLogFileName);
+            return output;
+        }
+
+        public static string GetDefaultErrorLogFilePath(string buildFilePath)
+        {
+            string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildFilePath);
+            string buildDirectoryPath = Path.GetDirectoryName(buildFilePath);
+
+            string errorLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Builder.ErrorLogFileSuffix);
+
+            string output = Path.Combine(buildDirectoryPath, errorLogFileName);
+            return output;
+        }
+
+        #endregion
+
         #region IBuilder Members
 
         public string SuccessRegexPattern
@@ -22,18 +49,9 @@ namespace Public.Common.Augustus.Lib
 
         public BuildInfo GetBuildInfo(BuildItem buildItem)
         {
-            string buildFileNameNoExtension = Path.GetFileNameWithoutExtension(buildItem.FilePath);
-            string buildDirectoryPath = Path.GetDirectoryName(buildItem.FilePath);
-
-            string outputLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Builder.OutputLogFileSuffix);
-            string outputLogPath = Path.Combine(buildDirectoryPath, outputLogFileName);
-
-            string errorLogFileName = String.Format(@"{0} {1}", buildFileNameNoExtension, Builder.ErrorLogFileSuffix);
-            string errorLogPath = Path.Combine(buildDirectoryPath, errorLogFileName);
-
             string buildCommand = String.Format(MSBuildBuilder.MSBuildShellCommandMask, MSBuildBuilder.MSBuildExecutablePath, buildItem.FilePath);
 
-            BuildInfo output = new BuildInfo(outputLogPath, errorLogPath, MSBuildBuilder.MSBuildSuccessRegexPattern, buildCommand);
+            BuildInfo output = new BuildInfo(buildItem, buildCommand, MSBuildBuilder.MSBuildSuccessRegexPattern);
             return output;
         }
 

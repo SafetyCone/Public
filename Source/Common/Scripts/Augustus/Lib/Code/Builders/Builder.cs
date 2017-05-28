@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 using Public.Common.Lib;
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO;
+using Public.Common.Lib.IO.Extensions;
+using Public.Common.Lib.Logging;
 
 
 namespace Public.Common.Augustus.Lib
@@ -25,11 +28,16 @@ namespace Public.Common.Augustus.Lib
 
         static Builder()
         {
-            Dictionary<OsEnvironment, IBuilder> builders = new Dictionary<OsEnvironment, IBuilder>();
-            Builder.BuildersByOS = builders;
+            Builder.BuildersByOS = Builder.GetDefaultBuildersByOS();
+        }
 
-            builders.Add(OsEnvironment.Cygwin, new CygwinBuilder());
-            builders.Add(OsEnvironment.Windows, new MSBuildBuilder());
+        public static Dictionary<OsEnvironment, IBuilder> GetDefaultBuildersByOS()
+        {
+            Dictionary<OsEnvironment, IBuilder> output = new Dictionary<OsEnvironment, IBuilder>();
+            output.Add(OsEnvironment.Cygwin, new CygwinBuilder());
+            output.Add(OsEnvironment.Windows, new MSBuildBuilder());
+
+            return output;
         }
 
         public static BuildInfo GetBuildInfo(BuildItem buildItem)
@@ -50,7 +58,35 @@ namespace Public.Common.Augustus.Lib
             return output;
         }
 
-        public static void Run(BuildInfo info, StreamWriter standardOutput, StreamWriter standardError)
+        public static bool RunBuildCommandAndDetermineSuccess(string buildCommand, string successRegexPattern, IOutputStream outputStream, IOutputStream errorStream)
+        {
+            StringListOutputStream determineSuccessOutputStream = new StringListOutputStream();
+            MultipleOutputStream multipleOutputStream = new MultipleOutputStream(new IOutputStream[] { determineSuccessOutputStream, outputStream });
+
+            Builder.RunBuildCommand(buildCommand, multipleOutputStream, errorStream);
+
+            bool output = Builder.DetermineSuccess(successRegexPattern, determineSuccessOutputStream);
+            return output;
+        }
+
+        private static bool DetermineSuccess(string successRegexPattern, StringListOutputStream stringListOutputStream)
+        {
+            Regex successRegex = new Regex(successRegexPattern);
+
+            bool output = false;
+            foreach (string line in stringListOutputStream.Lines)
+            {
+                if (successRegex.IsMatch(line))
+                {
+                    output = true;
+                    break;
+                }
+            }
+
+            return output;
+        }
+
+        private static void RunBuildCommand(string buildCommand, IOutputStream outputStream, IOutputStream errorStream)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo(Builder.CommandShellExecutableName);
             startInfo.UseShellExecute = false;
@@ -61,56 +97,91 @@ namespace Public.Common.Augustus.Lib
 
             Process process = new Process();
             process.StartInfo = startInfo;
-            process.ErrorDataReceived += (sender, e) => { Builder.ProcessDataReceived(sender, e, standardError); };
-            process.OutputDataReceived += (sender, e) => { Builder.ProcessDataReceived(sender, e, standardOutput); };
+            process.OutputDataReceived += (sender, e) => { Builder.ProcessDataReceived(sender, e, outputStream); };
+            process.ErrorDataReceived += (sender, e) => { Builder.ProcessDataReceived(sender, e, errorStream); };
 
             process.Start();
             StreamWriter standardInput = process.StandardInput;
-            process.BeginErrorReadLine();
             process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-            standardInput.WriteLine(info.BuildCommand);
+            standardInput.WriteLine(buildCommand);
             standardInput.Close();
 
             process.WaitForExit();
 #if(DEBUG)
             int exitCode = process.ExitCode; // For debugging.
             string line = String.Format(@"Process complete. Exit code: {0}.", exitCode);
-            standardOutput.WriteLineAndBlankLine(line);
+            outputStream.WriteLineAndBlankLine(line);
 #endif
             process.Close();
         }
 
-        private static void ProcessDataReceived(object sender, DataReceivedEventArgs e, StreamWriter output)
+        private static void ProcessDataReceived(object sender, DataReceivedEventArgs e, IOutputStream stream)
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
-                output.WriteLine(e.Data);
+                stream.WriteLine(e.Data);
             }
         }
 
-        private static bool Run(BuildInfo info)
+        public static bool RunBuildInfo(BuildInfo buildInfo, IOutputStream outputStream, IOutputStream errorStream)
         {
-            using (StreamWriter standardOutput = new StreamWriter(info.OutputLogPath))
-            using (StreamWriter standardError = new StreamWriter(info.ErrorLogPath))
-            {
-                Builder.Run(info, standardOutput, standardError);
-            }
-
-            bool output = Builder.DetermineSuccess(info);
+            bool output = Builder.RunBuildCommandAndDetermineSuccess(buildInfo.BuildCommand, buildInfo.SuccessRegexPattern, outputStream, errorStream);
             return output;
         }
 
-        private static bool DetermineSuccess(BuildInfo buildInfo)
+        public static bool RunBuildInfo(BuildInfo buildInfo, string outputLogFilePath, string errorLogFilePath)
         {
-            Regex successRegex = new Regex(buildInfo.SuccessRegexPattern);
+            bool output = Builder.RunBuildInfo(buildInfo, new FileOutputStream(outputLogFilePath), new FileOutputStream(errorLogFilePath));
+            return output;
+        }
+
+        public static bool Run(BuildItem item, IOutputStream outputStream, IOutputStream errorStream)
+        {
+            BuildInfo info = Builder.GetBuildInfo(item);
+
+            bool output = Builder.RunBuildInfo(info, outputStream, errorStream);
+            return output;
+        }
+
+        public static bool Run(BuildItem item, string outputLogFilePath, string errorLogFilePath)
+        {
+            bool output = Builder.Run(item, new FileOutputStream(outputLogFilePath), new FileOutputStream(errorLogFilePath));
+            return output;
+        }
+
+        public static bool Run(string buildItemSpecification, IOutputStream outputStream, IOutputStream errorStream)
+        {
+            BuildItem item = BuildItem.Parse(buildItemSpecification);
+
+            bool output = Builder.Run(item, outputStream, errorStream);
+            return output;
+        }
+
+        public static bool Run(string buildItemSpecification, string outputLogFilePath, string errorLogFilePath)
+        {
+            bool output = Builder.Run(buildItemSpecification, new FileOutputStream(outputLogFilePath), new FileOutputStream(errorLogFilePath));
+            return output;
+        }
+
+        #region Miscellaneous
+
+        public static string WriteResultLine(string buildItemPath, bool success)
+        {
+            string output = String.Format(@"{0} - {1}", success, buildItemPath);
+            return output;
+        }
+
+        private static bool DetermineSuccessFromOutputLogFile(string successRegexPattern, string outputLogFilePath)
+        {
+            Regex successRegex = new Regex(successRegexPattern);
 
             bool output = false;
 
-            string outputLogPath = buildInfo.OutputLogPath;
-            if (File.Exists(outputLogPath))
+            if (File.Exists(outputLogFilePath))
             {
-                using (StreamReader fileReader = new StreamReader(outputLogPath))
+                using (StreamReader fileReader = new StreamReader(outputLogFilePath))
                 {
                     while (!fileReader.EndOfStream)
                     {
@@ -126,53 +197,7 @@ namespace Public.Common.Augustus.Lib
             return output;
         }
 
-        public static Dictionary<string, bool> Run(IEnumerable<BuildItem> buildItems, TextWriter inspectionStream)
-        {
-            Dictionary<string, bool> output = new Dictionary<string, bool>();
-            foreach (BuildItem buildItem in buildItems)
-            {
-                BuildInfo info = Builder.GetBuildInfo(buildItem);
-
-                bool success = Builder.Run(info);
-
-                string buildFilePath = buildItem.FilePath;
-                output.Add(buildFilePath, success);
-
-                string inspectionMessage = Builder.WriteResultLine(buildFilePath, success);
-                inspectionStream.WriteLine(inspectionMessage);
-            }
-
-            return output;
-        }
-
-        public static string WriteResultLine(string buildItemPath, bool success)
-        {
-            string output = String.Format(@"{0} - {1}", success, buildItemPath);
-            return output;
-        }
-
-        public static bool Run(string buildItemSpecification)
-        {
-            BuildItem item = BuildItem.Parse(buildItemSpecification);
-            BuildInfo info = Builder.GetBuildInfo(item);
-
-            bool output = Builder.Run(info);
-            return output;
-        }
-
-        public static Dictionary<string, bool> RunBuildListFile(string buildListFilePath, TextWriter outputStream)
-        {
-            List<BuildItem> items = BuildItemTextFile.GetBuildItems(buildListFilePath);
-
-            Dictionary<string, bool> output = Builder.Run(items, Console.Out);
-            return output;
-        }
-
-        public static Dictionary<string, bool> RunBuildListFile(string buildListFilePath)
-        {
-            Dictionary<string, bool> output = Builder.RunBuildListFile(buildListFilePath, Console.Out);
-            return output;
-        }
+        #endregion
 
         #endregion
     }

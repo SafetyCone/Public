@@ -11,6 +11,26 @@ namespace Public.Common.Augustus.Lib
         public const string CygwinSucessRegexPattern = @"^Done!";
 
 
+        #region Static
+
+        public static string GetDefaultOutputLogFilePath(string buildFilePath)
+        {
+            string buildDirectoryPath = Path.GetDirectoryName(buildFilePath);
+
+            string output = Path.Combine(buildDirectoryPath, Builder.OutputLogFileSuffix);
+            return output;
+        }
+
+        public static string GetDefaultErrorLogFilePath(string buildFilePath)
+        {
+            string buildDirectoryPath = Path.GetDirectoryName(buildFilePath);
+            
+            string output = Path.Combine(buildDirectoryPath, Builder.ErrorLogFileSuffix);
+            return output;
+        }
+
+        #endregion
+
         #region IBuilder Members
 
         public string SuccessRegexPattern
@@ -23,14 +43,11 @@ namespace Public.Common.Augustus.Lib
 
         public BuildInfo GetBuildInfo(BuildItem buildItem)
         {
-            string buildDirectoryPath = Path.GetDirectoryName(buildItem.FilePath);
-            string outputLogPath = Path.Combine(buildDirectoryPath, Builder.OutputLogFileSuffix);
-            string errorLogPath = Path.Combine(buildDirectoryPath, Builder.ErrorLogFileSuffix);
-
             string directoryForMake = Path.GetDirectoryName(buildItem.FilePath);
+
             string buildCommand = String.Format(CygwinBuilder.CygwinShellCommandMask, CygwinBuilder.CygwinBinDirectoryPath, directoryForMake);
 
-            BuildInfo output = new BuildInfo(outputLogPath, errorLogPath, CygwinBuilder.CygwinSucessRegexPattern, buildCommand);
+            BuildInfo output = new BuildInfo(buildItem, buildCommand, CygwinBuilder.CygwinSucessRegexPattern);
             return output;
         }
 

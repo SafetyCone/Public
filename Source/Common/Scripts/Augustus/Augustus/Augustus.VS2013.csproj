@@ -46,6 +46,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Classes\Configuration.cs" />
+    <Compile Include="Code\Classes\Paths.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Construction.cs" />
     <Compile Include="Code\Program.cs" />

@@ -47,6 +47,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Code\Classes\Configuration.cs" />
+    <Compile Include="Code\Classes\Paths.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Construction.cs" />
     <Compile Include="Code\Program.cs" />
@@ -59,8 +60,8 @@
       <Project>{0E0151E2-EFF1-4642-9F4D-B88C4479BCE8}</Project>
       <Name>Augustus.Lib.VS2015</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Lib\Lib\Public.Common.Lib.VS2015.csproj">
-      <Project>{fbb331c2-8103-4a45-86a4-c72bf3259a32}</Project>
+    <ProjectReference Include="../../../Libraries/Lib/Lib/Public.Common.Lib.VS2015.csproj">
+      <Project>{FBB331C2-8103-4A45-86A4-C72BF3259A32}</Project>
       <Name>Public.Common.Lib.VS2015</Name>
     </ProjectReference>
   </ItemGroup>
@@ -68,7 +69,6 @@
     <Content Include="Files\Example Build List File.txt" />
     <Content Include="Project Plan.txt" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>

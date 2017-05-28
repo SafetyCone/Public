@@ -5,7 +5,11 @@ using System.IO;
 using System.Text;
 
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.IO;
 using Public.Common.Lib.IO.Email;
+using Public.Common.Lib.IO.Extensions;
+using Public.Common.Lib.Logging;
+using Public.Common.Lib.Production;
 using Public.Common.Lib.Security;
 
 using Public.Common.Augustus.Lib;
@@ -17,33 +21,113 @@ namespace Public.Common.Augustus
     {
         static void Main(string[] args)
         {
-            //Program.SubMain(args);
-            Testing.SubMain();
-            //Construction.SubMain();
+            Program.SubMain(args);
+            //Testing.SubMain();
+            //Construction.SubMain(args);
         }
 
         public static void SubMain(string[] args)
         {
-            TextWriter outputStream = Console.Out;
+            string programName = Constants.ProgramName;
+            DateTime runTime = DateTime.Now;
+
+            string outputDirectoryPath = Production.GetProgramRunOutputDirectoryPath(programName, runTime);
+
+            Paths paths = new Paths(outputDirectoryPath, programName, runTime);
+            paths.EnsurePathsCreated();
+
+            ConsoleOutputStream console = new ConsoleOutputStream();
+            DebugOutputStream debug = new DebugOutputStream();
+            MultipleOutputStream debugAndConsole = new MultipleOutputStream(new IOutputStream[] { console, debug });
+            debugAndConsole.WriteLineAndBlankLine(Constants.ProgramName);
+
+            string logFilePath = paths.LogFilePath;
+            debugAndConsole.WriteLine(@"Log file path:");
+            debugAndConsole.WriteLineAndBlankLine(logFilePath);
+
+            Log log = new Log(logFilePath);
+            MultipleOutputStream logAndConsole = new MultipleOutputStream(new IOutputStream[] { log.OutputStream, console });
 
             Configuration config;
-            if(Configuration.ParseArguments(out config, args, outputStream))
+            if (Configuration.ParseArguments(out config, paths, args, logAndConsole))
             {
-                Dictionary<string, bool> successByBuildItemPath = Builder.RunBuildListFile(config.BuildListFilePath, outputStream);
+                Dictionary<string, bool> successByBuildItemPath = Program.RunBuildListFile(config, logAndConsole);
 
-                Program.CreateOutputDirectory(config.OutputFilePath);
-                Program.WriteResults(config.OutputFilePath, successByBuildItemPath);
+                Program.CreateOutputDirectory(config.Paths.ResultsFilePath);
+                Program.WriteResults(config.Paths.ResultsFilePath, successByBuildItemPath);
 
                 if (config.OpenResults)
                 {
-                    Program.OpenResults(config.OutputFilePath);
+                    Program.OpenResults(config.Paths.ResultsFilePath);
                 }
 
                 if(config.EmailResults)
                 {
-                    Program.SendResultsEmail(config.OutputFilePath, successByBuildItemPath);
+                    Program.SendResultsEmail(config.Paths.ResultsFilePath, successByBuildItemPath);
                 }
             }   
+        }
+
+        private static Dictionary<string, bool> RunBuildListFile(Configuration config, IOutputStream logAndConsole)
+        {
+            logAndConsole.WriteLine(@"Loading build list file...");
+            List<BuildItem> buildItems = BuildItemTextFile.GetBuildItems(config.BuildListFilePath);
+            logAndConsole.WriteLineAndBlankLine(String.Format(@"Loaded build list file. Found {0} build items.", buildItems.Count));
+
+            Dictionary<string, bool> output = new Dictionary<string, bool>();
+            foreach (BuildItem buildItem in buildItems)
+            {
+                string buildOutputLogFilePath = Program.GetOutputLogFilePath(config.Paths.LogsDirectoryPath, buildItem);
+                string buildErrorLogFilePath = Program.GetErrorLogFilePath(config.Paths.LogsDirectoryPath, buildItem);
+
+                logAndConsole.WriteLine(String.Format(@"Building file: {0}", buildItem.FilePath));
+                logAndConsole.WriteLine(String.Format(@"Output log file: {0}", buildOutputLogFilePath));
+                logAndConsole.WriteLine(String.Format(@"Error log file: {0}", buildErrorLogFilePath));
+
+                bool success = Builder.Run(buildItem, new FileOutputStream(buildOutputLogFilePath), new FileOutputStream(buildErrorLogFilePath));
+
+                logAndConsole.WriteLineAndBlankLine(String.Format(@"Success? {0}.", success));
+
+                output.Add(buildItem.FilePath, success);
+            }
+
+            return output;
+        }
+
+        private static string GetOutputLogFilePath(string logsDirectoryPath, BuildItem buildItem)
+        {
+            string output;
+            switch (buildItem.OsEnvironment)
+            {
+                case OsEnvironment.Cygwin:
+                    output = CygwinBuilder.GetDefaultOutputLogFilePath(buildItem.FilePath);
+                    break;
+
+                default:
+                    // Windows.
+                    output = MSBuildBuilder.GetDefaultOutputLogFilePath(buildItem.FilePath);
+                    break;
+            }
+
+            return output;
+        }
+
+        private static string GetErrorLogFilePath(string logsDirectoryPath, BuildItem buildItem)
+        {
+            string output;
+            switch (buildItem.OsEnvironment)
+            {
+                case OsEnvironment.Cygwin:
+                    output = CygwinBuilder.GetDefaultErrorLogFilePath(buildItem.FilePath);
+                    break;
+
+                default:
+                    // Windows.
+                    output = MSBuildBuilder.GetDefaultErrorLogFilePath(buildItem.FilePath);
+                    break;
+            }
+
+            return output;
         }
 
         private static void SendResultsEmail(string outputFilePath, Dictionary<string, bool> successByBuildItemPath)

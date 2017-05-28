@@ -16,7 +16,7 @@ namespace Public.Common.Augustus
             string[] output = new string[]
             {
                 Configuration.DefaultBuildListFilePath,
-                Configuration.DefaultOutputFilePath,
+                @"C:\temp\logs\Augustus Testing.log",
                 Configuration.EmailResultsToken
             };
 

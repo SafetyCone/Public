@@ -10,3 +10,7 @@ Augustus:
 	* Direct all output from the build process to a file placed in the same directory as the solution or make file.
 	* Check the output for a keyword indicating success or failure (success: "^Build succeeded.", "^Done!") otherwise failure.
 	* Output list of all succeeded and failed builds.
+
+TODO:
+* Carry specification of x86 vs x64 through to the MSBuild process.
+* Decide whether to allow Debug vs. Release configuration specification (though this might be a case of just using whatever the project active configuration is.)

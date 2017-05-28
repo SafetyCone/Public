@@ -5,20 +5,18 @@ namespace Public.Common.Augustus.Lib
 {
     public class BuildInfo
     {
-        public string OutputLogPath { get; set; }
-        public string ErrorLogPath { get; set; }
-        public string SuccessRegexPattern { get; set; }
+        public BuildItem Item { get; set; }
         public string BuildCommand { get; set; }
+        public string SuccessRegexPattern { get; set; }
 
 
         public BuildInfo()
         {
         }
 
-        public BuildInfo(string outputLogPath, string errorLogPath, string successRegexPattern, string buildCommand)
+        public BuildInfo(BuildItem item, string buildCommand, string successRegexPattern)
         {
-            this.OutputLogPath = outputLogPath;
-            this.ErrorLogPath = errorLogPath;
+            this.Item = item;
             this.SuccessRegexPattern = successRegexPattern;
             this.BuildCommand = buildCommand;
         }
