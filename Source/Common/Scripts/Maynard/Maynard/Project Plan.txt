@@ -1,0 +1,34 @@
+Maynard will create a binaries directory, which contains the built binaries of each tool in the Minex arsenal.
+
+Inputs:
+* A file path to a solutions list file. This is a text file containing the list of solutions which should be built and their output binaries placed into the proper spot in the binaries folder.
+* An output directory path. A dated directory will be created in this path (deleted and re-written if present), as well as a current directory that is deleted and re-written each run.
+
+Outputs:
+* The binaries folder will have the following structure:
+
+Binaries - {Date as YYYMMDD}
+	Project1Name
+		Project1Name.VsVersion
+			Debug (Always the debug folder to aid in debugging.)
+				All binaries.
+	Project2Name
+		Project2Name.VsVersion
+			Debug (Always the debug folder to aid in debugging.)
+				All binaries.
+	...
+
+Binaries - Current
+	Project1Name
+		Project1Name.VsVersion
+			Debug (Always the debug folder to aid in debugging.)
+				All binaries.
+	Project2Name
+		Project2Name.VsVersion
+			Debug (Always the debug folder to aid in debugging.)
+				All binaries.
+	...
+
+
+	TODO:
+	* Incorporate default VS version information.

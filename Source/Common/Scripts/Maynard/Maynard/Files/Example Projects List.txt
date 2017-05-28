@@ -1,0 +1,4 @@
+﻿C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Granby\Granby.VS2010.sln|Windows|x86
+C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Augustus\Augustus.VS2015.sln|Windows|x86
+C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Avon\Avon.VS2015.sln|Windows|x86
+C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Maynard\Maynard.VS2010.sln|Windows|x86
