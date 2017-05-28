@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Code\Extensions\System.IO.Directory.cs" />
     <Compile Include="Code\Extensions\System.IO.TextWriter.cs" />
     <Compile Include="Code\Extensions\System.DateTime.cs" />
     <Compile Include="Code\Extensions\System.Xml.XmlDocument.cs" />
@@ -55,6 +56,14 @@
     <Compile Include="Code\Interfaces\ShallowClone.cs" />
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\ConsoleOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\DebugOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\FileOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\MultipleOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\StringListOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Classes\TextWriterOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\Interfaces\IOutputStream.cs" />
+    <Compile Include="Code\IO\Output Streams\IOutputStreamExtensions.cs" />
     <Compile Include="Code\IO\Paths\Utilities.cs" />
     <Compile Include="Code\IO\TextFileWriter.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
@@ -71,6 +80,9 @@
     <Compile Include="Code\IO\Files\TextFile.cs" />
     <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />
     <Compile Include="Code\IO\UrlShortcuts.cs" />
+    <Compile Include="Code\Logging\Classes\Log.cs" />
+    <Compile Include="Code\Logging\ILogExtensions.cs" />
+    <Compile Include="Code\Logging\Interfaces\ILog.cs" />
     <Compile Include="Code\Organizational\Domains\CommonDomain.cs" />
     <Compile Include="Code\Organizational\Domains\Domains.cs" />
     <Compile Include="Code\Organizational\Domains\ExamplesDomain.cs" />

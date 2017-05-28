@@ -69,5 +69,34 @@ namespace Public.Common.Lib.Extensions
             string output = PathExtensions.GetResolvedPath(unresolvedFilePath);
             return output;
         }
+
+        public static void EnsureDirectoryPathCreated(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+        }
+
+        public static void EnsureFilePathDirectoryCreated(string filePath)
+        {
+            string directoryPath = Path.GetDirectoryName(filePath);
+            PathExtensions.EnsureDirectoryPathCreated(directoryPath);
+        }
+
+        private static string DateTimeMarkPath(string path, DateTime dateTime)
+        {
+            string todayYYYYMMDD = dateTime.ToYYYYMMDDStr();
+
+            string directoryPath = Path.GetDirectoryName(path);
+            string fileNameOnly = Path.GetFileNameWithoutExtension(path);
+            string extension = PathExtensions.GetExtensionOnly(path);
+
+            string datedFileName = String.Format(@"{0} - {1}", fileNameOnly, todayYYYYMMDD);
+            string fullDatedFileName = PathExtensions.GetFullFileName(datedFileName, extension);
+
+            string output = Path.Combine(directoryPath, fullDatedFileName);
+            return output;
+        }
     }
 }

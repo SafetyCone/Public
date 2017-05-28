@@ -12,6 +12,12 @@ namespace Public.Common.Lib.Extensions
             return output;
         }
 
+        public static string ToHHMMSSStr(this DateTime dateTime)
+        {
+            string output = String.Format(@"{0:HHmmss}", dateTime);
+            return output;
+        }
+
         public static DateTime Round(this DateTime date, TimeSpan span)
         {
             long spanTickUnits = (date.Ticks + (span.Ticks / 2) + 1) / span.Ticks;
