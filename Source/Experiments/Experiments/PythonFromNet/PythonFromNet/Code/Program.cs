@@ -8,6 +8,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using Python.Runtime;
 
+using PythonFromNet.Lib;
+
 
 namespace PythonFromNet
 {
@@ -21,6 +23,8 @@ namespace PythonFromNet
         public const string RawMnistZipFilesDirectoryPath = @"C:\Organizations\Minex\Projects\Neural Networks\Data\MNIST\Raw";
         public const string RawMnistFilesDirectoryPath = @"C:\Organizations\Minex\Projects\Neural Networks\Data\MNIST";
         public const string RawBasedMnistNetDataFilePath = @"C:\Organizations\Minex\Projects\Neural Networks\Data\mnistNETRaw.dat";
+
+        public const string RawBasedMnistNetDoubleDataFilePath = @"C:\Organizations\Minex\Projects\Neural Networks\Data\mnistDoubleNETRaw.dat";
 
         public const string TrainingImagesZipFileName = @"train-images-idx3-ubyte.gz";
         public static string TrainingImagesFileName
@@ -150,7 +154,11 @@ namespace PythonFromNet
 
         private static void SubMain(string[] args)
         {
-            Program.TryRunNeuralNetwork();
+            //Program.EnsureNetworkNablasEquality();
+            //Program.GenerateInitialNetworkData();
+            //Program.GenerateMiniBatchFiles();
+            //Program.ConvertMnistFloatToDouble();
+            //Program.TryRunNeuralNetwork();
             //Program.TryDrawImage();
             //Program.TryCompareNielsenAndRawMnistData();
             //Program.TryReadRawMnistData();
@@ -158,18 +166,139 @@ namespace PythonFromNet
             //Program.TrySerializeDeserializeMnist();
             //Program.TryParseTestData();
             //Program.TryRunPythonNet();
+            //Program.Test();
+        }
+
+        private static void Test()
+        {
+            DateTime now = DateTime.Now;
+            MnistData data = BinarySerializer<MnistData>.DeserializeStatic(Program.RawBasedMnistNetDoubleDataFilePath);
+            TimeSpan elapsedTime = DateTime.Now - now;
         }
 
         #region Neural Network
 
-        private static void TryRunNeuralNetwork()
+        private static void EnsureNetworkNablasEquality()
         {
-            MnistDataSet characterImageDataSet = Program.DeserializeMnistData(Program.RawBasedMnistNetDataFilePath);
+            //Tuple<Vector[], Matrix[]> network1Nablas = Utilities.DeserializeNetworkData<Tuple<Vector[], Matrix[]>>(Network.NablasDataSeriesID, 0, 0);
+            //Tuple<Vector[], Matrix[]> network2Nablas = Utilities.DeserializeNetworkData<Tuple<Vector[], Matrix[]>>(@"Network2 Nablas", 0, 0);
+
+            for (int i = 500; i < 5001; i += 500)
+            {
+                Tuple<Vector[], Matrix[]> network1Datas = Utilities.DeserializeNetworkData<Tuple<Vector[], Matrix[]>>(Network.DatasDataSeriesID, 0, i);
+                Tuple<Vector[], Matrix[]> network2Datas = Utilities.DeserializeNetworkData<Tuple<Vector[], Matrix[]>>(@"Network2 Datas", 0, i);
+                Program.EnsureEquality(network1Datas, network2Datas);
+            }
+        }
+
+        private static void EnsureEquality(Tuple<Vector[], Matrix[]> data1, Tuple<Vector[], Matrix[]> data2)
+        {
+            Vector[] vectorArray1 = data1.Item1;
+            Vector[] vectorArray2 = data2.Item1;
+            if(vectorArray1.Length != vectorArray2.Length)
+            {
+                throw new Exception();
+            }
+
+            for (int iVector = 0; iVector < vectorArray1.Length; iVector++)
+            {
+                Vector v1 = vectorArray1[iVector];
+                Vector v2 = vectorArray2[iVector];
+
+                if(v1.Count != v2.Count)
+                {
+                    throw new Exception();
+                }
+
+                for (int iElement = 0; iElement < v1.Count; iElement++)
+                {
+                    if(v1.Values[iElement] != v2.Values[iElement])
+                    {
+                        throw new Exception();
+                    }
+                }
+            }
+
+            Matrix[] matrixArray1 = data1.Item2;
+            Matrix[] matrixArray2 = data2.Item2;
+            if (matrixArray1.Length != matrixArray2.Length)
+            {
+                throw new Exception();
+            }
+
+            for (int iMatrix = 0; iMatrix < matrixArray2.Length; iMatrix++)
+            {
+                Matrix m1 = matrixArray1[iMatrix];
+                Matrix m2 = matrixArray2[iMatrix];
+
+                if (m1.Rows != m2.Rows || m1.Columns != m2.Columns)
+                {
+                    throw new Exception();
+                }
+
+                for (int iRow = 0; iRow < m1.Rows; iRow++)
+                {
+                    for (int iCol = 0; iCol < m1.Columns; iCol++)
+                    {
+                        if (m1.Values[iRow, iCol] != m2.Values[iRow, iCol])
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void GenerateInitialNetworkData()
+        {
+            NetworkData initialNetworkData = new NetworkData(new int[] { 784, 30, 10 });
+
+            initialNetworkData.SetInitialBiasesAndWeights(Utilities.SingletonRandom);
+
+            NetworkData.Serialize(NetworkData.DefaultInitialNetworkDataFilePath, initialNetworkData);
+        }
+
+        private static void GenerateMiniBatchFiles()
+        {
+            int numberOfEpochs = 10;
+
+            int numberOfElements = 50000;
+            int sizeOfMiniBatch = 10;
+            int numberOfMiniBatches = numberOfElements / sizeOfMiniBatch;
+
+            MiniBatchFilePathManager filePathManager = new MiniBatchFilePathManager();
+            MiniBatchProvider provider = new MiniBatchProvider(numberOfElements);
+
+
+            for (int iEpoch = 0; iEpoch < numberOfEpochs; iEpoch++)
+            {
+                string filePath = filePathManager.GetNextEpochFilePath();
+
+                provider.Shuffle();
+                provider.SerializeIndices(filePath);
+            }
+        }
+
+        // NOTE: double data is 431MB, only 2.5 seconds to deserialize.
+        private static void ConvertMnistFloatToDouble()
+        {
+            MnistDataSet characterImageDataSet = BinarySerializer<MnistDataSet>.DeserializeStatic(Program.RawBasedMnistNetDataFilePath);
+
             MnistData dataSet = Program.Convert(characterImageDataSet);
 
-            Network network = new Network(new int[] { 784, 30, 10 });
+            BinarySerializer<MnistData>.SerializeStatic(dataSet, Program.RawBasedMnistNetDoubleDataFilePath);
+        }
 
-            TrainingPerformanceData performanceData = network.StochasticGradientDescent(dataSet.TrainingData, 10, 10, 3.0, dataSet.TestData, Console.Out);
+        private static void TryRunNeuralNetwork()
+        {
+            MnistData dataSet = BinarySerializer<MnistData>.DeserializeStatic(Program.RawBasedMnistNetDoubleDataFilePath);
+
+            NetworkData initialNetworkData = NetworkData.Deserialize(NetworkData.DefaultInitialNetworkDataFilePath);
+            MiniBatchFilePathManager miniBatchFilePathManager = new MiniBatchFilePathManager();
+
+            Network network = new Network();
+
+            TrainingPerformanceData performanceData = network.StochasticGradientDescent(dataSet.TrainingData, 10, 10, 3.0, initialNetworkData, miniBatchFilePathManager, dataSet.TestData, Console.Out);
 
             string filePath;
             
@@ -275,7 +404,7 @@ namespace PythonFromNet
 
         private static void TryDrawImage()
         {
-            MnistDataSet mnistData = Program.DeserializeMnistData(Program.RawBasedMnistNetDataFilePath);
+            MnistDataSet mnistData = BinarySerializer<MnistDataSet>.DeserializeStatic(Program.RawBasedMnistNetDataFilePath);
 
             CharacterImageData image = mnistData.TestData[0];
 
@@ -324,8 +453,8 @@ namespace PythonFromNet
             string nielsenBasedNetDataFilePath = Program.NielsenMnistNetDataFilePath;
             string rawBasedNetDataFilePath = Program.RawBasedMnistNetDataFilePath;
 
-            MnistDataSet nielsenMnist = Program.DeserializeMnistData(nielsenBasedNetDataFilePath);
-            MnistDataSet rawMnist = Program.DeserializeMnistData(rawBasedNetDataFilePath);
+            MnistDataSet nielsenMnist = BinarySerializer<MnistDataSet>.DeserializeStatic(nielsenBasedNetDataFilePath);
+            MnistDataSet rawMnist = BinarySerializer<MnistDataSet>.DeserializeStatic(rawBasedNetDataFilePath);
 
             List<Tuple<List<CharacterImageData>, List<CharacterImageData>>> nielsenRawPairs = new List<Tuple<List<CharacterImageData>, List<CharacterImageData>>>();
             nielsenRawPairs.Add(new Tuple<List<CharacterImageData>, List<CharacterImageData>>(nielsenMnist.TestData, rawMnist.TestData));
@@ -386,7 +515,7 @@ namespace PythonFromNet
             mnistData.TestData = Program.GetTestData();
 
             string serializationFilePath = Program.RawBasedMnistNetDataFilePath;
-            Program.SerializeMnistData(serializationFilePath, mnistData);
+            BinarySerializer<MnistDataSet>.SerializeStatic(mnistData, serializationFilePath);
         }
 
         private static Tuple<List<CharacterImageData>, List<CharacterImageData>> GetTrainingAndValidationData()
@@ -677,7 +806,7 @@ namespace PythonFromNet
 
             now = DateTime.Now;
             string serializationFilePath = Program.NielsenMnistNetDataFilePath;
-            Program.SerializeMnistData(serializationFilePath, mnistData);
+            BinarySerializer<MnistDataSet>.SerializeStatic(mnistData, serializationFilePath);
             elapsedTime = DateTime.Now - now;
             Console.WriteLine(String.Format(@"Serialization elapsed time: {0}", elapsedTime)); // < 1 second.
 
@@ -685,27 +814,6 @@ namespace PythonFromNet
             
             elapsedTime = DateTime.Now - now;
             Console.WriteLine(String.Format(@"Deserialization elapsed time: {0}", elapsedTime)); // < 2.5 seconds.
-        }
-
-        private static void SerializeMnistData(string filePath, MnistDataSet mnistData)
-        {
-            using (Stream fStream = new FileStream(filePath, FileMode.Create))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fStream, mnistData);
-            }
-        }
-
-        private static MnistDataSet DeserializeMnistData(string filePath)
-        {
-            MnistDataSet output;
-            using (Stream fStream = new FileStream(filePath, FileMode.Open))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                output = (MnistDataSet)formatter.Deserialize(fStream);
-            }
-
-            return output;
         }
 
         private static void TryParseTestData()

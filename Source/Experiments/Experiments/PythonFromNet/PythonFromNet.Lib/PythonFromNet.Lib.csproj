@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C11D90EB-7E21-4D1A-A500-C7C1FB95A152}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>PythonFromNet</RootNamespace>
-    <AssemblyName>PythonFromNet</AssemblyName>
+    <ProjectGuid>{3834EC8A-0730-4A28-9BFD-8AE95A61CA3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PythonFromNet.Lib</RootNamespace>
+    <AssemblyName>PythonFromNet.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,13 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Python.Runtime, Version=2.3.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\pythonnet_py27_dotnet.2.3.0\lib\net40\x64\Python.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,27 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Classes\EpochPerformanceData.cs" />
-    <Compile Include="Code\Classes\TrainingRunData.cs" />
-    <Compile Include="Code\Classes\TrainingPerformanceData.cs" />
-    <Compile Include="Code\Network\Network.cs" />
-    <Compile Include="Code\Program.cs" />
+    <Compile Include="Code\Data\CharacterImageData.cs" />
+    <Compile Include="Code\Data\MnistData.cs" />
+    <Compile Include="Code\Data\MnistDataSet.cs" />
+    <Compile Include="Code\Data\NumericImageData.cs" />
+    <Compile Include="Code\Extensions\RandomExtensions.cs" />
+    <Compile Include="Code\IO\FileSeriesManager.cs" />
+    <Compile Include="Code\IO\Serialization\BinarySerializer.cs" />
+    <Compile Include="Code\Linear Algebra\Matrix.cs" />
+    <Compile Include="Code\Linear Algebra\Vector.cs" />
+    <Compile Include="Code\Mini-Batches\Classes\MiniBatchFilePathManager.cs" />
+    <Compile Include="Code\Mini-Batches\Classes\MiniBatchProvider.cs" />
+    <Compile Include="Code\Network\NetworkData.cs" />
+    <Compile Include="Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="mnist_loader.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PythonFromNet.Lib\PythonFromNet.Lib.csproj">
-      <Project>{3834ec8a-0730-4a28-9bfd-8ae95a61ca3a}</Project>
-      <Name>PythonFromNet.Lib</Name>
-    </ProjectReference>
+    <Folder Include="Code\Mini-Batches\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
