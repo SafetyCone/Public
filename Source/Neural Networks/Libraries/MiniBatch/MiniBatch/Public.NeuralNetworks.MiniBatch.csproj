@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FF3B6FFF-9B8A-4B35-B7A9-654719302113}</ProjectGuid>
+    <ProjectGuid>{D2C6423F-7607-4876-B953-C4CC5916B2D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Public.Common.Lib.Math</RootNamespace>
-    <AssemblyName>Public.Common.Lib.Math</AssemblyName>
+    <RootNamespace>Public.NeuralNetworks.MiniBatch</RootNamespace>
+    <AssemblyName>Public.NeuralNetworks.MiniBatch</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,8 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\VS2017\Debug\</OutputPath>
-    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,8 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\VS2017\Release\</OutputPath>
-    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,18 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Classes\Shuffler.cs" />
-    <Compile Include="Code\Constants.cs" />
-    <Compile Include="Code\Linear Algebra\Matrix.cs" />
-    <Compile Include="Code\Linear Algebra\Vector.cs" />
-    <Compile Include="Code\Utilities.cs" />
+    <Compile Include="Code\Classes\MiniBatch.cs" />
+    <Compile Include="Code\Classes\MiniBatchBinarySerializer.cs" />
+    <Compile Include="Code\Classes\MiniBatchSetDataFile.cs" />
+    <Compile Include="Code\Classes\MiniBatchGenerator.cs" />
+    <Compile Include="Code\Classes\MiniBatchSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include="Project Plan.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Code\Extensions\System.Random.cs" />
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Math\Lib.Math\Public.Common.Lib.Math.VS2017.csproj">
+      <Project>{ff3b6fff-9b8a-4b35-b7a9-654719302113}</Project>
+      <Name>Public.Common.Lib.Math.VS2017</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

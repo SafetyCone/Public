@@ -1,0 +1,12 @@
+﻿Public.Common.Lib.Math
+
+A sub-lib as opposed to its own library since Math is a common functionality (thus it should be in Common.Lib), but not all programs will needs its functionality (hence it is a separate assembly).
+
+Provides:
+
+* Linear Algebra - Data structures and operations.
+	* Vector
+	* Matrix
+
+* Random Numbers
+	* Gaussian random numbers.
