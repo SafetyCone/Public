@@ -41,7 +41,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.Uri.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Extensions\System.IO.Directory.cs" />
     <Compile Include="Code\Extensions\System.IO.TextWriter.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Code\IO\Output Streams\Interfaces\IOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\IOutputStreamExtensions.cs" />
     <Compile Include="Code\IO\Paths\Utilities.cs" />
+    <Compile Include="Code\IO\Serialization\BinarySerializer.cs" />
     <Compile Include="Code\IO\TextFileWriter.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />

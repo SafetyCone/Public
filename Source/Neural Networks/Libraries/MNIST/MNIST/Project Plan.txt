@@ -1,0 +1,7 @@
+﻿The MNIST library provides functionality for loading the modified National Institute of Standards and Technology (modified NIST or MNIST) hand-written numeric digits dataset.
+
+The data was found as part of the online text here:
+http://neuralnetworksanddeeplearning.com/chap1.html
+
+The data itself is available from here:
+http://yann.lecun.com/exdb/mnist/
