@@ -58,6 +58,7 @@
     <Compile Include="Code\Interfaces\ShallowClone.cs" />
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
+    <Compile Include="Code\IO\Files\FileExtensions.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\ConsoleOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\DebugOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\FileOutputStream.cs" />
