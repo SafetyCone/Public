@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Public.Common.Lib.Code;
+using CodeUtilities = Public.Common.Lib.Code.Utilities;
 using Public.Common.Lib.Code.Logical;
 using Public.Common.Lib.Code.Physical;
 
@@ -44,7 +45,7 @@ namespace Public.Common.Avon
             HashSet<string> projectDirectoryPathsAllowedToChange = new HashSet<string>();
             projectDirectoryPathsAllowedToChange.Add(@"C:\Organizations\Minex\Repositories\Public\Source\Experiments\Scripts\Augustus\Augustus");
 
-            AvonUtilities.EnsureVsVersionedBinAndObjProperties(solutionDirectoryPath, projectDirectoryPathsAllowedToChange);
+            CodeUtilities.EnsureVsVersionedBinAndObjProperties(solutionDirectoryPath, projectDirectoryPathsAllowedToChange);
         }
 
         public static void SetDefaultVsVersionSolution()

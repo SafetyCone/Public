@@ -44,7 +44,7 @@ namespace Public.Common.Lib.Code
 
         public static ProjectFileNameInfo Parse(string projectFilePath)
         {
-            ProjectFileNameInfo output = ProjectFileNameInfo.Parse(projectFilePath, VisualStudioVersion.VS2015);
+            ProjectFileNameInfo output = ProjectFileNameInfo.Parse(projectFilePath, VisualStudioVersion.VS_UNKNOWN);
             return output;
         }
 

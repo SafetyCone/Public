@@ -2,7 +2,7 @@
 @echo off
 
 :: Input arguments.
-SET solutionDirectoryPath="C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Avon"
+SET solutionDirectoryPath="C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Granville"
 
 :: Call Avon.
 SET avonExecutablePath="C:\Organizations\Minex\Binaries\Current\Avon\Avon.VS2010\Avon.exe"
@@ -11,10 +11,10 @@ SET avonExecutablePath="C:\Organizations\Minex\Binaries\Current\Avon\Avon.VS2010
 echo on
 ::CALL %avonExecutablePath% CreateNewSolutionSet Library Lib.XXX Library
 ::CALL %avonExecutablePath% CreateSolutionSetFromInitialVsVersionSolution
-CALL %avonExecutablePath% DistributeChangesFromDefaultVsVersionSolution %solutionDirectoryPath%
+::CALL %avonExecutablePath% DistributeChangesFromDefaultVsVersionSolution %solutionDirectoryPath%
 ::CALL %avonExecutablePath% DistributeChangesFromSpecificVsVersionSolution %solutionDirectoryPath% VS2010
 ::CALL %avonExecutablePath% EnsureVsVersionedBinAndObjProperties
-::CALL %avonExecutablePath% SetDefaultVsVersionSolution %solutionDirectoryPath% VS2010
+CALL %avonExecutablePath% SetDefaultVsVersionSolution %solutionDirectoryPath% VS2010
 @echo off
 
 :: Keep the command window open if this was the entry point batch file.

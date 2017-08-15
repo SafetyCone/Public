@@ -1,4 +1,5 @@
 ﻿using System;
+using SysConvert = System.Convert;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -230,6 +231,11 @@ namespace Public.Common.Lib.Code.Serialization
                     {
                         XmlHelper.AddChildElement(noneNode, "LastGenOutput", none.LastGenOutput);
                     }
+
+                    if (CopyToOutputDirectory.Blank != none.CopyToOutputDirectory)
+                    {
+                        XmlHelper.AddChildElement(noneNode, "CopyToOutputDirectory", none.CopyToOutputDirectory.ToDefaultString());
+                    }
                 }
             }
         }
@@ -375,6 +381,10 @@ namespace Public.Common.Lib.Code.Serialization
             XmlHelper.AddChildElement(groupNode, "DefineConstants", StringExtensions.Concatenate(info.DefinedConstants.ToArray(), @";"));
             XmlHelper.AddChildElement(groupNode, "ErrorReport", BuildConfigurationInfo.DefaultErrorReport);
             XmlHelper.AddChildElement(groupNode, "WarningLevel", BuildConfigurationInfo.DefaultWarningLevel.ToString());
+            if (info.AllowUnsafeBlocks)
+            {
+                XmlHelper.AddChildElement(groupNode, "AllowUnsafeBlocks", info.AllowUnsafeBlocks.ToStringLower());
+            }
         }
 
         private static void ModifyProjectPropertyGroupForVsVersion(XmlElement projectPropertyGroupNode, Project project)
@@ -645,6 +655,12 @@ namespace Public.Common.Lib.Code.Serialization
                 none.LastGenOutput = lastGenOutputNode.InnerText;
             }
 
+            XmlNode copyToOutputDirectoryNode = node.SelectSingleNode("CopyToOutputDirectory");
+            if (null != copyToOutputDirectoryNode)
+            {
+                none.CopyToOutputDirectory = CopyToOutputDirectoryExtensions.FromDefault(copyToOutputDirectoryNode.InnerText);
+            }
+
             project.ProjectItemsByRelativePath.Add(none.IncludePath, none);
         }
 
@@ -808,6 +824,12 @@ namespace Public.Common.Lib.Code.Serialization
             string defineConstantsStr = node.SelectSingleNode("DefineConstants").InnerText;
             string[] defineConstantsArr = defineConstantsStr.Split(';');
             configInfo.DefinedConstants.AddRange(defineConstantsArr);
+
+            XmlNode allowUnsafeBlocksNode = node.SelectSingleNode("AllowUnsafeBlocks");
+            if (null != allowUnsafeBlocksNode)
+            {
+                configInfo.AllowUnsafeBlocks = SysConvert.ToBoolean(allowUnsafeBlocksNode.InnerText);
+            }
         }
 
         private static BuildConfiguration ParseBuildConfiguration(string condition)

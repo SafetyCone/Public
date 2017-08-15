@@ -11,6 +11,9 @@ namespace Public.Common.Lib.Code.Physical
     /// </summary>
     public enum VisualStudioVersion
     {
+        VS_ALL,
+        VS_UNKNOWN,
+        VS_LATEST,
         VS2010,
         VS2013,
         VS2015,
@@ -26,6 +29,9 @@ namespace Public.Common.Lib.Code.Physical
     /// </remarks>
     public static class VisualStudioVersionExtensions
     {
+        public const string VS_ALL = @"VS_ALL";
+        public const string VS_UNKNOWN = @"VS_UNKNOWN";
+        public const string VS_LATEST = @"VS_LATEST";
         public const string VS2010 = @"VS2010";
         public const string VS2013 = @"VS2013";
         public const string VS2015 = @"VS2015";
@@ -62,6 +68,18 @@ namespace Public.Common.Lib.Code.Physical
             string output;
             switch (visualStudioVersion)
             {
+                case VisualStudioVersion.VS_ALL:
+                    output = VisualStudioVersionExtensions.VS_ALL;
+                    break;
+
+                case VisualStudioVersion.VS_UNKNOWN:
+                    output = VisualStudioVersionExtensions.VS_UNKNOWN;
+                    break;
+
+                case VisualStudioVersion.VS_LATEST:
+                    output = VisualStudioVersionExtensions.VS_LATEST;
+                    break;
+
                 case VisualStudioVersion.VS2010:
                     output = VisualStudioVersionExtensions.VS2010;
                     break;
@@ -104,6 +122,18 @@ namespace Public.Common.Lib.Code.Physical
 
             switch (visualStudioVersion)
             {
+                case VisualStudioVersionExtensions.VS_ALL:
+                    value = VisualStudioVersion.VS_ALL;
+                    break;
+
+                case VisualStudioVersionExtensions.VS_UNKNOWN:
+                    value = VisualStudioVersion.VS_UNKNOWN;
+                    break;
+
+                case VisualStudioVersionExtensions.VS_LATEST:
+                    value = VisualStudioVersion.VS_LATEST;
+                    break;
+
                 case VisualStudioVersionExtensions.VS2010:
                     value = VisualStudioVersion.VS2010;
                     break;

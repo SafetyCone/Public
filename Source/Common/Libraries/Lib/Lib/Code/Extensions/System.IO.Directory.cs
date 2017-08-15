@@ -6,9 +6,22 @@ namespace Public.Common.Lib.Extensions
 {
 	public static class DirectoryExtensions
 	{
+        /// <summary>
+        /// Performs a deep copy of all files and subdirectories from one directory path to another, like Windows Explorer does when copying one directory to another.
+        /// </summary>
+        /// <remarks>
+        /// There is no System.IO.Directory.Copy() method, and the System.IO.File.Copy() method only works on files.
+        /// Thus we need our own implementation.
+        /// </remarks>
         public static void Copy(string sourceDirectoryPath, string destinationDirectoryPath, bool recursive, bool overwrite)
         {
             DirectoryInfo source = new DirectoryInfo(sourceDirectoryPath);
+            if (!source.Exists)
+            {
+                string message = String.Format(@"Source directory not found: {0}", sourceDirectoryPath);
+                throw new DirectoryNotFoundException(message);
+            }
+
             DirectoryInfo destination = new DirectoryInfo(destinationDirectoryPath);
             if(!destination.Exists)
             {
@@ -40,11 +53,8 @@ namespace Public.Common.Lib.Extensions
         }
 
         /// <summary>
-        /// Performs a full copy of all files and subdirectories from one directory path to another.
+        /// Performs a deep copy of all files and subdirectories from one directory path to another, like Windows Explorer does when copying one directory to another.
         /// </summary>
-        /// <remarks>
-        /// This the the deep-copy behavior of Windows Explorer, when copying one directory to another.
-        /// </remarks>
         public static void Copy(string sourceDirectoryPath, string destinationDirectoryPath)
         {
             DirectoryExtensions.Copy(sourceDirectoryPath, destinationDirectoryPath, true, true);

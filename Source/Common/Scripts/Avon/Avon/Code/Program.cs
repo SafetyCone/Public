@@ -11,8 +11,34 @@ namespace Public.Common.Avon
     {
         private static void Main(string[] args)
         {
-            Program.SubMain(args);
+            //Program.SubMain(args);
+            Program.DebugSubMain();
             //Construction.SubMain(args):
+        }
+
+        private static void DebugSubMain()
+        {
+            //string[] args =
+            //{
+            //    @"CreateSolutionSetFromInitialVsVersionSolution",
+            //    @"C:\Organizations\Minex\Repositories\Public\Source\Common\Libraries\Lib.Visuals\Lib.Visuals.VS2010.sln",
+            //    @"VS_ALL"
+            //};
+
+            //string[] args =
+            //{
+            //    @"DistributeChangesFromDefaultVsVersionSolution",
+            //    @"C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Avon"
+            //};
+
+            string[] args =
+            {
+                @"SetDefaultVsVersionSolution",
+                @"C:\Organizations\Minex\Repositories\Public\Source\Common\Scripts\Avon",
+                @"VS_LATEST"
+            };
+
+            Program.SubMain(args);
         }
 
         private static void SubMain(string[] args)

@@ -8,6 +8,7 @@ namespace Public.Common.Lib.Code
     /// </summary>
     public enum CopyToOutputDirectory
     {
+        Blank,
         Never,
         PreserveNewest,
         Always,

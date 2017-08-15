@@ -98,5 +98,16 @@ namespace Public.Common.Lib.Extensions
             string output = Path.Combine(directoryPath, fullDatedFileName);
             return output;
         }
+
+        /// <summary>
+        /// Determines whether the super-path contains the sub-path.
+        /// </summary>
+        /// <param name="superPath">The path higher in the path hierarchy, i.e. C:\temp\folder.</param>
+        /// <param name="subPath">The path lower in the hierarchy that might be contained by the super-path, i.e. C:\temp\folder\file (yes) or C:\temp\otherFolder\file (no).</param>
+        public static bool Contains(string superPath, string subPath)
+        {
+            bool output = subPath.Contains(superPath);
+            return output;
+        }
     }
 }

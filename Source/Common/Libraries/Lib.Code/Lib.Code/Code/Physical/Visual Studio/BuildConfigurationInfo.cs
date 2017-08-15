@@ -80,6 +80,7 @@ namespace Public.Common.Lib.Code.Physical
         public string BinOutputPath { get; set; }
         public string ObjIntermediatePath { get; set; }
         public List<string> DefinedConstants { get; set; }
+        public bool AllowUnsafeBlocks { get; set; }
 
 
         public BuildConfigurationInfo()

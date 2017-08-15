@@ -241,7 +241,7 @@ namespace Public.Common.Lib.Code
         }
 
         /// <summary>
-        /// Create a solution set of specific Visual Studio versions based on an initial solution.
+        /// Create a solution set of specific Visual Studio versions, based on an initial solution.
         /// </summary>
         public static void CreateSolutionSet(string initialSolutionFilePath, IEnumerable<VisualStudioVersion> desiredVsVersions)
         {
@@ -253,12 +253,17 @@ namespace Public.Common.Lib.Code
             PhysicalSolution initialSolution = SolutionSerializer.Deserialize(initialSolutionFilePath);
 
             // Determine the paths to each project referenced by the solution object.
+            // BUT! Only include project for further consideration whose paths are contained within the solution directory path.
             List<string> projectFilePaths = new List<string>();
             foreach(SolutionProjectReference initialProjectReference in initialSolution.ProjectsByGuid.Values)
             {
                 string projectFileUnresolvedPath = Path.Combine(solutionDirectoryPath, initialProjectReference.RelativePath);
                 string projectFilePath = PathExtensions.GetResolvedPath(projectFileUnresolvedPath);
-                projectFilePaths.Add(projectFilePath);
+
+                if (PathExtensions.Contains(solutionDirectoryPath, projectFilePath))
+                {
+                    projectFilePaths.Add(projectFilePath);
+                }
             }
 
             // Deserialize each project file to a physical project object.
@@ -281,9 +286,9 @@ namespace Public.Common.Lib.Code
                 solutionFilePathVsVersionPairs.Add(new Tuple<string, VisualStudioVersion>(desiredSolutionFilePath, desiredVsVersion));
             }
 
-            // Check to see if the files exist.
-            //  If they do then we are on to the situation of distributing information from files of one version of VS to files of another version of VS.
-            //  If they don't, then create these solution files.
+            // Check to see if solution files exist.
+            // If they do then we are on to the situation of distributing information from files of one version of VS to files of another version of VS. Ignore these projects, another user command handles that operation.
+            // If they don't, then create these solution files.
             foreach(Tuple<string, VisualStudioVersion> solutionFilePathVsVersionPair in solutionFilePathVsVersionPairs)
             {
                 VisualStudioVersion desiredVsVersion = solutionFilePathVsVersionPair.Item2;
@@ -312,7 +317,7 @@ namespace Public.Common.Lib.Code
                 }
             }
 
-            // Foreach project, determine the paths of all desired VS version project files.
+            // Foreach project in the solution, determine the paths of all desired VS-versioned project files.
             Dictionary<string, List<Tuple<string, VisualStudioVersion>>> projectFilePathVsVersionPairsByInitialProjectPath = new Dictionary<string, List<Tuple<string, VisualStudioVersion>>>();
             foreach (string path in initialProjectsByPath.Keys)
             {
@@ -334,9 +339,9 @@ namespace Public.Common.Lib.Code
                 }
             }
 
-            // Check to see if the files exist.
-            //  If they do, then we have the same situation as distributing information from files of one version of VS to files of another version of VS.
-            //  If they don't , then create these new project files.
+            // Check to see if project files exist.
+            // If they do, then we have the same situation as distributing information from files of one version of VS to files of another version of VS. Ignore these projects, another user command handles that operation.
+            // If they don't , then create these new project files.
             foreach(string initialProjectPath in projectFilePathVsVersionPairsByInitialProjectPath.Keys)
             {
                 PhysicalCSharpProject initialProject = initialProjectsByPath[initialProjectPath];
@@ -361,6 +366,66 @@ namespace Public.Common.Lib.Code
                     }
                 }
             }
+
+            // Ensure that the bin and obj folders are VS-versioned.
+            HashSet<string> projectDirectoryPathsAllowedToChange = new HashSet<string>();
+            foreach (string projectFilePath in projectFilePaths)
+            {
+                string projectDirectoryPath = Path.GetDirectoryName(projectFilePath);
+                projectDirectoryPathsAllowedToChange.Add(projectDirectoryPath);
+            }
+
+            Utilities.EnsureVsVersionedBinAndObjProperties(solutionDirectoryPath, projectDirectoryPathsAllowedToChange);
+        }
+
+        /// <summary>5
+        /// Create a solution set of specific Visual Studio versions, based on an initial solution, in a destination directory (useful if you want to preview the changes that will be made to the code).
+        /// </summary>
+        /// <remarks>
+        /// Note, if the destination directory is different than the solution directory, first, all files will be copied to the destination directory.
+        /// Then the function will continue using the solution file in the destination directory.
+        /// 
+        /// If the destination directory name does not match the source solution directory's name, a sub-directory with the source solution directory's name will be created.
+        /// </remarks>
+        public static void CreateSolutionSet(string initialSolutionFilePath, IEnumerable<VisualStudioVersion> desiredVsVersions, string destinationDirectoryPath)
+        {
+            string sourceDirectoryPath = Path.GetDirectoryName(initialSolutionFilePath);
+            
+            string destinationSolutionFilePath;
+            if (sourceDirectoryPath == destinationDirectoryPath)
+            {
+                destinationSolutionFilePath = initialSolutionFilePath;
+            }
+            else
+            {
+                // Ensure files are put into a sub-directory with the same name as the source solution directory's name.
+                string sourceDirectoryName = Path.GetFileName(sourceDirectoryPath);
+                string destinationDirectoryName = Path.GetFileName(destinationDirectoryPath);
+
+                string actualDestinationDirectoryPath;
+                if (sourceDirectoryName == destinationDirectoryName)
+                {
+                    actualDestinationDirectoryPath = destinationDirectoryPath;
+                }
+                else
+                {
+                    actualDestinationDirectoryPath = Path.Combine(destinationDirectoryPath, sourceDirectoryName);
+                }
+
+                // Copy all files to the new directory, but not if the directory already exists.
+                if (Directory.Exists(actualDestinationDirectoryPath))
+                {
+                    string message = String.Format(@"Destination directory exists, will not delete or overwrite: {0}", actualDestinationDirectoryPath);
+                    throw new InvalidOperationException(message);
+                }
+                
+                DirectoryExtensions.Copy(sourceDirectoryPath, actualDestinationDirectoryPath, true, false); // Make sure we don't overwrite.
+
+                string solutionFileName = Path.GetFileName(initialSolutionFilePath);
+                destinationSolutionFilePath = Path.Combine(actualDestinationDirectoryPath, solutionFileName);
+            }
+
+            Creation.CreateSolutionSet(destinationSolutionFilePath, desiredVsVersions);
         }
 
         public static void CreateSolutionSet(NewSolutionSetSpecification solutionSetSpecification)

@@ -325,67 +325,6 @@ namespace Public.Common.Avon.Lib
 
         #endregion
 
-        #region Ensure VS-Versioned Bin And Obj Project Properties
-
-        public static void EnsureVsVersionedBinAndObjProperties(string solutionDirectoryPath, HashSet<string> projectDirectoryPathsAllowedToChange)
-        {
-            string[] solutionFilePaths = CodeUtilities.GetSolutionFilePaths(solutionDirectoryPath);
-            foreach (string solutionFilePath in solutionFilePaths)
-            {
-                PhysicalSolution solution = SolutionSerializer.Deserialize(solutionFilePath);
-
-                List<string> projectFilePaths = CodeUtilities.GetProjectFilePaths(solutionFilePath, solution);
-                foreach (string projectFilePath in projectFilePaths)
-                {
-                    string projectDirectoryPath = Path.GetDirectoryName(projectFilePath);
-                    if (projectDirectoryPathsAllowedToChange.Contains(projectDirectoryPath))
-                    {
-                        Utilities.EnsureVsVersionedBinAndObjProperties(projectFilePath);
-                    }
-                }
-            }
-        }
-
-        private static void EnsureVsVersionedBinAndObjProperties(string projectFilePath)
-        {
-            ProjectFileNameInfo projectInfo = ProjectFileNameInfo.Parse(projectFilePath, VisualStudioVersion.VS2015); // Dummy VS version.
-
-            // Load project XML.
-            XmlDocument doc = new XmlDocument();
-            doc.LoadNoNamespaces(projectFilePath);
-
-            // Debug.
-            //XmlNode debugBuildNode = doc.SelectSingleNode(@"/Project/PropertyGroup[contains(@Condition,'Debug|AnyCPU')]");
-            XmlNode debugBuildNode = doc.SelectSingleNode(@"/Project/PropertyGroup[contains(@Condition,'Debug')]");
-            XmlNode debugBinNode = debugBuildNode.SelectSingleNode(CSharpProjectSerializer.OutputPathNodeName);
-            debugBinNode.InnerText = BuildConfigurationInfo.GetBinaryOutputDirectoryName(projectInfo.VisualStudioVersion, Configuration.Debug);
-
-            XmlNode debugObjNode = debugBuildNode.SelectSingleNode(CSharpProjectSerializer.BaseIntermediateOutputPathNodeName);
-            if (null == debugObjNode)
-            {
-                debugObjNode = XmlHelper.AddChildElement(debugBuildNode, CSharpProjectSerializer.BaseIntermediateOutputPathNodeName, debugBinNode);
-            }
-            debugObjNode.InnerText = BuildConfigurationInfo.GetObjectIntermediateDirectoryName(projectInfo.VisualStudioVersion);
-
-            // Release.
-            XmlNode releaseBuildNode = doc.SelectSingleNode(@"Project/PropertyGroup[contains(@Condition,'Release')]");
-            XmlNode releaseBinNode = releaseBuildNode.SelectSingleNode(CSharpProjectSerializer.OutputPathNodeName);
-            releaseBinNode.InnerText = BuildConfigurationInfo.GetBinaryOutputDirectoryName(projectInfo.VisualStudioVersion, Configuration.Release);
-
-            XmlNode releaseObjNode = releaseBuildNode.SelectSingleNode(CSharpProjectSerializer.BaseIntermediateOutputPathNodeName);
-            if (null == releaseObjNode)
-            {
-                releaseObjNode = XmlHelper.AddChildElement(releaseBuildNode, CSharpProjectSerializer.BaseIntermediateOutputPathNodeName, releaseBinNode);
-            }
-            releaseObjNode.InnerText = BuildConfigurationInfo.GetObjectIntermediateDirectoryName(projectInfo.VisualStudioVersion);
-
-            // Save project XML.
-            XmlHelper.FixXmlDocumentNamespaceForSave(doc, CSharpProjectSerializer.MsBuild2003XmlNamespaceName);
-            doc.Save(projectFilePath);
-        }
-
-        #endregion
-
         #region Create Solution Set With Default
 
         /// <summary>

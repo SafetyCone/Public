@@ -4,6 +4,7 @@ using System.IO;
 
 using Public.Common.Lib;
 using Public.Common.Lib.Code;
+using CodeUtilities = Public.Common.Lib.Code.Utilities;
 using Public.Common.Lib.Code.Logical;
 using Public.Common.Lib.Code.Physical;
 using Public.Common.Lib.Extensions;
@@ -99,11 +100,16 @@ namespace Public.Common.Avon
                     string visualStudioVersionToken = functionArgs[1];
 
                     VisualStudioVersion vsVersion = VisualStudioVersionExtensions.FromDefault(visualStudioVersionToken);
+                    VisualStudioVersion actualVsVersion = vsVersion;
+                    if (VisualStudioVersion.VS_LATEST == vsVersion)
+                    {
+                        actualVsVersion = VisualStudioVersion.VS2017;
+                    }
 
                     configuration.Action = () =>
                     {
                         string solutionDirectoryPath = solutionDirectoryPathToken;
-                        VisualStudioVersion defaultVersion = vsVersion;
+                        VisualStudioVersion defaultVersion = actualVsVersion;
 
                         AvonUtilities.SetDefaultVisualStudioVersion(solutionDirectoryPath, defaultVersion);
                     };
@@ -166,7 +172,7 @@ namespace Public.Common.Avon
                         string solutionDirectoryPath = solutionDirectoryPathToken;
                         HashSet<string> projectDirectoryPathsAllowedToChange = new HashSet<string>(projectPaths);
 
-                        AvonUtilities.EnsureVsVersionedBinAndObjProperties(solutionDirectoryPath, projectDirectoryPathsAllowedToChange);
+                        CodeUtilities.EnsureVsVersionedBinAndObjProperties(solutionDirectoryPath, projectDirectoryPathsAllowedToChange);
                     };
                 }
                 else
@@ -265,6 +271,8 @@ namespace Public.Common.Avon
 
         private static bool HandleDistributeChangesFromDefaultVsVersionSolution(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
         {
+            outputStream.WriteLineAndBlankLine(@"Distributing changes from default VS version solution.");
+
             bool output = true;
 
             try
@@ -273,6 +281,7 @@ namespace Public.Common.Avon
                 if (1 == numberOfArgs)
                 {
                     string solutionDirectoryPathToken = functionArgs[0];
+                    outputStream.WriteLineAndBlankLine(String.Format(@"Solution directory: {0}", solutionDirectoryPathToken));
 
                     configuration.Action = () =>
                     {
@@ -286,15 +295,18 @@ namespace Public.Common.Avon
                     string message = String.Format(@"Invalid number of arguments found: {0}. Expected 1.", numberOfArgs);
                     throw new ArgumentException(message);
                 }
+
+                outputStream.WriteLine(@"Successfully distributed changes.");
             }
             catch (Exception ex)
             {
                 output = false;
 
+                outputStream.WriteLine(@"Failed to distribute changes:");
                 outputStream.WriteLineAndBlankLine(ex.Message);
 
                 Configuration.DisplayDistributeChangesFromDefaultVsVersionSolutionUsage(outputStream);
-            }
+            }            
 
             return output;
         }
@@ -324,17 +336,18 @@ namespace Public.Common.Avon
             try
             {
                 int numberOfArgs = functionArgs.Length;
-                if(0 < numberOfArgs && 3 > numberOfArgs)
+                if(0 < numberOfArgs && 4 > numberOfArgs)
                 {
                     string solutionFilePath = functionArgs[0];
                     string vsVersionsToken = numberOfArgs > 1 ? functionArgs[1] : Configuration.GetAllVsVersionStrings();
+                    string destinationDirectoryPath = numberOfArgs > 2 ? functionArgs[2] : Path.GetDirectoryName(solutionFilePath);
 
                     configuration.Action = () =>
                     {
                         string initialSolutionFilePath = solutionFilePath;
                         VisualStudioVersion[] desiredVsVersions = Configuration.GetVsVersions(vsVersionsToken);
                         
-                        Creation.CreateSolutionSet(initialSolutionFilePath, desiredVsVersions);
+                        Creation.CreateSolutionSet(initialSolutionFilePath, desiredVsVersions, destinationDirectoryPath);
                     };
                 }
                 else
@@ -355,14 +368,40 @@ namespace Public.Common.Avon
             return output;
         }
 
+        private static void DisplayCreateSolutionSetFromInitialVsVersionSolutionUsage(IOutputStream outputStream)
+        {
+            string programName = Constants.ProgramName;
+            string functionName = Configuration.CreateSolutionSetFromInitialVsVersionSolutionFunctionName;
+            string line = String.Format(@"{0} {1}", programName, functionName);
+            outputStream.WriteLine(line);
+            outputStream.WriteLine();
+
+            line = String.Format(@"Usage: {0}.exe {1} SolutionFilePath [VisualStudioVersion1|VisualStudioVersion2|... or VS_ALL] [Destination directory path]", programName, functionName);
+            outputStream.WriteLine(line);
+            outputStream.WriteLine();
+
+            outputStream.WriteLine(@"Example:");
+            line = String.Format(@"{0}.exe {1} C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant\Nahant.VS2015.sln VS2010|VS2013|VS2015|VS2017 C:\temp", programName, functionName);
+            outputStream.WriteLine(line);
+            outputStream.WriteLine();
+        }
+
         private static VisualStudioVersion[] GetVsVersions(string vsVersionsToken)
         {
             string[] vsVersions = vsVersionsToken.Split(Configuration.VisualStudioVersionTokenSeparator);
 
-            VisualStudioVersion[] output = new VisualStudioVersion[vsVersions.Length];
-            for (int iVsVersion = 0; iVsVersion < vsVersions.Length; iVsVersion++)
+            VisualStudioVersion[] output;
+            if (1 == vsVersions.Length && VisualStudioVersionExtensions.VS_ALL == vsVersions[0])
             {
-                output[iVsVersion] = VisualStudioVersionExtensions.FromDefault(vsVersions[iVsVersion]);
+                output = VisualStudioVersionExtensions.GetAllVisualStudioVersions();
+            }
+            else
+            {
+                output = new VisualStudioVersion[vsVersions.Length];
+                for (int iVsVersion = 0; iVsVersion < vsVersions.Length; iVsVersion++)
+                {
+                    output[iVsVersion] = VisualStudioVersionExtensions.FromDefault(vsVersions[iVsVersion]);
+                }
             }
 
             return output;
@@ -374,24 +413,6 @@ namespace Public.Common.Avon
 
             string output = vsVersionStrings.Concatenate(Configuration.VisualStudioVersionTokenSeparator);
             return output;
-        }
-
-        private static void DisplayCreateSolutionSetFromInitialVsVersionSolutionUsage(IOutputStream outputStream)
-        {
-            string programName = Constants.ProgramName;
-            string functionName = Configuration.CreateSolutionSetFromInitialVsVersionSolutionFunctionName;
-            string line = String.Format(@"{0} {1}", programName, functionName);
-            outputStream.WriteLine(line);
-            outputStream.WriteLine();
-
-            line = String.Format(@"Usage: {0}.exe {1} SolutionFilePath [VisualStudioVersion1|VisualStudioVersion2|...]", programName, functionName);
-            outputStream.WriteLine(line);
-            outputStream.WriteLine();
-
-            outputStream.WriteLine(@"Example:");
-            line = String.Format(@"{0}.exe {1} C:\Organizations\Minex\Repositories\Public\Source\Common\Experiments\Nahant\Nahant.VS2015.sln VS2010|VS2013|VS2015|VS2017", programName, functionName);
-            outputStream.WriteLine(line);
-            outputStream.WriteLine();
         }
 
         private static bool HandleCreateNewSolutionSet(Configuration configuration, IOutputStream outputStream, string[] functionArgs)
