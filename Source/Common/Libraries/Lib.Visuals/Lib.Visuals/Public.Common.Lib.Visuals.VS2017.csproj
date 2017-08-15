@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D28CAE43-A1E4-4396-BB65-12C19DDBE764}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Public.Common.Lib.Visuals</RootNamespace>
+    <AssemblyName>Public.Common.Lib.Visuals</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\VS2017\Debug</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\VS2017\Release</OutputPath>
+    <BaseIntermediateOutputPath>obj\VS2017\</BaseIntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Classes\BitmapLocker.cs" />
+    <Compile Include="Code\Classes\Coordinate.cs" />
+    <Compile Include="Code\Colors\GrayColor.cs" />
+    <Compile Include="Code\Images\GenericImage.cs" />
+    <Compile Include="Code\Images\GenericCoordinatedImage.cs" />
+    <Compile Include="Code\Images\GrayImage.cs" />
+    <Compile Include="Code\Images\HsvImage.cs" />
+    <Compile Include="Code\Images\RgbImage.cs" />
+    <Compile Include="Code\Interfaces\ICoordinated.cs" />
+    <Compile Include="Code\Interfaces\ICoordinatedImage.cs" />
+    <Compile Include="Code\Pixels\GrayPixel.cs" />
+    <Compile Include="Code\Pixels\HsvPixel.cs" />
+    <Compile Include="Code\Pixels\Pixel.cs" />
+    <Compile Include="Code\Pixels\PixelBase.cs" />
+    <Compile Include="Code\Images\PixelImage.cs" />
+    <Compile Include="Code\Colors\ColorConversion.cs" />
+    <Compile Include="Code\Colors\HsvColor.cs" />
+    <Compile Include="Code\Colors\RgbColor.cs" />
+    <Compile Include="Code\ExampleImages.cs" />
+    <Compile Include="Code\Pixels\RgbPixel.cs" />
+    <Compile Include="Code\Utilities.cs" />
+    <Compile Include="Code\Windows Forms\BindableToolStripStatusLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Code\Windows Forms\Extensions\HScrollBarExtensions.cs" />
+    <Compile Include="Code\Windows Forms\PropertyNames.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Project Plan.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
