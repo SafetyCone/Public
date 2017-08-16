@@ -1,9 +1,9 @@
 ﻿
 
-namespace Minex.Common.Lib.Visuals
-{
-    public interface ICoordinated
-    {
-        Coordinate Coordinate { get; }
-    }
-}
+//namespace Public.Common.Lib.Visuals
+//{
+//    public interface ICoordinated
+//    {
+//        Coordinate Coordinate { get; }
+//    }
+//}

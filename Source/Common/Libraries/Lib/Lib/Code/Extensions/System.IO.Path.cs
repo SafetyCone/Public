@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 
+using Public.Common.Lib.Extensions;
 
-namespace Public.Common.Lib.Extensions
+
+namespace Public.Common.Lib.IO.Extensions
 {
     public static class PathExtensions
     {
@@ -37,15 +39,29 @@ namespace Public.Common.Lib.Extensions
         }
 
         /// <summary>
-        /// Returns the file extension without the leading file extension character.
+        /// Provides the extension of the file without the leading file extension separator prefix ("bmp" instead of ".bmp").
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// The System.IO.Path.GetExtension() method returns the file extension prefixed with the file extension separator (ex: ".bmp").
+        /// 
+        /// The file extension separator is generally '.' (period).
+        /// </remarks>
         public static string GetExtensionOnly(string path)
         {
             string fileExtensionWithSeparator = Path.GetExtension(path);
 
-            string output = fileExtensionWithSeparator.Substring(1); // Skip the first char.
+            string output = fileExtensionWithSeparator.Substring(1); // Skip the first character of the string since it will be the file extension separator.
+            return output;
+        }
+
+        /// <summary>
+        /// Determines whether the file name has the specified extension.
+        /// </summary>
+        public static bool HasExtension(string fileName, string extension)
+        {
+            string fileExtension = PathExtensions.GetExtensionOnly(fileName);
+
+            bool output = fileExtension == extension;
             return output;
         }
 

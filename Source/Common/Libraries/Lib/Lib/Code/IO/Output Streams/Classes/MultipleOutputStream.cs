@@ -8,13 +8,16 @@ namespace Public.Common.Lib.IO
     {
         #region Static
 
-        public static IOutputStream GetDebugAndConsoleOutputStream()
+        public static IOutputStream DebugAndConsoleOutputStream
         {
-            DebugOutputStream debug = new DebugOutputStream();
-            ConsoleOutputStream console = new ConsoleOutputStream();
+            get
+            {
+                DebugOutputStream debug = new DebugOutputStream();
+                ConsoleOutputStream console = new ConsoleOutputStream();
 
-            MultipleOutputStream output = new MultipleOutputStream(new IOutputStream[] { debug, console });
-            return output;
+                MultipleOutputStream output = new MultipleOutputStream(new IOutputStream[] { debug, console });
+                return output;
+            }
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿The Minex.Common.Lib.Visuals library is meant to hold classes useful in working with:
+﻿The Public.Common.Lib.Visuals library is meant to hold classes useful in working with:
 	* Color
 		* Conversion, RGB to HSV.
 		* Serialization
@@ -6,9 +6,12 @@
 		* Helper methods.
 		* Property name constants for binding.
 
-The namespace was named "Lib.Visuals" instead of "Code" as these features should be considered to reside in the Minex common library.
+The namespace was named "Lib.Visuals" instead of "Code" as these features should be considered to reside in the Public common library.
 The namespace was put into a separted DLL since not all applications will have a visual component.
 
 The classes can be used to:
 	* Define Windows Forms property names for use in data bindings.
 	* Deserialize/Serialize colors.
+
+
+NOTE: This project is based on the Minex.Common.Lib.Visuals project.

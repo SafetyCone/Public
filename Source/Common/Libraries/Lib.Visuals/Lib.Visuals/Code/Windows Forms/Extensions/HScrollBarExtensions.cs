@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 
 
-namespace Minex.Common.Lib.Visuals.WindowsForms.Extensions
+namespace Public.Common.Lib.Visuals.WindowsForms.Extensions
 {
     public static class HScrollBarExtensions
     {

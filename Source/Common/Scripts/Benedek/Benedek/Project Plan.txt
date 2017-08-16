@@ -1,0 +1,14 @@
+﻿Benedek is a bitmap file describer.
+
+Given the path to a bitmap file, and a path to an output text file, Benedek will provide:
+
+* Image width and height.
+* Image bits per pixel.
+
+And other bitmap file metadata that is not really important to the main mission of reading and writing bitmaps, but is interesting from an historical perspective:
+
+* Compression method.
+* Image horizontal and verticle resolution in pixels per meter.
+	(Cameras would never actually know this exact information, but maybe is set by a manufacturer to aid in printing, or was included back when bitmaps were a contender for schematic diagram representation.)
+* Color table color count.
+* Important color count.

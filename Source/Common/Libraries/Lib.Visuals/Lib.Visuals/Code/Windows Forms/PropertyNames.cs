@@ -1,6 +1,6 @@
 ﻿
 
-namespace Minex.Common.Lib.Visuals.WindowsForms
+namespace Public.Common.Lib.Visuals.WindowsForms
 {
     public static class PropertyNames
     {

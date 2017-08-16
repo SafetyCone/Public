@@ -18,6 +18,15 @@ namespace Public.Common.Lib.Extensions
             return output;
         }
 
+        public static string ToYYYYMMDD_HHMMSSStr(this DateTime dateTime)
+        {
+            string yyyymmdd = dateTime.ToYYYYMMDDStr();
+            string hhmmss = dateTime.ToHHMMSSStr();
+
+            string output = String.Format(@"{0}-{1}", yyyymmdd, hhmmss);
+            return output;
+        }
+
         public static DateTime Round(this DateTime date, TimeSpan span)
         {
             long spanTickUnits = (date.Ticks + (span.Ticks / 2) + 1) / span.Ticks;

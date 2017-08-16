@@ -2,7 +2,7 @@
 using System.IO;
 
 
-namespace Public.Common.Lib.Extensions
+namespace Public.Common.Lib.IO.Extensions
 {
     public static class TextWriterExtensions
     {

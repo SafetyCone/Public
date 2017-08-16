@@ -1,105 +1,92 @@
 ﻿using System;
-using System.Drawing;
+
+using Public.Common.Lib;
 
 
-namespace Minex.Common.Lib.Visuals
+namespace Public.Common.Lib.Visuals
 {
     /// <summary>
-    /// Represents a color specified by RGB values. All RGB values should be in the range [0, 1].
+    /// Represents a color specified by RGB values, allowing a generic type for the color channel values.
     /// </summary>
+    /// <remarks>
+    /// An immutable structure, 
+    /// </remarks>
     [Serializable]
-    public class RgbColor
+    public struct RgbColor<T> : IEquatable<RgbColor<T>>
+        where T: struct, IEquatable<T> // The IEquatable restriction on T is required to prevent boxing in the IEquatable.Equals() method for RgbColor.
     {
         #region Static
 
-        public static bool VerifyPixelParameterRange(RgbColor color, double parameterRangeMinimum, double parameterRangeMaximum, bool throwOnError)
+        public static bool operator ==(RgbColor<T> lhs, RgbColor<T> rhs)
         {
-            if (parameterRangeMinimum > color.Red || parameterRangeMaximum < color.Red)
-            {
-                if (throwOnError)
-                {
-                    string message = Pixel.FormatExceptionMessage(@"Red", color.Red, parameterRangeMinimum, parameterRangeMaximum);
-                    throw new Exception(message);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            if (parameterRangeMinimum > color.Green || parameterRangeMaximum < color.Green)
-            {
-                if (throwOnError)
-                {
-                    string message = Pixel.FormatExceptionMessage(@"Green", color.Green, parameterRangeMinimum, parameterRangeMaximum);
-                    throw new Exception(message);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            if (parameterRangeMinimum > color.Blue || parameterRangeMaximum < color.Blue)
-            {
-                if (throwOnError)
-                {
-                    string message = Pixel.FormatExceptionMessage(@"Blue", color.Blue, parameterRangeMinimum, parameterRangeMaximum);
-                    throw new Exception(message);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return lhs.Equals(rhs);
         }
 
-        public static bool VerifyPixelParameterRange(RgbColor color, double parameterRangeMinimum, double parameterRangeMaximum)
+        public static bool operator !=(RgbColor<T> lhs, RgbColor<T> rhs)
         {
-            bool output = RgbColor.VerifyPixelParameterRange(color, parameterRangeMinimum, parameterRangeMaximum, false);
+            return !(lhs.Equals(rhs));
+        }
+
+        #endregion
+
+        #region IEquatable Members
+
+        public bool Equals(RgbColor<T> other)
+        {
+            // Use of Equals() method with IEquatable constraint on type parameter prevents boxing.
+            // Confirmed using ILSpy and looking at the generated IL, the IEquatable constraint is required.
+            bool output = (this.zRed.Equals(other.zRed)) && (this.zGreen.Equals(other.zGreen)) && (this.zBlue.Equals(other.zBlue));
             return output;
-        }
-
-        public static bool VerifyPixelParameterRange(RgbColor color)
-        {
-            bool output = RgbColor.VerifyPixelParameterRange(color, Pixel.DefaultColorParameterRangeMinimum, Pixel.DefaultColorParamtereRangeMaximum, false);
-            return output;
-        }
-
-        public static void VerifyPixelParameterRangeThrow(RgbColor color, double parameterRangeMinimum, double parameterRangeMaximum)
-        {
-            RgbColor.VerifyPixelParameterRange(color, parameterRangeMinimum, parameterRangeMaximum, true);
-        }
-
-        public static void VerifyPixelParameterRangeThrow(RgbColor color)
-        {
-            RgbColor.VerifyPixelParameterRange(color, Pixel.DefaultColorParameterRangeMinimum, Pixel.DefaultColorParamtereRangeMaximum, true);
         }
 
         #endregion
 
 
-        public double Red { get; set; }
-        public double Green { get; set; }
-        public double Blue { get; set; }
-
-
-        public RgbColor() { }
-
-        public RgbColor(double red, double green, double blue)
+        private readonly T zRed;
+        public T Red
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            get
+            {
+                return this.zRed;
+            }
+        }
+        private readonly T zGreen;
+        public T Green
+        {
+            get
+            {
+                return this.zGreen;
+            }
+        }
+        private readonly T zBlue;
+        public T Blue
+        {
+            get
+            {
+                return this.zBlue;
+            }
         }
 
-        public RgbColor(Color color)
+
+        public RgbColor(T red, T green, T blue)
         {
-            this.Red = ColorConversion.LevelToValue(color.R);
-            this.Green = ColorConversion.LevelToValue(color.G);
-            this.Blue = ColorConversion.LevelToValue(color.B);
+            this.zRed = red;
+            this.zGreen = green;
+            this.zBlue = blue;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is RgbColor<T>)
+            {
+                return this.Equals((RgbColor<T>)obj);
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashHelper.GetHashCode(this.zRed, this.zGreen, this.zBlue);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Windows.Forms.Design;
 
 
-namespace Minex.Common.Lib.Visuals.Code.Windows_Forms
+namespace Public.Common.Lib.Visuals.Code.WindowsForms
 {
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
     public class BindableToolStripStatusLabel : ToolStripStatusLabel, IBindableComponent

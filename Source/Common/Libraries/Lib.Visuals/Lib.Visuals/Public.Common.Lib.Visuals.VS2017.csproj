@@ -44,11 +44,22 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2017.csproj">
+      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
+      <Name>Public.Common.Lib.VS2017</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\BitmapLocker.cs" />
     <Compile Include="Code\Classes\Coordinate.cs" />
+    <Compile Include="Code\Colors\Classes\Color Value Type Infos\ByteColorValueTypeInfo.cs" />
+    <Compile Include="Code\Colors\Classes\GrayColor.cs" />
     <Compile Include="Code\Colors\GrayColor.cs" />
+    <Compile Include="Code\Colors\HsvColor.cs" />
+    <Compile Include="Code\Colors\Interfaces\IColorValueTypeInfo.cs" />
+    <Compile Include="Code\Colors\RgbColor.cs" />
+    <Compile Include="Code\Enumerations\ImageFileType.cs" />
     <Compile Include="Code\Images\GenericImage.cs" />
     <Compile Include="Code\Images\GenericCoordinatedImage.cs" />
     <Compile Include="Code\Images\GrayImage.cs" />
@@ -56,14 +67,19 @@
     <Compile Include="Code\Images\RgbImage.cs" />
     <Compile Include="Code\Interfaces\ICoordinated.cs" />
     <Compile Include="Code\Interfaces\ICoordinatedImage.cs" />
+    <Compile Include="Code\IO\Files\Bitmaps\BitmapFile.cs" />
+    <Compile Include="Code\IO\Files\Bitmaps\BitmapFileDIBHeader.cs" />
+    <Compile Include="Code\IO\Files\Bitmaps\BitmapFileHeader.cs" />
+    <Compile Include="Code\IO\Files\Bitmaps\BitmapFileHeaderHeader.cs" />
+    <Compile Include="Code\IO\Files\Bitmaps\BitmapFileSerializer.cs" />
     <Compile Include="Code\Pixels\GrayPixel.cs" />
     <Compile Include="Code\Pixels\HsvPixel.cs" />
     <Compile Include="Code\Pixels\Pixel.cs" />
     <Compile Include="Code\Pixels\PixelBase.cs" />
     <Compile Include="Code\Images\PixelImage.cs" />
     <Compile Include="Code\Colors\ColorConversion.cs" />
-    <Compile Include="Code\Colors\HsvColor.cs" />
-    <Compile Include="Code\Colors\RgbColor.cs" />
+    <Compile Include="Code\Colors\Classes\HsvColor.cs" />
+    <Compile Include="Code\Colors\Classes\RgbColor.cs" />
     <Compile Include="Code\ExampleImages.cs" />
     <Compile Include="Code\Pixels\RgbPixel.cs" />
     <Compile Include="Code\Utilities.cs" />
