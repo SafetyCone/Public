@@ -55,10 +55,9 @@
     <Compile Include="Code\Classes\Coordinate.cs" />
     <Compile Include="Code\Colors\Classes\Color Value Type Infos\ByteColorValueTypeInfo.cs" />
     <Compile Include="Code\Colors\Classes\GrayColor.cs" />
-    <Compile Include="Code\Colors\GrayColor.cs" />
-    <Compile Include="Code\Colors\HsvColor.cs" />
+    <Compile Include="Code\Colors\Classes\HsvColor.cs" />
+    <Compile Include="Code\Colors\Classes\RgbColor.cs" />
     <Compile Include="Code\Colors\Interfaces\IColorValueTypeInfo.cs" />
-    <Compile Include="Code\Colors\RgbColor.cs" />
     <Compile Include="Code\Enumerations\ImageFileType.cs" />
     <Compile Include="Code\Images\GenericImage.cs" />
     <Compile Include="Code\Images\GenericCoordinatedImage.cs" />
@@ -78,8 +77,6 @@
     <Compile Include="Code\Pixels\PixelBase.cs" />
     <Compile Include="Code\Images\PixelImage.cs" />
     <Compile Include="Code\Colors\ColorConversion.cs" />
-    <Compile Include="Code\Colors\Classes\HsvColor.cs" />
-    <Compile Include="Code\Colors\Classes\RgbColor.cs" />
     <Compile Include="Code\ExampleImages.cs" />
     <Compile Include="Code\Pixels\RgbPixel.cs" />
     <Compile Include="Code\Utilities.cs" />
