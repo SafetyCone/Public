@@ -41,7 +41,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.Array.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Extensions\System.BitConverter.cs" />
     <Compile Include="Code\Extensions\System.IO.Directory.cs" />

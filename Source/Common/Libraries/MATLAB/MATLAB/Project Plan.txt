@@ -1,0 +1,18 @@
+﻿MATLAB - A library for interoperating with MATLAB.
+
+Goals:
+* Automate MATLAB from C# .NET code.
+* Put/Get variables (strings, ints, doubles, arrays, multidimensional arrays) into/out of MATLAB.
+* Run MATLAB commands as strings.
+* Use MATLAB to generate figures, allow saving to an image file.
+
+Some matlab code:
+
+hFig = figure;
+hAxes = axes('Parent', hFig);
+hLine = plot(hAxes, [1, 2], [3, 4])
+set(hLine, 'LineStyle', '-.')
+delete(hLine)
+hold on
+quiver(hAxes, 0, 0, 3, 2, 0)
+hold off
