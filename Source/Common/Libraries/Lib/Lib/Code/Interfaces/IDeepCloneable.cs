@@ -3,8 +3,8 @@
 
 namespace Public.Common.Lib
 {
-    public interface IDeepCloneable
+    public interface IDeepCloneable<T> : ICloneable
     {
-        object DeepClone();
+        T CloneDeep();
     }
 }

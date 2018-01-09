@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
     <Compile Include="Code\Extensions\System.Array.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +57,7 @@
     <Compile Include="Code\Extensions\System.String.cs" />
     <Compile Include="Code\Interfaces\ICloneable.cs" />
     <Compile Include="Code\Interfaces\IDeepCloneable.cs" />
-    <Compile Include="Code\Interfaces\ShallowClone.cs" />
+    <Compile Include="Code\Interfaces\IShallowClone.cs" />
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
     <Compile Include="Code\IO\FileExtensions.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Code\Security\Authentications\Authentication.cs" />
     <Compile Include="Code\Security\Authentications\AuthenticationsTextFile.cs" />
     <Compile Include="Code\Utilities\HashHelper.cs" />
+    <Compile Include="Code\Utilities\HashHelperPrimeMultiplier.cs" />
     <Compile Include="Code\Utilities\SearchPatternHelper.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifference.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifferenceTextSerializer.cs" />

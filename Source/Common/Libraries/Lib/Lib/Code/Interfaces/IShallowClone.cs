@@ -3,8 +3,8 @@
 
 namespace Public.Common.Lib
 {
-    public interface ShallowClone
+    public interface IShallowClone<T>
     {
-        object ShallowClone();
+        T CloneShallow();
     }
 }

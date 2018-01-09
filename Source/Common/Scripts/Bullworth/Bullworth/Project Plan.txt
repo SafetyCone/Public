@@ -1,0 +1,39 @@
+﻿Bullworth is a script that moves DLLs from one location to another.
+
+It is meant to move native unmanaged DLLs (perhaps from a C++ project) into the build directory of a .NET managed project.
+It is called from the .NET managed client project, preferable as part of the post-build event.
+
+BENEFITS:
+* Copies files (DLLs, PDBs) from a dependency project for a particular client project input configuration (Debug, Release) and architecture (Any CPU, x86, x64).
+* Can be run from a client project's post-build event.
+* Handles the mapping of "Any CPU" to "x32".
+* Only copies DLLs if the source modified time is greater than the destination modified time.
+* Can be given the path to a input file specifying the DLLs to copy.
+
+TO USE:
+* Include this project in a client solution.
+* Add a reference from the client project to the Bullworth project to ensure that it is built and added to the output directory.
+* Create a Bullworth input file in the client project, and set its "Copy To Output Directory" property to "Copy if newer".
+* The output executable from this project will be in the output directory of the solution, and when the client project's post-build event executes to call this executable, it will provide the client project output directory path, configuration, and architecture, and the path of the input file relative to the project client output directory.
+
+Now the built Bullworth executable will be able to find the the copied Bullwoth input file, and will be run as part of the client project's post-build event.
+
+INPUT ARGUMENTS:
+1. $(TargetDir) of the client project.
+2. $(ConfigurationName) of the client project.
+3. $(PlatformName) of the client project.
+4. The path of the input file, relative to the $(TargetDir) of the client project.
+
+Example (be sure to use parentheses to group arguments):
+"$(TargetDir)" "$(ConfigurationName)" "$(PlatformName)" "Files\Bullworth Input.txt"
+"C:\Organizations\Minex\Repositories\Public\Source\MyTheia\Experiments\VlPInvokeNET\VlPInvokeNET\bin\Debug" "Debug" "Any CPU" "Files\Bullworth Input.txt"
+
+INPUT FILE FORMAT: Lines, where each line is a path either rooted, or relative to the client project's target directory.
+The replace codes $(Configuration) [either "Debug", or "Release") and $(Architecture) [either "x32" or "x64"] are available.
+
+POST-BUILD EXAMPLE (note the lack of quotes around $(TargetDir):
+"$(TargetDir)Bullworth.exe" $(TargetDir) "$(ConfigurationName)" "$(PlatformName)" "Files\Bullworth Input.txt"
+
+
+TROUBLESHOOTING:
+When Bullworth is run from the post-build event of a client project, it's Console.Write() output will go to the Visual Studio Output window.

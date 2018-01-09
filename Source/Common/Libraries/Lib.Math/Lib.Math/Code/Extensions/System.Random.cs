@@ -1,8 +1,10 @@
 ﻿using System;
 using SysMath = System.Math;
+using System.Collections.Generic;
+using System.Linq;
 
 
-namespace Public.Common.Lib.Math
+namespace Public.Common.Lib.Math.Extensions
 {
     public static class RandomExtensions
     {
@@ -23,6 +25,42 @@ namespace Public.Common.Lib.Math
             double randomNormal = mu + sigma * randomStandardNormal;
 
             return randomNormal;
+        }
+
+        public static int[] GetIndicesWithoutReplacement(this Random random, int numberOfElements, int numberOfDraws)
+        {
+            // Bifurcate the algorithm based on the ratio of the number of elements to the number of draws.
+            int[] output;
+            if (4 * numberOfDraws > numberOfElements)
+            {
+                // If the number of draws (k) is a sizable fraction of the number of elements (N), just shuffle all elements and choose the first k.
+                // High-memory use!
+                int[] indices = new int[numberOfElements];
+                for (int iIndex = 0; iIndex < numberOfElements; iIndex++)
+                {
+                    indices[iIndex] = iIndex;
+                }
+
+                Shuffler.ShuffleStatic(indices, random);
+
+                output = new int[numberOfDraws];
+                Array.Copy(indices, output, numberOfDraws);
+            }
+            else
+            {
+                // If the number of draws (k) is small relative to the number of elements (N), just draw with replacement until we get k unique indices.
+                // Low memory use, but has frequent wated draws.
+                var uniqueIndices = new HashSet<int>();
+                while(uniqueIndices.Count < numberOfDraws)
+                {
+                    int curDraw = random.Next(numberOfElements);
+                    uniqueIndices.Add(curDraw);
+                }
+
+                output = uniqueIndices.ToArray();
+            }
+
+            return output;
         }
     }
 }

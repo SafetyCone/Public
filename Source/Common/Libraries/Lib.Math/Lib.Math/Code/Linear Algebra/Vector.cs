@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Public.Common.Lib.Math.Extensions;
+
 
 namespace Public.Common.Lib.Math
 {
@@ -145,6 +147,18 @@ namespace Public.Common.Lib.Math
 
         public readonly double[] Values;
         public int Count { get; protected set; }
+        public double this[int index]
+        {
+            get
+            {
+                double output = this.Values[index];
+                return output;
+            }
+            set
+            {
+                this.Values[index] = value;
+            }
+        }
 
 
         public Vector(double[] values)
