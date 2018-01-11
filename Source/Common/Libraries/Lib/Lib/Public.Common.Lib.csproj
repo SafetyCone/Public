@@ -42,6 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Caches\Classes\Base Classes\AcquiringIndexedFileSystemCacheBase.cs" />
+    <Compile Include="Code\Caches\Classes\Base Classes\Cache.cs" />
+    <Compile Include="Code\Caches\Classes\CacheDirectoryPathBuilder.cs" />
+    <Compile Include="Code\Caches\Classes\IndexedFileSystemCache.cs" />
+    <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
+    <Compile Include="Code\Caches\Interfaces\ICache.cs" />
+    <Compile Include="Code\Caches\Interfaces\IPersistedCache.cs" />
     <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
     <Compile Include="Code\Extensions\System.Array.cs" />
   </ItemGroup>
@@ -70,6 +77,8 @@
     <Compile Include="Code\IO\Output Streams\Interfaces\IOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\IOutputStreamExtensions.cs" />
     <Compile Include="Code\IO\Paths\Utilities.cs" />
+    <Compile Include="Code\IO\Serialization\Classes\BinaryFileSerializer.cs" />
+    <Compile Include="Code\IO\Serialization\Interfaces\IFileSerializer.cs" />
     <Compile Include="Code\IO\TextFileWriter.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />
@@ -80,7 +89,7 @@
     <Compile Include="Code\IO\Serialization\Classes\TextFileSerializationUnit.cs" />
     <Compile Include="Code\IO\Serialization\Classes\TextFileSerializer.cs" />
     <Compile Include="Code\IO\Serialization\Interfaces\ISerializationUnit.cs" />
-    <Compile Include="Code\IO\Serialization\Interfaces\ISerializer.cs" />
+    <Compile Include="Code\IO\Serialization\Interfaces\ISerializationUnitSerializer.cs" />
     <Compile Include="Code\IO\Serialization\SerializationList.cs" />
     <Compile Include="Code\IO\Files\TextFile.cs" />
     <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />

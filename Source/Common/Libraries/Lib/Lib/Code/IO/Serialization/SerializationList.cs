@@ -14,25 +14,25 @@ namespace Public.Common.Lib.IO.Serialization
     /// </remarks>
     public class SerializationList
     {
-        public Dictionary<string, ISerializer> SerializersByMoniker { get; protected set; }
-        public List<Tuple<ISerializationUnit, ISerializer>> Units { get; protected set; }
+        public Dictionary<string, ISerializationUnitSerializer> SerializersByMoniker { get; protected set; }
+        public List<Tuple<ISerializationUnit, ISerializationUnitSerializer>> Units { get; protected set; }
 
 
         public SerializationList()
         {
-            this.SerializersByMoniker = new Dictionary<string, ISerializer>();
-            this.Units = new List<Tuple<ISerializationUnit, ISerializer>>();
+            this.SerializersByMoniker = new Dictionary<string, ISerializationUnitSerializer>();
+            this.Units = new List<Tuple<ISerializationUnit, ISerializationUnitSerializer>>();
         }
 
         public void AddUnitByMoniker(ISerializationUnit unit, string serializerMoniker)
         {
-            ISerializer serializer = this.SerializersByMoniker[serializerMoniker];
-            this.Units.Add(new Tuple<ISerializationUnit, ISerializer>(unit, serializer));
+            ISerializationUnitSerializer serializer = this.SerializersByMoniker[serializerMoniker];
+            this.Units.Add(new Tuple<ISerializationUnit, ISerializationUnitSerializer>(unit, serializer));
         }
 
         public void Serialize()
         {
-            foreach(Tuple<ISerializationUnit, ISerializer> pair in this.Units)
+            foreach(Tuple<ISerializationUnit, ISerializationUnitSerializer> pair in this.Units)
             {
                 pair.Item2.Serialize(pair.Item1);
             }

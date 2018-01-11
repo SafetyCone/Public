@@ -7,7 +7,7 @@ namespace Public.Common.Lib.IO.Serialization
     /// The base class of all serializers.
     /// </summary>
     /// <typeparam name="T">The serialization unit type.</typeparam>
-    public abstract class SerializerBase<T> : ISerializer
+    public abstract class SerializerBase<T> : ISerializationUnitSerializer
         where T: class, ISerializationUnit
     {
         #region ISerializer Members
