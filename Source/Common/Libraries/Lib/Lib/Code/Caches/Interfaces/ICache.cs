@@ -1,7 +1,13 @@
-﻿
+﻿using System.Collections.Generic;
+
 
 namespace Public.Common.Lib
 {
+    public interface ICache<T>
+    {
+        T this[string key] { get; }
+    }
+
     /// <summary>
     /// The plain cache interface.
     /// </summary>
@@ -19,6 +25,7 @@ namespace Public.Common.Lib
         /// Note to implementers: The assumed behavior is to error if key is not found.
         /// </remarks>
         TValue this[TKey key] { get; }
+        //IEnumerable<TKey> Keys { get; }
 
 
         bool ContainsKey(TKey key);
@@ -58,7 +65,7 @@ namespace Public.Common.Lib
         /// <remarks>
         /// Note to implementers: The assumed behavior is to error if key is not found.
         /// </remarks>
-        TValue this[TKey1 key, TKey2 key2] { get; }
+        TValue this[TKey1 key1, TKey2 key2] { get; }
 
 
         bool ContainsKey(TKey1 key1, TKey2 key2);

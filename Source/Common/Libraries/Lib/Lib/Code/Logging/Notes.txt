@@ -1,0 +1,11 @@
+﻿Public.Common.Lib.Logging
+
+The logging classes in the Public.Common.Lib library are meant to be facades for actual logging implementations of any type. Some examples might be my own, Log4Net, Serilog, NLog, etc.
+
+These logging classes enable code to be written that is agnostic about what logging implementation will actually be used.
+
+When a logging implemenation is selected, two classes must be written to allow its use:
+1) ILogger implementation - this is the class that will actually perform logging actions. Usually this class is just a wrapper around an implementation's own logger.
+2) ILoggingImplementation implementation - this is a class that provides loggers from a static context. Especially important is the construction of a default logger.
+
+Additionally, 

@@ -63,8 +63,10 @@ namespace Public.Common.Lib.IO
         public FileOutputStream(string filePath)
         {
             this.FilePath = filePath;
-            this.zStreamWriter = new StreamWriter(this.FilePath);
-            this.zStreamWriter.AutoFlush = true;
+            this.zStreamWriter = new StreamWriter(this.FilePath)
+            {
+                AutoFlush = true
+            };
         }
     }
 }

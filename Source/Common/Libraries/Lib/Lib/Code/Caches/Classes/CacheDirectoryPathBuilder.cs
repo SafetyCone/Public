@@ -43,9 +43,9 @@ namespace Public.Common.Lib
             DirectoryInfo sessionDirectory = cacheDirectory.Parent;
             DirectoryInfo cachesDirectory = sessionDirectory.Parent;
 
-            this.CachesDirectoryPath = cacheDirectory.FullName;
+            this.CachesDirectoryPath = cachesDirectory.FullName;
             this.SessionDirectoryName = sessionDirectory.Name;
-            this.CacheDirectoryName = cachesDirectory.Name;
+            this.CacheDirectoryName = cacheDirectory.Name;
         }
 
         public string ToCacheDirectoryPath()

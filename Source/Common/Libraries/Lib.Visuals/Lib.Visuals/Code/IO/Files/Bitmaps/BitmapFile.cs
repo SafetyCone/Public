@@ -6,8 +6,7 @@ using System.Text;
 
 using Public.Common.Lib.IO;
 using Public.Common.Lib.IO.Extensions;
-using Public.Common.Lib.Visuals;
-using RgbColor = Public.Common.Lib.Visuals.RgbColor<byte>;
+using RgbColorByte = Public.Common.Lib.Visuals.RgbColor<byte>;
 
 
 namespace Public.Common.Lib.Visuals
@@ -107,7 +106,7 @@ namespace Public.Common.Lib.Visuals
             {
                 for (int iCol = 0; iCol < widthX; iCol++)
                 {
-                    RgbColor rgbColor = file[iRow, iCol];
+                    RgbColorByte rgbColor = file[iRow, iCol];
                     Color color = ColorConversion.RgbToColor(rgbColor);
                     bitmap.SetPixel(iCol, iRow, color);
                 }
@@ -120,12 +119,12 @@ namespace Public.Common.Lib.Visuals
 
 
         public BitmapFileHeader Header { get; set; }
-        private RgbColor[,] Pixels;
-        public RgbColor this[int row, int column]
+        private RgbColorByte[,] Pixels;
+        public RgbColorByte this[int row, int column]
         {
             get
             {
-                RgbColor output = this.Pixels[row, column];
+                RgbColorByte output = this.Pixels[row, column];
                 return output;
             }
             set
@@ -137,7 +136,7 @@ namespace Public.Common.Lib.Visuals
 
         public BitmapFile(int rows, int columns)
         {
-            this.Pixels = new RgbColor[rows, columns];
+            this.Pixels = new RgbColorByte[rows, columns];
         }
 
         public BitmapFile(BitmapFileHeader header)

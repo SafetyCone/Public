@@ -5,6 +5,15 @@ using Public.Common.Lib;
 
 namespace Public.Common.Lib.Visuals
 {
+    public struct RgbColor
+    {
+        public const int NumberOfRgbColorChannels = 3;
+        public const int RedChannelIndex = 0;
+        public const int GreenChannelIndex = 1;
+        public const int BlueChannelIndex = 2;
+    }
+
+
     /// <summary>
     /// Represents a color specified by RGB values, allowing a generic type for the color channel values.
     /// </summary>

@@ -45,20 +45,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.VS2017.csproj">
-      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
-      <Name>Public.Common.Lib.VS2017</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Code\Classes\BitmapLocker.cs" />
     <Compile Include="Code\Classes\Coordinate.cs" />
+    <Compile Include="Code\Classes\ImageDirectorySource.cs" />
+    <Compile Include="Code\Classes\ImageFormatFileExtensions.cs" />
+    <Compile Include="Code\Classes\ImageID.cs" />
+    <Compile Include="Code\Classes\ImagePathSource.cs" />
+    <Compile Include="Code\Classes\PixelLocation.cs" />
+    <Compile Include="Code\Classes\Rec709FloatImageConverter.cs" />
+    <Compile Include="Code\Images\FloatImage.cs" />
+    <Compile Include="Code\Images\RGB Byte\RgbByteImage.cs" />
+    <Compile Include="Code\Images\RGB Float\Interfaces\IRgbFloatImageSerializer.cs" />
+    <Compile Include="Code\Images\RGB Byte\RgbByteImageBinarySerializer.cs" />
     <Compile Include="Code\Colors\Classes\Color Value Type Infos\ByteColorValueTypeInfo.cs" />
     <Compile Include="Code\Colors\Classes\GrayColor.cs" />
     <Compile Include="Code\Colors\Classes\HsvColor.cs" />
+    <Compile Include="Code\Images\RGB Byte\RgbByteColor.cs" />
     <Compile Include="Code\Colors\Classes\RgbColor.cs" />
+    <Compile Include="Code\Images\RGB Float\Classes\RgbFloatColor.cs" />
     <Compile Include="Code\Colors\Interfaces\IColorValueTypeInfo.cs" />
     <Compile Include="Code\Enumerations\ImageFileType.cs" />
+    <Compile Include="Code\Enumerations\ImageFormat.cs" />
+    <Compile Include="Code\Images\Gray Float\Classes\GrayFloatImage.cs" />
+    <Compile Include="Code\Images\Gray Float\Classes\GrayFloatImageBinarySerializer.cs" />
+    <Compile Include="Code\Images\RGB Float\Classes\RgbFloatImage.cs" />
+    <Compile Include="Code\Images\RGB Float\Classes\RgbFloatImageBinarySerializer.cs" />
     <Compile Include="Code\Images\GenericImage.cs" />
     <Compile Include="Code\Images\GenericCoordinatedImage.cs" />
     <Compile Include="Code\Images\GrayImage.cs" />
@@ -66,11 +77,23 @@
     <Compile Include="Code\Images\RgbImage.cs" />
     <Compile Include="Code\Interfaces\ICoordinated.cs" />
     <Compile Include="Code\Interfaces\ICoordinatedImage.cs" />
+    <Compile Include="Code\Interfaces\IGrayFloatImageRepository.cs" />
+    <Compile Include="Code\Interfaces\IGrayFloatImageSource.cs" />
+    <Compile Include="Code\Interfaces\IRgbFloatImageRepository.cs" />
+    <Compile Include="Code\Interfaces\IRgbFloatImageSource.cs" />
+    <Compile Include="Code\Interfaces\IRgbToGrayImageConverter.cs" />
+    <Compile Include="Code\IO\Caches\GrayFloatImageCache.cs" />
+    <Compile Include="Code\IO\Caches\GrayFloatImageDataFileCache.cs" />
+    <Compile Include="Code\IO\Caches\GrayFloatImageFileCache.cs" />
+    <Compile Include="Code\IO\Caches\RgbFloatImageCache.cs" />
+    <Compile Include="Code\IO\Caches\RgbFloatImageDataFileCache.cs" />
+    <Compile Include="Code\IO\Caches\RgbFloatImageFileCache.cs" />
     <Compile Include="Code\IO\Files\Bitmaps\BitmapFile.cs" />
     <Compile Include="Code\IO\Files\Bitmaps\BitmapFileDIBHeader.cs" />
     <Compile Include="Code\IO\Files\Bitmaps\BitmapFileHeader.cs" />
     <Compile Include="Code\IO\Files\Bitmaps\BitmapFileHeaderHeader.cs" />
     <Compile Include="Code\IO\Files\Bitmaps\BitmapFileSerializer.cs" />
+    <Compile Include="Code\IO\Files\FileExtensions.cs" />
     <Compile Include="Code\Pixels\GrayPixel.cs" />
     <Compile Include="Code\Pixels\HsvPixel.cs" />
     <Compile Include="Code\Pixels\Pixel.cs" />
@@ -87,9 +110,15 @@
     <Compile Include="Code\Windows Forms\PropertyNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
+      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
+      <Name>Public.Common.Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

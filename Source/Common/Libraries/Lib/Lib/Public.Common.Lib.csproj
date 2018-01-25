@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Code\Caches\Classes\Base Classes\AcquiringIndexedFileSystemCacheBase.cs" />
     <Compile Include="Code\Caches\Classes\Base Classes\Cache.cs" />
+    <Compile Include="Code\Caches\Classes\Base Classes\CacheBase.cs" />
     <Compile Include="Code\Caches\Classes\CacheDirectoryPathBuilder.cs" />
     <Compile Include="Code\Caches\Classes\IndexedFileSystemCache.cs" />
     <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Code\Extensions\System.IO.Directory.cs" />
     <Compile Include="Code\Extensions\System.IO.TextWriter.cs" />
     <Compile Include="Code\Extensions\System.DateTime.cs" />
+    <Compile Include="Code\Extensions\System.TimeSpan.cs" />
     <Compile Include="Code\Extensions\System.Xml.XmlDocument.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Exceptions\UnexpectedEnumerationValueException.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Code\IO\Paths\Utilities.cs" />
     <Compile Include="Code\IO\Serialization\Classes\BinaryFileSerializer.cs" />
     <Compile Include="Code\IO\Serialization\Interfaces\IFileSerializer.cs" />
+    <Compile Include="Code\IO\Serialization\Interfaces\IInstrumentedFileSerializer.cs" />
     <Compile Include="Code\IO\TextFileWriter.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializationUnitBase.cs" />
     <Compile Include="Code\IO\Serialization\Classes\Base Classes\SerializerBase.cs" />
@@ -94,9 +97,20 @@
     <Compile Include="Code\IO\Files\TextFile.cs" />
     <Compile Include="Code\IO\Serialization\SerializationListExtensions.cs" />
     <Compile Include="Code\IO\UrlShortcuts.cs" />
+    <Compile Include="Code\Logging\Classes\DummyLogger.cs" />
+    <Compile Include="Code\Logging\Classes\DummyLoggingImplementation.cs" />
     <Compile Include="Code\Logging\Classes\Log.cs" />
+    <Compile Include="Code\Logging\Classes\Loggers.cs" />
+    <Compile Include="Code\Logging\Classes\LoggingTiming.cs" />
+    <Compile Include="Code\Logging\Classes\LogViewer.cs" />
+    <Compile Include="Code\Logging\Classes\Utilities.cs" />
+    <Compile Include="Code\Logging\Enumerations\CallerLoggingAssumption.cs" />
+    <Compile Include="Code\Logging\Enumerations\Level.cs" />
     <Compile Include="Code\Logging\ILogExtensions.cs" />
     <Compile Include="Code\Logging\Interfaces\ILog.cs" />
+    <Compile Include="Code\Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Code\Logging\Interfaces\ILoggerConfiguration.cs" />
+    <Compile Include="Code\Logging\Interfaces\ILoggingImplementation.cs" />
     <Compile Include="Code\Organizational\Domains\CommonDomain.cs" />
     <Compile Include="Code\Organizational\Domains\Domains.cs" />
     <Compile Include="Code\Organizational\Domains\ExamplesDomain.cs" />
@@ -115,8 +129,15 @@
     <Compile Include="Code\Production\Production.cs" />
     <Compile Include="Code\Security\Authentications\Authentication.cs" />
     <Compile Include="Code\Security\Authentications\AuthenticationsTextFile.cs" />
+    <Compile Include="Code\Timing\Classes\LeafTimingNode.cs" />
+    <Compile Include="Code\Timing\Classes\ListTimingNode.cs" />
+    <Compile Include="Code\Timing\Interfaces\ITimingNode.cs" />
+    <Compile Include="Code\Timing\StopwatchTimingNode.cs" />
+    <Compile Include="Code\Timing\TimingNodeTextSerializer.cs" />
     <Compile Include="Code\Utilities\HashHelper.cs" />
     <Compile Include="Code\Utilities\HashHelperPrimeMultiplier.cs" />
+    <Compile Include="Code\Programs\NotepadPlusPlus.cs" />
+    <Compile Include="Code\Utilities\ProcessStarter.cs" />
     <Compile Include="Code\Utilities\SearchPatternHelper.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifference.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifferenceTextSerializer.cs" />
@@ -126,6 +147,8 @@
     <Compile Include="Code\Extensions\System.Boolean.cs" />
     <Compile Include="Code\Extensions\System.IO.Path.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Code\Logging\Notes.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

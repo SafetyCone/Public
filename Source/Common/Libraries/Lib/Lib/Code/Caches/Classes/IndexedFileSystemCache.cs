@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Public.Common.Lib.IO;
@@ -27,9 +28,9 @@ namespace Public.Common.Lib
         public static readonly string DefaultIndexTokenSeparator = @"|";
 
 
-        public static string GetIndexFilePath(string directoryPath, string indexFileName)
+        public static string GetIndexFilePath(string cacheDirectoryPath, string indexFileName)
         {
-            string output = Path.Combine(directoryPath, indexFileName);
+            string output = Path.Combine(cacheDirectoryPath, indexFileName);
             return output;
         }
 
@@ -47,6 +48,53 @@ namespace Public.Common.Lib
 
             string dataFilePath = Path.Combine(filesDirectoryPath, fileName);
             return dataFilePath;
+        }
+
+        public static Dictionary<string, string> ReadIndexFilePath(string indexFilePath, string indexTokenSeparator)
+        {
+            var output = new Dictionary<string, string>();
+            using (StreamReader reader = new StreamReader(indexFilePath))
+            {
+                string[] separators = new string[] { indexTokenSeparator };
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+
+                    string[] tokens = line.Split(separators, StringSplitOptions.None);
+                    string keyToken = tokens[0];
+                    string filePath = tokens[1];
+
+                    output.Add(keyToken, filePath);
+                }
+            }
+
+            return output;
+        }
+
+        public static Dictionary<string, string> ReadIndexFilePath(string indexFilePath)
+        {
+            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFilePath(indexFilePath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator);
+            return output;
+        }
+
+        public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath, string indexFileName, string indexTokenSeparator)
+        {
+            string indexFilePath = IndexedFileSystemCache<TKey, TValue>.GetIndexFilePath(cacheDirectoryPath, indexFileName);
+
+            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFilePath(indexFilePath, indexTokenSeparator);
+            return output;
+        }
+
+        public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath, string indexTokenSeparator)
+        {
+            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFile(cacheDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, indexTokenSeparator);
+            return output;
+        }
+
+        public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath)
+        {
+            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFile(cacheDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator);
+            return output;
         }
 
         #endregion

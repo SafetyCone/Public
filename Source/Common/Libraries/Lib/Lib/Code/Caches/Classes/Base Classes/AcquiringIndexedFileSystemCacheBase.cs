@@ -209,9 +209,32 @@ namespace Public.Common.Lib
 
     public static class AcquiringIndexedFileSystemCacheBaseExtensions
     {
+        public static readonly string StringCombinationSeparator = @"<>";
+
+
+        public static string CombineKey1Key2(string key1, string key2)
+        {
+            string output = key1 + AcquiringIndexedFileSystemCacheBaseExtensions.StringCombinationSeparator + key2;
+            return output;
+        }
+
         public static string CombineKey1Key2<TValue>(this AcquiringIndexedFileSystemCacheBase<string, string, string, TValue> cache, string key1, string key2)
         {
-            string output = key1 + @"<>" + key2;
+            var output = AcquiringIndexedFileSystemCacheBaseExtensions.CombineKey1Key2(key1, key2);
+            return output;
+        }
+
+        public static Tuple<string, string> SeparateKey1Key2(string combinedKey)
+        {
+            string[] keys = combinedKey.Split(new string[] { AcquiringIndexedFileSystemCacheBaseExtensions.StringCombinationSeparator }, StringSplitOptions.None);
+
+            var output = Tuple.Create(keys[0], keys[1]);
+            return output;
+        }
+
+        public static Tuple<string, string> SeparateKey1Key2<TValue>(this AcquiringIndexedFileSystemCacheBase<string, string, string, TValue> cache, string combinedKey)
+        {
+            var output = AcquiringIndexedFileSystemCacheBaseExtensions.SeparateKey1Key2(combinedKey);
             return output;
         }
     }
