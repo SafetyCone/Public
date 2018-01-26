@@ -2,7 +2,7 @@
 using System.IO;
 
 
-namespace Public.Common.Lib.Visuals
+namespace Public.Common.Lib.Visuals.IO.Serialization
 {
     /// <summary>
     /// Serializes RGB float images to binary files.

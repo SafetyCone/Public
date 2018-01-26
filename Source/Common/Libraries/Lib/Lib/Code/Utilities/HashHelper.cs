@@ -1,4 +1,7 @@
-﻿
+﻿using System.Collections.Generic;
+
+using Public.Common.Lib.Extensions;
+
 
 namespace Public.Common.Lib
 {
@@ -49,6 +52,14 @@ namespace Public.Common.Lib
 
                 return output;
             }
+        }
+
+        public static int GetHashCode<T>(IEnumerable<T> values)
+        {
+            int output = 0;
+            values.ForEach((x) => output ^= x.GetHashCode());
+
+            return output;
         }
 
         #endregion

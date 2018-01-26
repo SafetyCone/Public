@@ -4,24 +4,15 @@ using System.IO;
 
 using Public.Common.Lib.IO;
 using PathExtensions = Public.Common.Lib.IO.Extensions.PathExtensions;
-using PathUtilities = Public.Common.Lib.IO.Paths.Utilities;
 using Public.Common.Lib.IO.Serialization;
 
 
 namespace Public.Common.Lib
 {
-    /// <summary>
-    /// A file-system cache that lives within a directory, using an index file to map between key objects and files stored in a sub-directory.
-    /// </summary>
-    /// <remarks>
-    /// The single responsiblity of this class is to the manage the text index file, updating paths 
-    /// </remarks>
-    public class IndexedFileSystemCache<TKey, TValue> : Cache<string, string>, IPersistedCache<TKey, TValue>, IDisposable
+    public abstract class SimpleIndexedFileSystemCache : Cache<string, string>
     {
         #region Static
 
-        public static readonly string DefaultCachesDirectoryPath = PathUtilities.DefaultCachesDirectoryPath;
-        public static readonly string DefaultSessionName = @"Default";
         public static readonly string DefaultIndexFileName = @"Index.txt";
         public static readonly string DefaultFilesDirectoryName = @"Data";
         public static readonly string DefaultFilesExtension = FileExtensions.DataFileExtension;
@@ -73,32 +64,43 @@ namespace Public.Common.Lib
 
         public static Dictionary<string, string> ReadIndexFilePath(string indexFilePath)
         {
-            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFilePath(indexFilePath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator);
+            var output = SimpleIndexedFileSystemCache.ReadIndexFilePath(indexFilePath, SimpleIndexedFileSystemCache.DefaultIndexTokenSeparator);
             return output;
         }
 
         public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath, string indexFileName, string indexTokenSeparator)
         {
-            string indexFilePath = IndexedFileSystemCache<TKey, TValue>.GetIndexFilePath(cacheDirectoryPath, indexFileName);
+            string indexFilePath = SimpleIndexedFileSystemCache.GetIndexFilePath(cacheDirectoryPath, indexFileName);
 
-            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFilePath(indexFilePath, indexTokenSeparator);
+            var output = SimpleIndexedFileSystemCache.ReadIndexFilePath(indexFilePath, indexTokenSeparator);
             return output;
         }
 
         public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath, string indexTokenSeparator)
         {
-            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFile(cacheDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, indexTokenSeparator);
+            var output = SimpleIndexedFileSystemCache.ReadIndexFile(cacheDirectoryPath, SimpleIndexedFileSystemCache.DefaultIndexFileName, indexTokenSeparator);
             return output;
         }
 
         public static Dictionary<string, string> ReadIndexFile(string cacheDirectoryPath)
         {
-            var output = IndexedFileSystemCache<TKey, TValue>.ReadIndexFile(cacheDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator);
+            var output = SimpleIndexedFileSystemCache.ReadIndexFile(cacheDirectoryPath, SimpleIndexedFileSystemCache.DefaultIndexFileName, SimpleIndexedFileSystemCache.DefaultIndexTokenSeparator);
             return output;
         }
 
         #endregion
+    }
 
+
+
+    /// <summary>
+    /// A file-system cache that lives within a directory, using an index file to map between key objects and files stored in a sub-directory.
+    /// </summary>
+    /// <remarks>
+    /// The single responsiblity of this class is to the manage the text index file, updating paths 
+    /// </remarks>
+    public class SimpleIndexedFileSystemCache<TKey, TValue> : SimpleIndexedFileSystemCache, IPersistedCache<TKey, TValue>, IDisposable
+    {
         #region IDisposable
 
         private bool zDisposed = false;
@@ -127,7 +129,7 @@ namespace Public.Common.Lib
             this.zDisposed = true;
         }
 
-        ~IndexedFileSystemCache()
+        ~SimpleIndexedFileSystemCache()
         {
             this.Dispose(false);
         }
@@ -135,18 +137,18 @@ namespace Public.Common.Lib
         #endregion
 
 
-        public string DirectoryPath { get; private set; }
-        public string IndexFilePath { get; private set; }
-        public string FilesDirectoryPath { get; private set; }
+        public string DirectoryPath { get; }
+        public string IndexFilePath { get; }
+        public string FilesDirectoryPath { get; }
         /// <summary>
         /// Allow specifying the file extension of serialized cache files. This can make it easy to open these files in another program.
         /// </summary>
-        public string FilesExtension { get; private set; }
+        public string FilesExtension { get; }
         /// <summary>
         /// Allow using a different token separator if the string representation of TKey uses the default token separator.
         /// </summary>
-        public string IndexTokenSeparator { get; private set; }
-        public IFileSerializer<TValue> FileSerializer { get; private set; }
+        public string IndexTokenSeparator { get; }
+        public IFileSerializer<TValue> FileSerializer { get; }
         public TValue this[TKey key]
         {
             get
@@ -160,56 +162,41 @@ namespace Public.Common.Lib
         }
 
 
-        public IndexedFileSystemCache(IFileSerializer<TValue> fileSerializer)
-            : this(IndexedFileSystemCache<TKey, TValue>.DefaultCachesDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesDirectoryName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesExtension, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator,
-                  fileSerializer)
-        {
-        }
-
-        public IndexedFileSystemCache(CacheDirectoryPathBuilder cacheDirectoryPathBuilder, IFileSerializer<TValue> fileSerializer)
-            : this(cacheDirectoryPathBuilder.ToCacheDirectoryPath(),
-                  IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesDirectoryName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesExtension, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator,
-                  fileSerializer)
-        {
-        }
-
-        public IndexedFileSystemCache(CacheDirectoryPathBuilder cacheDirectoryPathBuilder, string cacheDirectoryName, IFileSerializer<TValue> fileSerializer)
-            : this(cacheDirectoryPathBuilder.ToCacheDirectoryPath(),
-                  IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesDirectoryName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesExtension, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator,
-                  fileSerializer)
-        {
-        }
-
-        public IndexedFileSystemCache(string directoryPath, string indexFileName, string filesDirectoryName, string filesExtension, string indexTokenSeparator, IFileSerializer<TValue> fileSerializer)
+        public SimpleIndexedFileSystemCache(string directoryPath, string indexFileName, string filesDirectoryName, string filesExtension, string indexTokenSeparator, IFileSerializer<TValue> fileSerializer)
         {
             this.FilesExtension = filesExtension;
             this.IndexTokenSeparator = indexTokenSeparator;
             this.FileSerializer = fileSerializer;
 
             this.DirectoryPath = directoryPath;
-            if(!Directory.Exists(this.DirectoryPath))
+            if (!Directory.Exists(this.DirectoryPath))
             {
                 Directory.CreateDirectory(this.DirectoryPath);
             }
 
-            this.IndexFilePath = IndexedFileSystemCache<TKey, TValue>.GetIndexFilePath(this.DirectoryPath, indexFileName);
-            if(File.Exists(this.IndexFilePath))
+            this.IndexFilePath = SimpleIndexedFileSystemCache.GetIndexFilePath(this.DirectoryPath, indexFileName);
+            if (File.Exists(this.IndexFilePath))
             {
                 this.ReadIndexFile();
             }
 
-            this.FilesDirectoryPath = IndexedFileSystemCache<TKey, TValue>.GetFilesDirectoryPath(this.DirectoryPath, filesDirectoryName);
+            this.FilesDirectoryPath = SimpleIndexedFileSystemCache.GetFilesDirectoryPath(this.DirectoryPath, filesDirectoryName);
             if (!Directory.Exists(this.FilesDirectoryPath))
             {
                 Directory.CreateDirectory(this.FilesDirectoryPath);
             }
         }
 
+        public SimpleIndexedFileSystemCache(string directoryPath, IFileSerializer<TValue> fileSerializer)
+            : this(directoryPath, SimpleIndexedFileSystemCache.DefaultIndexFileName, SimpleIndexedFileSystemCache.DefaultFilesDirectoryName, SimpleIndexedFileSystemCache.DefaultFilesExtension, SimpleIndexedFileSystemCache.DefaultIndexTokenSeparator, fileSerializer)
+        {
+        }
+
         private void ReadIndexFile()
         {
             using (StreamReader reader = new StreamReader(this.IndexFilePath))
             {
-                string[] separators = new string[] { this.IndexTokenSeparator};
+                string[] separators = new string[] { this.IndexTokenSeparator };
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
@@ -248,7 +235,7 @@ namespace Public.Common.Lib
         public void Add(TKey key, TValue value, bool forceReplace = false)
         {
             string keyToken = this.KeyToKeyToken(key);
-            if(this.ContainsKey(keyToken))
+            if (this.ContainsKey(keyToken))
             {
                 if (forceReplace)
                 {
@@ -261,7 +248,7 @@ namespace Public.Common.Lib
                 }
             }
 
-            string filePath = IndexedFileSystemCache<TKey, TValue>.GetNewFilePath(this.FilesDirectoryPath, this.FilesExtension);
+            string filePath = SimpleIndexedFileSystemCache.GetNewFilePath(this.FilesDirectoryPath, this.FilesExtension);
 
             this.FileSerializer[filePath] = value;
 
@@ -284,7 +271,7 @@ namespace Public.Common.Lib
         public void Remove(TKey key)
         {
             string keyToken = this.KeyToKeyToken(key);
-            if(this.ContainsKey(keyToken))
+            if (this.ContainsKey(keyToken))
             {
                 string filePath = this[keyToken];
                 File.Delete(filePath);

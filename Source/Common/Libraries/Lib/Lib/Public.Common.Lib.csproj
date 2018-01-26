@@ -47,9 +47,12 @@
     <Compile Include="Code\Caches\Classes\Base Classes\CacheBase.cs" />
     <Compile Include="Code\Caches\Classes\CacheDirectoryPathBuilder.cs" />
     <Compile Include="Code\Caches\Classes\IndexedFileSystemCache.cs" />
+    <Compile Include="Code\Caches\Classes\SimpleIndexedFileSystemCache.cs" />
     <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
     <Compile Include="Code\Caches\Interfaces\ICache.cs" />
     <Compile Include="Code\Caches\Interfaces\IPersistedCache.cs" />
+    <Compile Include="Code\Extensions\IEnumerable.cs" />
+    <Compile Include="Code\Extensions\ReferenceTypes.cs" />
     <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
     <Compile Include="Code\Extensions\System.Array.cs" />
   </ItemGroup>

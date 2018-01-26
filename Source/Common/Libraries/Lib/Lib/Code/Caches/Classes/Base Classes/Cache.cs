@@ -5,12 +5,12 @@ namespace Public.Common.Lib
 {
     public class Cache<TKey, TValue> : ICache<TKey, TValue>
     {
-        protected Dictionary<TKey, TValue> zValuesByKey = new Dictionary<TKey, TValue>();
+        protected Dictionary<TKey, TValue> ValuesByKey = new Dictionary<TKey, TValue>();
         public TValue this[TKey key]
         {
             get
             {
-                TValue output = this.zValuesByKey[key];
+                TValue output = this.ValuesByKey[key];
                 return output;
             }
         }
@@ -24,28 +24,28 @@ namespace Public.Common.Lib
                 this.Remove(key);
             }
 
-            this.zValuesByKey.Add(key, value);
+            this.ValuesByKey.Add(key, value);
         }
 
         public void Clear()
         {
-            this.zValuesByKey.Clear();
+            this.ValuesByKey.Clear();
         }
 
         public bool ContainsKey(TKey key)
         {
-            bool output = this.zValuesByKey.ContainsKey(key);
+            bool output = this.ValuesByKey.ContainsKey(key);
             return output;
         }
 
         public void Remove(TKey key)
         {
-            this.zValuesByKey.Remove(key);
+            this.ValuesByKey.Remove(key);
         }
 
         public TValue GetValue(TKey key)
         {
-            TValue output = this.zValuesByKey[key];
+            TValue output = this.ValuesByKey[key];
             return output;
         }
     }

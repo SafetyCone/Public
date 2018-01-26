@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 
@@ -94,25 +92,6 @@ namespace Public.Common.Lib.Visuals
         {
             bool output = BitmapFile.IsBitmapFile(buffer, false);
             return output;
-        }
-
-        public static Bitmap ConvertToMSBitmap(BitmapFile file)
-        {
-            int widthX = file.Header.DIBHeader.WidthX;
-            int heightY = file.Header.DIBHeader.HeightY;
-
-            Bitmap bitmap = new Bitmap(widthX, heightY, PixelFormat.Format24bppRgb);
-            for (int iRow = 0; iRow < heightY; iRow++)
-            {
-                for (int iCol = 0; iCol < widthX; iCol++)
-                {
-                    RgbColorByte rgbColor = file[iRow, iCol];
-                    Color color = ColorConversion.RgbToColor(rgbColor);
-                    bitmap.SetPixel(iCol, iRow, color);
-                }
-            }
-
-            return bitmap;
         }
 
         #endregion

@@ -4,7 +4,7 @@ using System.IO;
 using Public.Common.Lib.IO.Serialization;
 
 
-namespace Public.Common.Lib.Visuals
+namespace Public.Common.Lib.Visuals.IO.Serialization
 {
     public class RgbByteImageBinarySerializer : IFileSerializer<RgbByteImage>
     {

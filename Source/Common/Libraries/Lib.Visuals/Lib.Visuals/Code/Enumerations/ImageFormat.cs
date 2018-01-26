@@ -21,10 +21,14 @@ namespace Public.Common.Lib.Visuals
         public static string BitmapDescription { get => ImageFormatExtensions.zBitmapDescription; }
         private const string zBinaryDataDescription = @"Data";
         public static string BinaryDataDescription { get => ImageFormatExtensions.zBinaryDataDescription; }
+        private const string zGifDescription = @"GIF";
+        public static string GifDescription { get => ImageFormatExtensions.zGifDescription; }
         private const string zJpegDescription = @"JPEG";
         public static string JpegDescription { get => ImageFormatExtensions.zJpegDescription; }
         private const string zPngDescription = @"PNG";
         public static string PngDescription { get => ImageFormatExtensions.zPngDescription; }
+        private const string zTiffDescription = @"TIFF";
+        public static string TiffDescription { get => ImageFormatExtensions.zTiffDescription; }
 
 
         public static string ToDescriptionString(this ImageFormat imageFormat)
@@ -40,12 +44,20 @@ namespace Public.Common.Lib.Visuals
                     output = ImageFormatExtensions.zBinaryDataDescription;
                     break;
 
+                case ImageFormat.Gif:
+                    output = ImageFormatExtensions.zGifDescription;
+                    break;
+
                 case ImageFormat.Jpg:
                     output = ImageFormatExtensions.zJpegDescription;
                     break;
 
                 case ImageFormat.Png:
                     output = ImageFormatExtensions.zPngDescription;
+                    break;
+
+                case ImageFormat.Tiff:
+                    output = ImageFormatExtensions.zTiffDescription;
                     break;
 
                 default:
@@ -78,12 +90,20 @@ namespace Public.Common.Lib.Visuals
                     value = ImageFormat.Dat;
                     break;
 
+                case ImageFormatExtensions.zGifDescription:
+                    value = ImageFormat.Dat;
+                    break;
+
                 case ImageFormatExtensions.zJpegDescription:
                     value = ImageFormat.Jpg;
                     break;
 
                 case ImageFormatExtensions.zPngDescription:
                     value = ImageFormat.Png;
+                    break;
+
+                case ImageFormatExtensions.zTiffDescription:
+                    value = ImageFormat.Tiff;
                     break;
 
                 default:
