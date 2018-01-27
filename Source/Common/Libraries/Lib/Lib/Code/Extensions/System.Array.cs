@@ -23,5 +23,24 @@ namespace Public.Common.Lib.Extensions
             Type output = array.GetType().GetElementType();
             return output;
         }
+
+        public static void OnEach<T>(this T[] source, Func<T, T> function)
+        {
+            int numberOfElements = source.Length;
+            for (int iElement = 0; iElement < numberOfElements; iElement++)
+            {
+                source[iElement] = function(source[iElement]);
+            }
+        }
+
+        public static T[] Copy<T>(this T[] source)
+        {
+            int numberOfElements = source.Length;
+
+            T[] output = new T[numberOfElements];
+            Array.Copy(source, output, numberOfElements);
+
+            return output;
+        }
     }
 }

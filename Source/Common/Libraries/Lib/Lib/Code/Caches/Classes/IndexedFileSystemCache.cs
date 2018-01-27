@@ -16,7 +16,7 @@ namespace Public.Common.Lib
     /// <remarks>
     /// The single responsiblity of this class is to the manage the text index file, updating paths 
     /// </remarks>
-    public class IndexedFileSystemCache<TKey, TValue> : Cache<string, string>, IPersistedCache<TKey, TValue>, IDisposable
+    public class IndexedFileSystemCache<TKey, TValue> : Cache<string, string>, IPersisted, ICache<TKey, TValue>, IDisposable
     {
         #region Static
 

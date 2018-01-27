@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-
-//using PathExtensions = Public.Common.Lib.IO.Extensions.PathExtensions;
 
 
 namespace Bullworth
@@ -115,9 +112,11 @@ namespace Bullworth
             }
 
             // Create the list of replace codes.
-            var replaceCodes = new List<Tuple<string, string>>();
-            replaceCodes.Add(Tuple.Create(@"$(Architecture)", sourceArchitectureDirectoryName));
-            replaceCodes.Add(Tuple.Create(@"$(Configuration)", sourceConfigurationDirectoryName));
+            var replaceCodes = new List<Tuple<string, string>>
+            {
+                Tuple.Create(@"$(Architecture)", sourceArchitectureDirectoryName),
+                Tuple.Create(@"$(Configuration)", sourceConfigurationDirectoryName)
+            };
 
             if (!File.Exists(inputFilePath))
             {
