@@ -13,6 +13,7 @@ namespace Public.Common.Lib.Visuals
         public const float MaxChannelValue = 1.0f;
         public const float MinChannelValue = 0.0f;
         public const int NumberOfRgbColorChannels = 3;
+        public const float ByteMax = 255.0f;
 
 
         #region Static

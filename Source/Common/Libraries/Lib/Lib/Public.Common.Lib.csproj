@@ -51,7 +51,8 @@
     <Compile Include="Code\Caches\DataFileCache.cs" />
     <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
     <Compile Include="Code\Caches\Interfaces\ICache.cs" />
-    <Compile Include="Code\Extensions\IEnumerable.cs" />
+    <Compile Include="Code\Classes\Selector.cs" />
+    <Compile Include="Code\Extensions\System.Collections.Generic.IEnumerable.cs" />
     <Compile Include="Code\Extensions\ReferenceTypes.cs" />
     <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
     <Compile Include="Code\Extensions\System.Array.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Code\Interfaces\ICloneable.cs" />
     <Compile Include="Code\Interfaces\IDeepCloneable.cs" />
     <Compile Include="Code\Interfaces\IPersisted.cs" />
+    <Compile Include="Code\Interfaces\ISelector.cs" />
     <Compile Include="Code\Interfaces\IShallowClone.cs" />
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />

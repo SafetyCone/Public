@@ -17,6 +17,10 @@ namespace Public.Common.Lib.Visuals.MSWindows
 
         #region Static
 
+        public static SysImageFormat DefaultImageFormat { get; } = SysImageFormat.Jpeg;
+        public static string DefaultImageFileExtension { get; } = FileExtensions.JpgFileExtension;
+
+
         public static SysImageFormat DetermineImageFormatFromFileExtension(string filePath)
         {
             SysImageFormat output;

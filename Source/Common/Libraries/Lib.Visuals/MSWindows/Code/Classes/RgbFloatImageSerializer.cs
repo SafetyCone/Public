@@ -11,20 +11,20 @@ namespace Public.Common.Lib.Visuals.MSWindows
     /// <summary>
     /// De/serializes RGB byte images to/from all formats supported by the MS Windows Bitmap object.
     /// </summary>
-    public class RgbByteImageSerializer : IInstrumentedFileSerializer<RgbByteImage>
+    public class RgbFloatImageSerializer : IInstrumentedFileSerializer<RgbFloatImage>
     {
         #region Static
 
-        public static RgbByteImage Deserialize(string filePath, LoggingTiming loggingTimimg = default(LoggingTiming))
+        public static RgbFloatImage Deserialize(string filePath, LoggingTiming loggingTimimg = default(LoggingTiming))
         {
             // Ensure we have a logger. From a static context, use the session log.
             var logger = Loggers.GetLoggerOrDefault(loggingTimimg.SessionLogger);
 
             // Timing node.
-            var deserialize = StopwatchTimingNode.GetList($@"Deserialize RGB Byte Image: {filePath}", loggingTimimg.TimingNode);
+            var deserialize = StopwatchTimingNode.GetList($@"Deserialize RGB Float Image: {filePath}", loggingTimimg.TimingNode);
 
             // Load the bitmap.
-            logger.Info($@"Deserializing to RGB Byte Image: {filePath}...");
+            logger.Info($@"Deserializing to RGB Float Image: {filePath}...");
 
             var loadBitmap = StopwatchTimingNode.GetLeaf(@"Load image.", deserialize);
 
@@ -34,24 +34,24 @@ namespace Public.Common.Lib.Visuals.MSWindows
             LoggingUtilities.LogDuration(logger, loadBitmap, Level.Info, $@"Loaded image. Size: rows (height): {bitmap.Height.ToString()}, rolumns (width): {bitmap.Width.ToString()}.");
 
             // Create the output.
-            logger.Info(@"Creating RGB Byte Image...");
+            logger.Info(@"Creating RGB Float Image...");
 
-            var createRgbByteImage = StopwatchTimingNode.GetLeaf(@"Create RGB Byte Image.", deserialize);
+            var createRgbFloatImage = StopwatchTimingNode.GetLeaf(@"Create RGB Float Image.", deserialize);
 
-            RgbByteImage output = BitmapConverter.ToRgbByteImage(bitmap);
+            RgbFloatImage output = BitmapConverter.ToRgbFloatImage(bitmap);
 
-            createRgbByteImage.Stop();
+            createRgbFloatImage.Stop();
 
-            LoggingUtilities.LogDuration(logger, createRgbByteImage, Level.Info, @"Created RGB byte image.");
+            LoggingUtilities.LogDuration(logger, createRgbFloatImage, Level.Info, @"Created RGB Float image.");
 
             deserialize.Stop();
 
-            LoggingUtilities.LogDuration(logger, deserialize, Level.Info, $@"Deserialized RGB byte image: {filePath}");
+            LoggingUtilities.LogDuration(logger, deserialize, Level.Info, $@"Deserialized RGB Float image: {filePath}");
 
             return output;
         }
 
-        public static void Serialize(string filePath, RgbByteImage image, LoggingTiming logggingTimimg = default(LoggingTiming), bool overwrite = true)
+        public static void Serialize(string filePath, RgbFloatImage image, LoggingTiming logggingTimimg = default(LoggingTiming), bool overwrite = true)
         {
             int rows = image.Rows;
             int columns = image.Columns;
@@ -70,30 +70,30 @@ namespace Public.Common.Lib.Visuals.MSWindows
         private ILogger Logger { get; }
 
 
-        public RgbByteImageSerializer(ILogger logger)
+        public RgbFloatImageSerializer(ILogger logger)
         {
             this.Logger = logger;
 
-            this.Logger.Info($@"Created new {nameof(RgbByteImageSerializer)}");
+            this.Logger.Info($@"Created new {nameof(RgbFloatImageSerializer)}");
         }
 
-        public RgbByteImageSerializer()
-            :this(Loggers.GetDefaultLogger())
+        public RgbFloatImageSerializer()
+            : this(Loggers.GetDefaultLogger())
         {
         }
 
-        public RgbByteImage this[string filePath, LoggingTiming loggingTiming = default(LoggingTiming), bool overwrite = true]
+        public RgbFloatImage this[string filePath, LoggingTiming loggingTiming = default(LoggingTiming), bool overwrite = true]
         {
             get
             {
                 string endMessage = $@"Deserialized {filePath}";
-                RgbByteImage output = LoggingUtilities.FunctionLogDuration(this.Logger, () => RgbByteImageSerializer.Deserialize(filePath, loggingTiming), Level.Info, endMessage);
+                RgbFloatImage output = LoggingUtilities.FunctionLogDuration(this.Logger, () => RgbFloatImageSerializer.Deserialize(filePath, loggingTiming), Level.Info, endMessage);
                 return output;
             }
             set
             {
                 string endMessage = $@"Serialized {filePath}";
-                LoggingUtilities.ActionLogDuration(this.Logger, () => RgbByteImageSerializer.Serialize(filePath, value, loggingTiming, overwrite), Level.Info, endMessage);
+                LoggingUtilities.ActionLogDuration(this.Logger, () => RgbFloatImageSerializer.Serialize(filePath, value, loggingTiming, overwrite), Level.Info, endMessage);
             }
         }
     }

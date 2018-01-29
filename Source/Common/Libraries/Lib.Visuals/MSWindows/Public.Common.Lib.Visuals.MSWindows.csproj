@@ -43,11 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Classes\BitmapConverter.cs" />
     <Compile Include="Code\Classes\BitmapLocker.cs" />
     <Compile Include="Code\Classes\ColorConversion.cs" />
     <Compile Include="Code\Classes\FileExtensions.cs" />
+    <Compile Include="Code\Classes\RgbFloatImageSerializer.cs" />
+    <Compile Include="Code\Programs\WindowsPhotoViewer.cs" />
     <Compile Include="Code\Classes\RgbByteImageSerializer.cs" />
     <Compile Include="Code\Extensions\BitmapFile.cs" />
+    <Compile Include="Code\Extensions\Public.Common.Lib.Visuals.RgbByteImage.cs" />
     <Compile Include="Code\Windows Forms\BindableToolStripStatusLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -55,7 +59,9 @@
     <Compile Include="Code\Windows Forms\PropertyNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.Drawing.Imaging.PixelFormat.cs" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
       <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
@@ -65,6 +71,12 @@
       <Project>{d28cae43-a1e4-4396-bb65-12c19ddbe764}</Project>
       <Name>Public.Common.Lib.Visuals</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Extensions\Public.Common.Lib.Visuals.RgbFloatImage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.Drawing.Bitmap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
