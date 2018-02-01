@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.Construction.VS2017", "Construction\Public.Common.Lib.Construction.VS2017.csproj", "{E5653F0E-29B5-4528-8B71-67912B2DD94E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2017", "Lib\Public.Common.Lib.VS2017.csproj", "{B76FF3DB-E7EC-4B04-A51A-2958EA072645}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.Common.Lib.VS2017", "Lib\Public.Common.Lib.csproj", "{B76FF3DB-E7EC-4B04-A51A-2958EA072645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

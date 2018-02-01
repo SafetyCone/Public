@@ -240,6 +240,11 @@ namespace Public.Common.Lib
         {
         }
 
+        public SimpleIndexedFileSystemCache(string directoryPath, IFileSerializer<TValue> fileSerializer, string filesExtension)
+            : this(directoryPath, SimpleIndexedFileSystemCache.DefaultIndexFileName, SimpleIndexedFileSystemCache.DefaultFilesDirectoryName, filesExtension, SimpleIndexedFileSystemCache.DefaultIndexTokenSeparator, fileSerializer)
+        {
+        }
+
         /// <summary>
         /// Allow overriding TKey key to string key token conversion. Default is ToString().
         /// </summary>

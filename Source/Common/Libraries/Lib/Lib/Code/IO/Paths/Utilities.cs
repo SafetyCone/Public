@@ -7,6 +7,10 @@ namespace Public.Common.Lib.IO.Paths
 {
     public static class Utilities
     {
+        // Also placed here for convenience.
+        public const char WindowsFileExtensionSeparatorChar = Public.Common.Lib.IO.Extensions.PathExtensions.WindowsFileExtensionSeparatorChar;
+
+
         /// <summary>
         /// Allow changing the default directory path used for all caches.
         /// </summary>

@@ -9,7 +9,7 @@ namespace Public.Common.Lib.IO.Serialization
     /// <remarks>
     /// The details of what file format (BinaryFormatter, custom binary format, XML, text, etc.) are left unspecified.
     /// </remarks>
-    public interface IInstrumentedFileSerializer<T>
+    public interface IInstrumentedFileSerializer<T> : IFileSerializer<T>
     {
         /// <summary>
         /// De/serializes an object to a file.
@@ -25,7 +25,7 @@ namespace Public.Common.Lib.IO.Serialization
         /// 
         /// Note to implementors: You are encourage to have this indexer property call static methods Deserialize()/Serialize().
         /// </remarks>
-        T this[string filePath, LoggingTiming loggingTiming = default(LoggingTiming), bool overwrite = true] { get; set; }
+        T this[string filePath, LoggingTiming loggingTiming, bool overwrite = true] { get; set; }
     }
 
 

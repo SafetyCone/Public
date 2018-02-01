@@ -6,6 +6,7 @@ namespace Public.Common.Lib.Construction
     {
         static void Main(string[] args)
         {
+            //Public.Common.Lib.IO.Serialization.b
         }
     }
 }
