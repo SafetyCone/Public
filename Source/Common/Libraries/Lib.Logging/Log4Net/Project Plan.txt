@@ -1,0 +1,3 @@
+﻿Public.Common.Lib.Logging.Log4Net
+
+This library implents the Public.Common.Lib.Logging framework using Log4net.

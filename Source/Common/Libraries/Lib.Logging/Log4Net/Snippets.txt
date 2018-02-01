@@ -1,0 +1,31 @@
+﻿switch(level)
+{
+    case Level.Info:
+
+        break;
+
+    case Level.Debug:
+
+        break;
+
+    case Level.Warn:
+
+        break;
+
+    case Level.Error:
+
+        break;
+
+    case Level.Fatal:
+
+        break;
+
+    case Level.All:
+
+        break;
+
+    case Level.Off:
+    default:
+
+        break;
+}

@@ -1,0 +1,5 @@
+﻿Public.Common.Lib.Logging
+
+The library contains a high-level logging framework.
+
+A high-level logging framework orchestrates multiple logs.

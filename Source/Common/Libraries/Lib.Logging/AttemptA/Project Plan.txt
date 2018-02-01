@@ -1,0 +1,5 @@
+﻿Public.Common.Lib.Logging.AttemptA
+
+This is an attempt to create my own log-level logging framework.
+
+A low level logging framework handles the dispatch of log entries between loggers and sinks.
