@@ -3,7 +3,7 @@
 
 namespace Public.Common.Lib.Visuals
 {
-    public class ImageConverter
+    public class ImageConverter : IRgbByteToRgbFloatImageConverter
     {
         #region Static
 
@@ -28,5 +28,8 @@ namespace Public.Common.Lib.Visuals
         }
 
         #endregion
+
+
+        public RgbFloatImage this[RgbByteImage byteImage] => ImageConverter.ToRgbFloatImage(byteImage);
     }
 }

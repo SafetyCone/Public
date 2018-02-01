@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 
-using Public.Common.Lib.IO.Serialization;
 using Public.Common.Lib.Logging;
 using LoggingUtilities = Public.Common.Lib.Logging.Utilities;
+using Public.Common.Lib.Visuals.IO.Serialization;
 
 
 namespace Public.Common.Lib.Visuals.MSWindows
@@ -11,7 +11,7 @@ namespace Public.Common.Lib.Visuals.MSWindows
     /// <summary>
     /// De/serializes RGB byte images to/from all formats supported by the MS Windows Bitmap object.
     /// </summary>
-    public class RgbByteImageSerializer : IInstrumentedFileSerializer<RgbByteImage>
+    public class RgbByteImageExternalFormatSerializer : IRgbByteImageExternalFormatSerializer
     {
         #region Static
 
@@ -68,32 +68,46 @@ namespace Public.Common.Lib.Visuals.MSWindows
 
 
         private ILogger Logger { get; }
+        public ImageFormat[] SupportedExternalFormats => new ImageFormat[] { ImageFormat.Bmp, ImageFormat.Gif, ImageFormat.Jpg, ImageFormat.Png, ImageFormat.Tiff };
 
 
-        public RgbByteImageSerializer(ILogger logger)
+        public RgbByteImageExternalFormatSerializer(ILogger logger)
         {
             this.Logger = logger;
 
-            this.Logger.Info($@"Created new {nameof(RgbByteImageSerializer)}");
+            this.Logger.Info($@"Created new {nameof(RgbByteImageExternalFormatSerializer)}");
         }
 
-        public RgbByteImageSerializer()
+        public RgbByteImageExternalFormatSerializer()
             :this(Loggers.GetDefaultLogger())
         {
         }
 
-        public RgbByteImage this[string filePath, LoggingTiming loggingTiming = default(LoggingTiming), bool overwrite = true]
+        public RgbByteImage this[string filePath, bool overwrite = true]
+        {
+            get
+            {
+                RgbByteImage output = this[filePath, default(LoggingTiming), overwrite];
+                return output;
+            }
+            set
+            {
+                this[filePath, default(LoggingTiming), overwrite] = value;
+            }
+        }
+
+        public RgbByteImage this[string filePath, LoggingTiming loggingTiming, bool overwrite = true]
         {
             get
             {
                 string endMessage = $@"Deserialized {filePath}";
-                RgbByteImage output = LoggingUtilities.FunctionLogDuration(this.Logger, () => RgbByteImageSerializer.Deserialize(filePath, loggingTiming), Level.Info, endMessage);
+                RgbByteImage output = LoggingUtilities.FunctionLogDuration(this.Logger, () => RgbByteImageExternalFormatSerializer.Deserialize(filePath, loggingTiming), Level.Info, endMessage);
                 return output;
             }
             set
             {
                 string endMessage = $@"Serialized {filePath}";
-                LoggingUtilities.ActionLogDuration(this.Logger, () => RgbByteImageSerializer.Serialize(filePath, value, loggingTiming, overwrite), Level.Info, endMessage);
+                LoggingUtilities.ActionLogDuration(this.Logger, () => RgbByteImageExternalFormatSerializer.Serialize(filePath, value, loggingTiming, overwrite), Level.Info, endMessage);
             }
         }
     }

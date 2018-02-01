@@ -1,24 +1,17 @@
 ﻿using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 
 using Public.Common.Lib.IO.Extensions;
+using VisualFileExtensions = Public.Common.Lib.Visuals.IO.FileExtensions;
 
 
 namespace Public.Common.Lib.Visuals.MSWindows
 {
     public static class FileExtensions
     {
-        public const string BitmapFileExtension = @"bmp";
-        public const string GifFileExtension = @"gif";
-        public const string JpgFileExtension = @"jpg";
-        public const string JpegFileExtension = @"jpeg";
-        public const string TifFileExtension = @"tif";
-        public const string TiffFileExtension = @"tiff";
-
-
         #region Static
 
         public static SysImageFormat DefaultImageFormat { get; } = SysImageFormat.Jpeg;
-        public static string DefaultImageFileExtension { get; } = FileExtensions.JpgFileExtension;
+        public static string DefaultImageFileExtension { get; } = VisualFileExtensions.JpgFileExtension;
 
 
         public static SysImageFormat DetermineImageFormatFromFileExtension(string filePath)
@@ -28,21 +21,21 @@ namespace Public.Common.Lib.Visuals.MSWindows
             string extension = PathExtensions.GetExtensionOnly(filePath).ToLowerInvariant();
             switch(extension)
             {
-                case FileExtensions.BitmapFileExtension:
+                case VisualFileExtensions.BitmapFileExtension:
                     output = SysImageFormat.Bmp;
                     break;
 
-                case FileExtensions.GifFileExtension:
+                case VisualFileExtensions.GifFileExtension:
                     output = SysImageFormat.Gif;
                     break;
 
-                case FileExtensions.JpegFileExtension:
-                case FileExtensions.JpgFileExtension:
+                case VisualFileExtensions.JpegFileExtension:
+                case VisualFileExtensions.JpgFileExtension:
                     output = SysImageFormat.Jpeg;
                     break;
 
-                case FileExtensions.TiffFileExtension:
-                case FileExtensions.TifFileExtension:
+                case VisualFileExtensions.TiffFileExtension:
+                case VisualFileExtensions.TifFileExtension:
                     output = SysImageFormat.Tiff;
                     break;
 

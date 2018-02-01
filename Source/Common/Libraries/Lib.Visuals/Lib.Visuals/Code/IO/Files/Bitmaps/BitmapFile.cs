@@ -4,6 +4,7 @@ using System.Text;
 
 using Public.Common.Lib.IO;
 using Public.Common.Lib.IO.Extensions;
+using VisualFileExtensions = Public.Common.Lib.Visuals.IO.FileExtensions;
 using RgbColorByte = Public.Common.Lib.Visuals.RgbColor<byte>;
 
 
@@ -21,7 +22,7 @@ namespace Public.Common.Lib.Visuals
         /// </summary>
         public static bool IsBitmapFilePath(string filePath)
         {
-            bool output = PathExtensions.HasExtension(filePath, FileExtensions.BitmapFileExtension);
+            bool output = PathExtensions.HasExtension(filePath, VisualFileExtensions.BitmapFileExtension);
             return output;
         }
 
@@ -30,7 +31,7 @@ namespace Public.Common.Lib.Visuals
         /// </summary>
         public static bool IsBitmapFileName(string fileName)
         {
-            bool output = PathExtensions.HasExtension(fileName, FileExtensions.BitmapFileExtension);
+            bool output = PathExtensions.HasExtension(fileName, VisualFileExtensions.BitmapFileExtension);
             return output;
         }
 

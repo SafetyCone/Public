@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Public.Common.Lib.Extensions;
+
 
 namespace Public.Common.Lib.Visuals
 {
@@ -156,6 +158,13 @@ namespace Public.Common.Lib.Visuals
             this.Rows = rows_height_y;
             this.Columns = columns_width_x;
             this.Data = data;
+        }
+
+        public RgbByteImage(RgbByteImage other)
+        {
+            this.Rows = other.Rows;
+            this.Columns = other.Columns;
+            this.Data = other.Data.Copy();
         }
 
         private void SetInternals(int rows_height_y, int columns_width_x)
