@@ -222,8 +222,7 @@ namespace Public.Common.MATLAB
 
         public object GetData(string variableName, string workspaceName)
         {
-            object output;
-            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out output);
+            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out object output);
 
             return output;
         }
@@ -282,8 +281,7 @@ namespace Public.Common.MATLAB
 
         public double[] GetRealVector(string variableName, string workspaceName)
         {
-            object vectorAsObject;
-            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out vectorAsObject);
+            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out object vectorAsObject);
 
             double[,] vectorAsMatrix = vectorAsObject as double[,];
             if (null == vectorAsMatrix)
@@ -407,8 +405,7 @@ namespace Public.Common.MATLAB
 
         public double[,] GetRealMatrix(string variableName, string workspaceName)
         {
-            object vectorAsObject;
-            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out vectorAsObject);
+            this.MlApplication.GetWorkspaceData(variableName, workspaceName, out object vectorAsObject);
 
             double[,] vectorAsMatrix = vectorAsObject as double[,];
             if (null == vectorAsMatrix)

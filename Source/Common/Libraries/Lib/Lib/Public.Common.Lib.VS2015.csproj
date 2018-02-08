@@ -53,7 +53,7 @@
     <Compile Include="Code\Extensions\System.String.cs" />
     <Compile Include="Code\Interfaces\ICloneable.cs" />
     <Compile Include="Code\Interfaces\IDeepCloneable.cs" />
-    <Compile Include="Code\Interfaces\ShallowClone.cs" />
+    <Compile Include="Code\Interfaces\IShallowClone.cs" />
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\ConsoleOutputStream.cs" />
