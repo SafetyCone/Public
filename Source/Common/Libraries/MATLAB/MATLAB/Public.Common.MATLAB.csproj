@@ -50,17 +50,21 @@
     <Compile Include="Code\Classes\MatlabException.cs" />
     <Compile Include="Code\Functions.cs" />
     <Compile Include="Code\Interfaces\IHandle.cs" />
+    <Compile Include="Code\Matlab.cs" />
     <Compile Include="Code\MatlabApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
-      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
-      <Name>Public.Common.Lib.VS2017</Name>
-    </ProjectReference>
+    <Content Include="M-Files\escapeAllCharacters.m" />
+    <Content Include="M-Files\escapeAllSpecialCharacters.m" />
+    <Content Include="M-Files\filePathsByExtension.m" />
+    <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Project Plan.txt" />
+    <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
+      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
+      <Name>Public.Common.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

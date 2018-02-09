@@ -1,4 +1,5 @@
 ﻿using System;
+
 using ML = MLApp;
 
 using Public.Common.Lib.Extensions;
@@ -38,7 +39,7 @@ namespace Public.Common.MATLAB
 
         public static void Stop()
         {
-            if(null != MatlabApplication.zInstance)
+            if (null != MatlabApplication.zInstance)
             {
                 MatlabApplication.zInstance.Dispose();
 
@@ -185,18 +186,10 @@ namespace Public.Common.MATLAB
             this.WindowMaximized = maximized;
         }
 
-        ///// <summary>
-        ///// Adds a path to the MATLAB search path at the top of the search path list.
-        ///// </summary>
-        //public void AddPathTop(string path)
-        //{
-
-        //}
-
         public string Execute(string command, bool throwOnError)
         {
             string output = this.MlApplication.Execute(command);
-            if(null != output && String.Empty != output && output.Substring(0, MatlabApplication.ErrorIndicatorLength) == MatlabApplication.ErrorIndicator && throwOnError)
+            if (null != output && String.Empty != output && output.Substring(0, MatlabApplication.ErrorIndicatorLength) == MatlabApplication.ErrorIndicator && throwOnError)
             {
                 throw new MatlabException(output);
             }
@@ -419,6 +412,153 @@ namespace Public.Common.MATLAB
         public double[,] GetRealMatrix(string variableName)
         {
             double[,] output = this.GetRealMatrix(variableName, MatlabApplication.BaseWorkspaceName);
+            return output;
+        }
+    }
+}
+
+
+namespace Public.Common.MATLAB.Commands
+{
+    public static class MatlabApplicationExtensions
+    {
+        private static string NotFound = @"not found";
+
+
+        public static void AddPath(this MatlabApplication matlabApplication, string path)
+        {
+            matlabApplication.AddPathToTop(path);
+        }
+
+        public static void AddPathToTop(this MatlabApplication matlabApplication, string path)
+        {
+            matlabApplication.Path(path);
+        }
+
+        public static string CurrentDirectory(this MatlabApplication matlabApplication)
+        {
+            string command = $@"{Matlab.AnswerVariableName} = cd;";
+            matlabApplication.Execute(command);
+
+            string currentDirectory = matlabApplication.GetString(Matlab.AnswerVariableName);
+            return currentDirectory;
+        }
+
+        public static void CurrentDirectory(this MatlabApplication matlabApplication, string directoryPath)
+        {
+            string command = $@"cd('{directoryPath}');";
+            matlabApplication.Execute(command);
+        }
+
+        public static void ChangeCurrentDirectory(this MatlabApplication matlabApplication, string directoryPath)
+        {
+            matlabApplication.CurrentDirectory(directoryPath);
+        }
+
+        public static bool IsAvailable(this MatlabApplication matlabApplication, string item)
+        {
+            string whichFirstOnly = matlabApplication.WhichFirstOnly(item);
+
+            bool output = !whichFirstOnly.Contains(MatlabApplicationExtensions.NotFound);
+            return output;
+        }
+
+        public static string[] Path(this MatlabApplication matlabApplication)
+        {
+            string command = $@"{Matlab.AnswerVariableName} = path;";
+            matlabApplication.Execute(command);
+
+            string pathConcatenated = matlabApplication.GetString(Matlab.AnswerVariableName);
+
+            string[] output = pathConcatenated.Split(';');
+            return output;
+        }
+
+        /// <summary>
+        /// Adds a path to the top of the MATLAB search path.
+        /// </summary>
+        public static void Path(this MatlabApplication matlabApplication, string path)
+        {
+            string command = $@"path('{path}', path);";
+            matlabApplication.Execute(command);
+        }
+
+        /// <summary>
+        /// Returns the all locations at which an item can be found. The item could be a function in a MATLAB code file, a method on a loaded Java class, a workspace variable, or a file (including its extension).
+        /// </summary>
+        /// <remarks>
+        /// Always returns at least one element.
+        /// </remarks>
+        public static string[] Which(this MatlabApplication matlabApplication, string item, bool all = false)
+        {
+            string allSuffix = String.Empty;
+            if (all)
+            {
+                allSuffix = @", '-all'";
+            }
+
+            string command = $@"{Matlab.AnswerVariableName} = which('{item}'{allSuffix});";
+            matlabApplication.Execute(command);
+
+            object answer = matlabApplication.GetData(Matlab.AnswerVariableName);
+
+            string[] output;
+            switch (answer)
+            {
+                case string answerString:
+                    output = new string[] { answerString };
+                    break;
+
+                case object[,] cellArray:
+                    int nItems = cellArray.GetLength(0);
+                    output = new string[nItems];
+                    for (int iItem = 0; iItem < nItems; iItem++)
+                    {
+                        output[iItem] = Convert.ToString(cellArray[iItem, 0]);
+                    }
+                    break;
+
+                case null:
+                default:
+                    output = new string[] { MatlabApplicationExtensions.NotFound };
+                    break;
+            }
+
+            return output;
+        }
+
+        public static string WhichFirstOnly(this MatlabApplication matlabApplication, string item)
+        {
+            string[] locations = matlabApplication.Which(item);
+
+            string output = locations[0];
+            return output;
+        }
+    }
+}
+
+
+namespace Public.Common.Lib.MATLAB.Commands
+{
+    using Public.Common.MATLAB;
+    using Public.Common.MATLAB.Commands;
+
+
+    public static class MatlabApplicationExtensions
+    {
+        public static void AddCommonLibraryPath(this MatlabApplication matlabApplication)
+        {
+            string commonLibraryPath = matlabApplication.GetCommonLibraryPath();
+
+            matlabApplication.AddPath(commonLibraryPath);
+        }
+
+        public static string GetCommonLibraryPath(this MatlabApplication matlabApplication)
+        {
+            string command = $@"{Matlab.AnswerVariableName} = getCommonLibraryPath;";
+            matlabApplication.Execute(command);
+
+            string output = matlabApplication.GetString(Matlab.AnswerVariableName);
             return output;
         }
     }
