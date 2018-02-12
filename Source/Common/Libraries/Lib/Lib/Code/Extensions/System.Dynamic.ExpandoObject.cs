@@ -4,7 +4,7 @@ using System.Dynamic;
 using Public.Common.Lib.IO.Serialization;
 
 
-namespace Public.Common.Lib
+namespace Public.Common.Lib.Extensions
 {
     public static class ExpandoObjectExtensions
     {
@@ -70,6 +70,41 @@ namespace Public.Common.Lib
             var dictionary = BinaryFileSerializer.Deserialize<Dictionary<string, object>>(filePath);
 
             expando.AddDictionary(dictionary);
+        }
+
+        /// <summary>
+        /// Performs a shallow copy of all fields except those that are themselves ExpandoObjects, which are recursively copied in the same way.
+        /// </summary>
+        public static ExpandoObject Copy(this ExpandoObject expando)
+        {
+            ExpandoObject output = new ExpandoObject();
+
+            var expandoDict = expando as IDictionary<string, object>;
+            foreach(string key in expandoDict.Keys)
+            {
+                object value = expandoDict[key];
+                if(value is ExpandoObject subExpando)
+                {
+                    ExpandoObject subExpandoCopy = subExpando.Copy();
+                    output.AddElement(key, subExpandoCopy);
+                }
+                else
+                {
+                    output.AddElement(key, value);
+                }
+            }
+
+            return output;
+        }
+
+        public static ExpandoObject ShallowCopy(this ExpandoObject expando)
+        {
+            ExpandoObject output = new ExpandoObject();
+
+            var expandoDict = expando as IDictionary<string, object>;
+            output.AddDictionary(expandoDict);
+
+            return output;
         }
     }
 }

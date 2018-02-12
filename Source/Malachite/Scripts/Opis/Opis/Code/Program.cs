@@ -3,15 +3,15 @@ using System.Dynamic;
 using System.IO;
 
 using Public.Common.Lib;
+using Public.Common.Lib.Extensions;
 using Public.Common.Lib.IO;
 using PathUtilities = Public.Common.Lib.IO.Paths.Utilities;
 using Public.Common.Lib.IO.Serialization;
-using Public.Common.Lib.MATLAB.Commands;
+using Public.Common.Lib.MATLAB;
 using Public.Common.Lib.Visuals;
 using ImageFileExtensions = Public.Common.Lib.Visuals.IO.FileExtensions;
 using Public.Common.Lib.Visuals.MetadataExtractor;
 using Public.Common.MATLAB;
-using Public.Common.MATLAB.Commands;
 
 
 namespace Opis
@@ -24,7 +24,8 @@ namespace Opis
             //Program.TestMetadataExtractor();
             //Program.TestDynamic();
             //Program.TestDynamicCreationFromMatlab();
-            Program.SubMain();
+            Program.TestMarshallDynamicToMatlab();
+            //Program.SubMain();
         }
 
         private static void SubMain()
@@ -157,11 +158,35 @@ namespace Opis
             return imagePoints;
         }
 
+        private static void TestMarshallDynamicToMatlab()
+        {
+            var temp = new ExpandoObject();
+            int aValue = 1;
+            temp.AddElement(@"a", aValue);
+            bool bValue = true;
+            temp.AddElement(@"b", bValue);
+            string cValue = @"ccc";
+            temp.AddElement(@"c", cValue);
+            double[,] dValue = new double[,] { { 1, 2 }, { 3, 4 } };
+            temp.AddElement(@"d", dValue);
+            double[,,] eValue = new double[,,] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+            temp.AddElement(@"e", eValue);
+            ExpandoObject fValue = temp.ShallowCopy(); // Copy the current state to avoid infinite recursion.
+            temp.AddElement(@"f", fValue);
+            object[] gValue = new object[] { aValue, bValue, cValue, dValue, eValue, fValue };
+            temp.AddElement(@"g", gValue);
+
+            using (var matlabApplication = new MatlabApplication())
+            {
+                matlabApplication.PutStructure(@"temp2", temp);
+            }
+        }
+
         private static void TestDynamicCreationFromMatlab()
         {
-            using (var matlabApplication = new MatlabApplication(true))
+            using (var matlabApplication = new MatlabApplication())
             {
-                matlabApplication.Startup();
+                matlabApplication.Reset();
 
                 string command;
 
@@ -190,7 +215,7 @@ namespace Opis
 
                 string structureName = @"temp";
 
-                System.Dynamic.ExpandoObject expando = new System.Dynamic.ExpandoObject();
+                ExpandoObject expando = new ExpandoObject();
                 foreach (string fieldName in fieldNames)
                 {
                     command = $@"{Matlab.AnswerVariableName} = class({structureName}.{fieldName})";

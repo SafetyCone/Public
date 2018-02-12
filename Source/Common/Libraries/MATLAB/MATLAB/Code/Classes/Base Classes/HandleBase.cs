@@ -56,7 +56,7 @@ namespace Public.Common.MATLAB
                 }
 
                 // Clean-up unmanaged resources here.
-                string command = String.Format(@"{0}({1})", MatlabApplication.DeleteFunctionName, this.HandleName);
+                string command = String.Format(@"{0}({1})", Matlab.DeleteFunctionName, this.HandleName);
                 this.Application.Execute(command);
             }
 

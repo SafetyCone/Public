@@ -52,10 +52,13 @@
     <Compile Include="Code\Classes\Variable.cs" />
     <Compile Include="Code\Enumerations\MatlabDataType.cs" />
     <Compile Include="Code\Extensions\System.ArrayInt.cs" />
+    <Compile Include="Code\Extensions\System.Dynamic.ExpandoObject.cs" />
     <Compile Include="Code\Functions.cs" />
     <Compile Include="Code\Interfaces\IHandle.cs" />
     <Compile Include="Code\Matlab.cs" />
     <Compile Include="Code\MatlabApplication.cs" />
+    <Compile Include="Code\Commands\Commands.cs" />
+    <Compile Include="Code\Commands\CommonLibraryCommands.cs" />
     <Compile Include="Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

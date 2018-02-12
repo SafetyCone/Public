@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Public.Common.MATLAB.Commands;
-
 
 namespace Public.Common.MATLAB
 {
@@ -64,7 +62,7 @@ namespace Public.Common.MATLAB
         }
 
         public Variable(MatlabApplication matlabApplication, string name)
-            : this(matlabApplication, name, $@"{name} = struct;")
+            : this(matlabApplication, name, Matlab.GetCreateEmptyStructureCommand(name)) // A structure can always be replaced with a another value, a field cannot be added to a non-structure. Allow addition of fields to crated variables.
         {
         }
     }
