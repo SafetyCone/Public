@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 
-namespace Public.Common.Lib.IO.Extensions
+namespace Public.Common.Lib.IO
 {
 	public static class DirectoryExtensions
 	{
@@ -58,6 +62,47 @@ namespace Public.Common.Lib.IO.Extensions
         public static void Copy(string sourceDirectoryPath, string destinationDirectoryPath)
         {
             DirectoryExtensions.Copy(sourceDirectoryPath, destinationDirectoryPath, true, true);
+        }
+
+        public static string[] FilePathsByExtensions(string directoryPath, IEnumerable<string> fileExtensions)
+        {
+            string[] fileExtensionsArr = fileExtensions?.ToArray() ?? new string[] { };
+
+            int nFileExtensions = fileExtensionsArr.Length;
+
+            string[] output;
+            if(0 < nFileExtensions)
+            {
+                // Build the regex pattern.
+                StringBuilder builder = new StringBuilder(fileExtensionsArr[0]);
+                for (int iFileExtensions = 1; iFileExtensions < nFileExtensions; iFileExtensions++)
+                {
+                    string fileExtension = fileExtensionsArr[iFileExtensions];
+                    string appendix = $@"|{fileExtension}";
+                    builder.Append(appendix);
+                }
+
+                string regexPattern = builder.ToString();
+                Regex regex = new Regex(regexPattern);
+
+                List<string> pathsOfInterest = new List<string>();
+                foreach(var filePath in Directory.EnumerateFiles(directoryPath))
+                {
+                    string loweredFilePath = filePath.ToLowerInvariant();
+                    if(regex.IsMatch(loweredFilePath))
+                    {
+                        pathsOfInterest.Add(filePath);
+                    }
+                }
+
+                output = pathsOfInterest.ToArray();
+            }
+            else
+            {
+                output = new string[] { };
+            }
+
+            return output;
         }
 	}
 }

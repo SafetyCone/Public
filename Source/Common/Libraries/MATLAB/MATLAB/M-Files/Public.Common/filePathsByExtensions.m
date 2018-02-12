@@ -1,4 +1,4 @@
-function filePaths = filePathsByExtension(directoryPath, fileExtensions)
+function filePaths = filePathsByExtensions(directoryPath, fileExtensions)
 % filePathsByExtension - Gets all file paths in a directory which have the
 % specified file extensions.
 

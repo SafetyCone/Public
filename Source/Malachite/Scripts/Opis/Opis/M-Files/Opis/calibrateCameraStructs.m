@@ -1,0 +1,23 @@
+function [cameraParams, imagesUsed, estimationErrors] = calibrateCameraStructs(imagePoints, boardConfiguration, estimationParameters, imageSize)
+
+worldUnits = boardConfiguration.worldUnits;
+boardSize = boardConfiguration.boardSize;
+squareSize = boardConfiguration.squareSize;
+
+estimateSkew = estimationParameters.estimateSkew;
+estimateTangentialDistortion = estimationParameters.estimateTangentialDistortion;
+numRadialDistortionCoefficients = estimationParameters.numRadialDistortionCoefficients;
+
+% Generate world coordinates of the corners of the squares
+worldPoints = generateCheckerboardPoints(boardSize, squareSize);
+
+[cameraParams, imagesUsed, estimationErrors] = estimateCameraParameters(imagePoints, worldPoints, ...
+    'EstimateSkew', estimateSkew, ...
+    'EstimateTangentialDistortion', estimateTangentialDistortion, ...
+    'NumRadialDistortionCoefficients', numRadialDistortionCoefficients, ...
+    'WorldUnits', worldUnits, ...
+    'InitialIntrinsicMatrix', [], ...
+    'InitialRadialDistortion', [], ...
+    'ImageSize', imageSize); %% Should be the same for all images from the camera?
+
+end

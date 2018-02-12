@@ -70,6 +70,7 @@
     <Compile Include="Code\Classes\ImageFormatFileExtensions.cs" />
     <Compile Include="Code\Classes\ImageID.cs" />
     <Compile Include="Code\Classes\ImagePathSource.cs" />
+    <Compile Include="Code\Classes\ImageSize.cs" />
     <Compile Include="Code\Classes\PixelLocation.cs" />
     <Compile Include="Code\Classes\Rec709FloatImageConverter.cs" />
     <Compile Include="Code\Images\FloatImage.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Code\Interfaces\IGrayFloatImageRepository.cs" />
     <Compile Include="Code\Interfaces\IGrayFloatImageSource.cs" />
     <Compile Include="Code\Interfaces\IImageResizer.cs" />
+    <Compile Include="Code\Interfaces\IExternalFormatImageSizeProvider.cs" />
     <Compile Include="Code\Interfaces\IRgbByteImageExternalFormatSerializer.cs" />
     <Compile Include="Code\Interfaces\IRgbByteToRgbFloatImageConverter.cs" />
     <Compile Include="Code\Interfaces\IRgbFloatImageExternalFormatSerializer.cs" />

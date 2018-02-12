@@ -1,0 +1,3 @@
+﻿Opis is a camera calibration script.
+
+Opis uses MATLAB's camera calibration functionality to create camera parameter sets (including camera intrinsic matrices) given a list of checkerboard calibration images.

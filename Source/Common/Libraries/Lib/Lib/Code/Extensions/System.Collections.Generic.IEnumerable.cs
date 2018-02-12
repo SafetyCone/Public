@@ -40,5 +40,13 @@ namespace Public.Common.Lib.Extensions
                 count++;
             }
         }
+
+        public static int Product(this IEnumerable<int> source)
+        {
+            int output = 1;
+            source.ForEach((x) => output *= x);
+
+            return output;
+        }
     }
 }

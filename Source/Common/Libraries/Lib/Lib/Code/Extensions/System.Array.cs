@@ -42,5 +42,26 @@ namespace Public.Common.Lib.Extensions
 
             return output;
         }
+
+        public static TDestination[] ConvertTo<TSource, TDestination>(this TSource[] source, Func<TSource, TDestination> converter)
+        {
+            int nElements = source.Length;
+
+            TDestination[] output = new TDestination[nElements];
+            for (int iElement = 0; iElement < nElements; iElement++)
+            {
+                TSource sourceElement = source[iElement];
+                TDestination destinationElement = converter(sourceElement);
+                output[iElement] = destinationElement;
+            }
+
+            return output;
+        }
+
+        public static int[] ConvertToInt(this double[] source)
+        {
+            int[] output = source.ConvertTo<double, int>(Convert.ToInt32);
+            return output;
+        }
     }
 }

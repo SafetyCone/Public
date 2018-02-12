@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 
 
-namespace Public.Common.Lib
+namespace Public.Common.Lib.OS
 {
     public class ProcessStarter
     {

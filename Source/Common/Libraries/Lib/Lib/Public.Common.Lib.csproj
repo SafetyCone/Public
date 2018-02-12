@@ -69,9 +69,12 @@
     <Compile Include="Code\Caches\DataFileCache.cs" />
     <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
     <Compile Include="Code\Caches\Interfaces\ICache.cs" />
+    <Compile Include="Code\Classes\MatrixSize.cs" />
     <Compile Include="Code\Classes\Selector.cs" />
     <Compile Include="Code\Extensions\System.Collections.Generic.IEnumerable.cs" />
     <Compile Include="Code\Extensions\ReferenceTypes.cs" />
+    <Compile Include="Code\Extensions\System.Dynamic.ExpandoObject.cs" />
+    <Compile Include="Code\Extensions\System.Object.cs" />
     <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
     <Compile Include="Code\Extensions\System.Array.cs" />
   </ItemGroup>

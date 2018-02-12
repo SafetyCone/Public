@@ -8,6 +8,7 @@ namespace Public.Common.Lib.Visuals.IO
         public const string GifFileExtension = @"gif";
         public const string JpgFileExtension = @"jpg";
         public const string JpegFileExtension = @"jpeg";
+        public const string PngFileExtension = @"png";
         public const string TifFileExtension = @"tif";
         public const string TiffFileExtension = @"tiff";
     }
