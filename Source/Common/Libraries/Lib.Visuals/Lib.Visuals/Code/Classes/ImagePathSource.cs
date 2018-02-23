@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
-using Public.Common.Lib.Extensions;
+using PublicIoUtilities = Public.Common.Lib.IO.Utilities;
 
 
 namespace Public.Common.Lib.Visuals
@@ -42,30 +39,11 @@ namespace Public.Common.Lib.Visuals
 
         public IEnumerator<string> GetEnumerator()
         {
-            // Build a regex pattern to find files with image file extensions of interest.
-            StringBuilder fileExtensionsRegexPatternBuilder = new StringBuilder();
-            foreach (var fileExtension in ImageFormatFileExtensions.All)
-            {
-                fileExtensionsRegexPatternBuilder.Append($@"\.{fileExtension}$|");
-            }
-            fileExtensionsRegexPatternBuilder.RemoveLast();
-
-            // Make the regex.
-            string regexPattern = fileExtensionsRegexPatternBuilder.ToString();
-            Regex regex = new Regex(regexPattern);
-
-            // Search all file paths in the directory using the regex, keeping the paths that match the image file extensions.
-            var imageFilePaths = new List<string>();
-            foreach (var filePath in Directory.EnumerateFiles(this.DirectoryPath))
-            {
-                if (regex.IsMatch(filePath))
-                {
-                    imageFilePaths.Add(filePath);
-                }
-            }
+            string[] filePaths = PublicIoUtilities.FilePathsByExtensions(this.DirectoryPath, ImageFormatFileExtensions.All);
 
             // Return an enumerator to this list of image file paths.
-            return imageFilePaths.GetEnumerator();
+            var output = new List<string>(filePaths);
+            return output.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

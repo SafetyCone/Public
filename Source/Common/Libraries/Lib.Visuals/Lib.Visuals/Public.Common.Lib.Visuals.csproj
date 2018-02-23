@@ -64,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\Coordinate.cs" />
-    <Compile Include="Code\Classes\FileExtensions.cs" />
+    <Compile Include="Code\IO\FileExtensions.cs" />
     <Compile Include="Code\Classes\ImageConverter.cs" />
     <Compile Include="Code\Classes\ImageDirectorySource.cs" />
     <Compile Include="Code\Classes\ImageFormatFileExtensions.cs" />
@@ -98,11 +98,13 @@
     <Compile Include="Code\Images\RgbImage.cs" />
     <Compile Include="Code\Interfaces\ICoordinated.cs" />
     <Compile Include="Code\Interfaces\ICoordinatedImage.cs" />
+    <Compile Include="Code\Interfaces\IExternalFormatImageFileUndistorter.cs" />
     <Compile Include="Code\Interfaces\IGrayFloatImageRepository.cs" />
     <Compile Include="Code\Interfaces\IGrayFloatImageSource.cs" />
     <Compile Include="Code\Interfaces\IImageResizer.cs" />
     <Compile Include="Code\Interfaces\IExternalFormatImageSizeProvider.cs" />
     <Compile Include="Code\Interfaces\IRgbByteImageExternalFormatSerializer.cs" />
+    <Compile Include="Code\Interfaces\IRgbByteImageUndistorter.cs" />
     <Compile Include="Code\Interfaces\IRgbByteToRgbFloatImageConverter.cs" />
     <Compile Include="Code\Interfaces\IRgbFloatImageExternalFormatSerializer.cs" />
     <Compile Include="Code\Interfaces\IRgbFloatImageRepository.cs" />

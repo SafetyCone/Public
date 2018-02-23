@@ -1,0 +1,29 @@
+﻿Ellasar is a script to operate VisualSfM from the command line via C#.
+
+VisualSfM: http://ccwu.me/vsfm/
+Documentation: http://ccwu.me/vsfm/doc.html
+
+
+Run CMVS
+// Example command:
+// cmvs E:\Organizations\Minex\Data\Images\Princeton\Campus\Small\VisualSfM\Tower1.nvm.cmvs\00\ 50 4
+/// <param name="modelDirectoryPath">The directory in which to work.</param>
+/// <param name="maxNumberOfImages">The maximum number of images in a cluster (this is system memory dependent).</param>
+/// <param name="numberOfCpus">CMVS is a parallel process, thus provide the number of CPUs on the system that can be used.</param> 
+
+// Documentation: https://www.di.ens.fr/cmvs/documentation.html
+
+
+Run GenOption
+// Example command:
+// genOption E:\Organizations\Minex\Data\Images\Princeton\Campus\Small\VisualSfM\Tower1.nvm.cmvs\00\ 1 2 0.700000 7 3 4
+
+// Documentation (Same as CMVS): https://www.di.ens.fr/cmvs/documentation.html
+// Documentation (Same as PMVS): https://www.di.ens.fr/pmvs/documentation.html
+
+
+Run PMVS2
+ // Example command:
+// pmvs2 E:\Organizations\Minex\Data\Images\Princeton\Campus\Small\VisualSfM\Tower1.nvm.cmvs\00\ option-0000 {output file here!}
+
+// Documentation: https://www.di.ens.fr/pmvs/documentation.html
