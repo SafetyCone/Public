@@ -1,0 +1,9 @@
+﻿Eshunna is a program to read VisualSfM produced NVM text files.
+
+See: http://ccwu.me/vsfm/doc.html#nvm. Includes the file format.
+See: http://ccwu.me/vsfm/doc.html#basic. States that measurement locations are relative to the center of an image.
+
+
+Ideas to improve the file format:
+1. Instead of storing just the image file name, store the path to an image set info object, which contains all information for an image index (such as file path, etc.). Then store an index AND the file name. This allows easy image inspection while still retaining the full original image file path.
+2. Create a new file extension for my breaking format change.

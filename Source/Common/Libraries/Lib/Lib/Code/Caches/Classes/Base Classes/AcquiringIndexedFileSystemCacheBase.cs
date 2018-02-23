@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Public.Common.Lib
+namespace Public.Common.Lib.Caches
 {
     /// <summary>
     /// Base-class for all acquiring caches that use an indexed file system for cache value storage.

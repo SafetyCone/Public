@@ -12,4 +12,14 @@ namespace Public.Common.Lib.Logging
         Fatal = 50,
         Off = 100
     }
+
+
+    public static class LevelExtensions
+    {
+        public static string ToDescription(this Level level)
+        {
+            string output = level.ToString();
+            return output;
+        }
+    }
 }

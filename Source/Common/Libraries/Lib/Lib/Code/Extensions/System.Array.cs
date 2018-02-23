@@ -43,6 +43,16 @@ namespace Public.Common.Lib.Extensions
             return output;
         }
 
+        public static T[] Copy<T>(this T[] source, int startIndex, int endIndex)
+        {
+            int numberOfElements = endIndex - startIndex + 1;
+
+            T[] output = new T[numberOfElements];
+            Array.Copy(source, startIndex, output, 0, numberOfElements);
+
+            return output;
+        }
+
         public static TDestination[] ConvertTo<TSource, TDestination>(this TSource[] source, Func<TSource, TDestination> converter)
         {
             int nElements = source.Length;

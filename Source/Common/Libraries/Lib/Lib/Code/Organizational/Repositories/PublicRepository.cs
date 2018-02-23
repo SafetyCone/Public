@@ -11,7 +11,8 @@ namespace Public.Common.Lib.Organizational
     /// </remarks>
     public sealed class PublicRepository : IRepository
     {
-        public const string RepositoryName = @"Public";
+        public static readonly string RepositoryName = @"Public";
+        public static readonly string RepositoryDirectoryName = PublicRepository.RepositoryName;
 
 
         public string Name { get; private set; }

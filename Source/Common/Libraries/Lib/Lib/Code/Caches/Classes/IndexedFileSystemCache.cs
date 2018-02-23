@@ -4,11 +4,10 @@ using System.IO;
 
 using Public.Common.Lib.IO;
 using PathExtensions = Public.Common.Lib.IO.Extensions.PathExtensions;
-using PathUtilities = Public.Common.Lib.IO.Paths.Utilities;
 using Public.Common.Lib.IO.Serialization;
 
 
-namespace Public.Common.Lib
+namespace Public.Common.Lib.Caches
 {
     /// <summary>
     /// A file-system cache that lives within a directory, using an index file to map between key objects and files stored in a sub-directory.
@@ -19,9 +18,7 @@ namespace Public.Common.Lib
     public class IndexedFileSystemCache<TKey, TValue> : Cache<string, string>, IPersisted, ICache<TKey, TValue>, IDisposable
     {
         #region Static
-
-        public static readonly string DefaultCachesDirectoryPath = PathUtilities.DefaultCachesDirectoryPath;
-        public static readonly string DefaultSessionName = @"Default";
+        
         public static readonly string DefaultIndexFileName = @"Index.txt";
         public static readonly string DefaultFilesDirectoryName = @"Data";
         public static readonly string DefaultFilesExtension = FileExtensions.DataFileExtension;
@@ -161,7 +158,7 @@ namespace Public.Common.Lib
 
 
         public IndexedFileSystemCache(IFileSerializer<TValue> fileSerializer)
-            : this(IndexedFileSystemCache<TKey, TValue>.DefaultCachesDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesDirectoryName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesExtension, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator,
+            : this(FileSystemCache.DefaultCachesDirectoryPath, IndexedFileSystemCache<TKey, TValue>.DefaultIndexFileName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesDirectoryName, IndexedFileSystemCache<TKey, TValue>.DefaultFilesExtension, IndexedFileSystemCache<TKey, TValue>.DefaultIndexTokenSeparator,
                   fileSerializer)
         {
         }

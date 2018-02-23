@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{48417A3D-33E6-40D1-B907-21BF6B9CFDC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Eshunna.Lib</RootNamespace>
+    <AssemblyName>Eshunna.Lib</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Classes\Location3DHomogenous.cs" />
+    <Compile Include="Code\Logging\DummyLog.cs" />
+    <Compile Include="Code\Logging\ILog.cs" />
+    <Compile Include="Code\Logging\StringListLog.cs" />
+    <Compile Include="Code\NVM\Camera.cs" />
+    <Compile Include="Code\Classes\Color.cs" />
+    <Compile Include="Code\NVM\CameraEqualityComparer.cs" />
+    <Compile Include="Code\Classes\Extensions.cs" />
+    <Compile Include="Code\NVM\FeaturePoint.cs" />
+    <Compile Include="Code\Classes\Location2D.cs" />
+    <Compile Include="Code\Classes\Location3D.cs" />
+    <Compile Include="Code\NVM\FeaturePointComparer.cs" />
+    <Compile Include="Code\NVM\Measurement.cs" />
+    <Compile Include="Code\NVM\MeasurementEqualityComparer.cs" />
+    <Compile Include="Code\NVM\NViewMatch.cs" />
+    <Compile Include="Code\NVM\NViewMatchEqualityComparer.cs" />
+    <Compile Include="Code\NVM\NvmV3Serializer.cs" />
+    <Compile Include="Code\Classes\Quaternion.cs" />
+    <Compile Include="Code\Patches\Patch.cs" />
+    <Compile Include="Code\Patches\PatchCollection.cs" />
+    <Compile Include="Code\Patches\PatchCollectionEqualityComparer.cs" />
+    <Compile Include="Code\Patches\PatchCollectionV1Serializer.cs" />
+    <Compile Include="Code\Patches\PatchEqualityComparer.cs" />
+    <Compile Include="Code\PLY\Enumerations\PlyDataType.cs" />
+    <Compile Include="Code\PLY\PlyDataTypeExtensions.cs" />
+    <Compile Include="Code\PLY\PlyElementDescriptor.cs" />
+    <Compile Include="Code\PLY\PlyElementDescriptorEqualityComparer.cs" />
+    <Compile Include="Code\PLY\PlyFile.cs" />
+    <Compile Include="Code\PLY\Enumerations\PlyFileDataFormat.cs" />
+    <Compile Include="Code\PLY\PlyFileDataFormatExtensions.cs" />
+    <Compile Include="Code\PLY\PlyFileEqualityComparer.cs" />
+    <Compile Include="Code\PLY\PlyFileHeader.cs" />
+    <Compile Include="Code\PLY\PlyFileHeaderEqualityComparer.cs" />
+    <Compile Include="Code\PLY\PlyPropertyDescriptor.cs" />
+    <Compile Include="Code\PLY\PlyV1TextSerializer.cs" />
+    <Compile Include="Code\PLY\ValueConverter.cs" />
+    <Compile Include="Code\Verification\Classes\RoundTripExternalDataStructureVerifier.cs" />
+    <Compile Include="Code\Verification\Classes\RoundTripExternalFileFormat.cs" />
+    <Compile Include="Code\Verification\Classes\TextFileComparer.cs" />
+    <Compile Include="Code\Verification\Interfaces\IFileComparer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.csproj">
+      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
+      <Name>Public.Common.Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

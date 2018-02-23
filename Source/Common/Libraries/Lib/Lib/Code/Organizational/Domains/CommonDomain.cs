@@ -11,7 +11,8 @@ namespace Public.Common.Lib.Organizational
     /// </remarks>
     public sealed class CommonDomain : IDomain
     {
-        public const string DomainName = @"Common";
+        public static readonly string DomainName = @"Common";
+        public static readonly string DomainDirectoryName = CommonDomain.DomainName;
 
 
         public string Name { get; private set; }

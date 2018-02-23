@@ -7,6 +7,12 @@ namespace Public.Common.Lib.Logging
 {
     public static class Utilities
     {
+        public static string ToString(Level level, string message)
+        {
+            string output = $@"{level.ToDescription()} - {message}";
+            return output;
+        }
+
         public static TimeSpan ActionDuration(Action action)
         {
             var start = DateTime.Now;

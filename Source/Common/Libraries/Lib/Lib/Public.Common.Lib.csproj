@@ -64,15 +64,17 @@
     <Compile Include="Code\Caches\Classes\Base Classes\Cache.cs" />
     <Compile Include="Code\Caches\Classes\Base Classes\CacheBase.cs" />
     <Compile Include="Code\Caches\Classes\CacheDirectoryPathBuilder.cs" />
+    <Compile Include="Code\Caches\Classes\FileSystemCache.cs" />
     <Compile Include="Code\Caches\Classes\IndexedFileSystemCache.cs" />
     <Compile Include="Code\Caches\Classes\SimpleIndexedFileSystemCache.cs" />
+    <Compile Include="Code\Caches\Classes\StringFileSystemCache.cs" />
     <Compile Include="Code\Caches\DataFileCache.cs" />
     <Compile Include="Code\Caches\Interfaces\IAcquiringCache.cs" />
     <Compile Include="Code\Caches\Interfaces\ICache.cs" />
-    <Compile Include="Code\Classes\MatrixSize.cs" />
     <Compile Include="Code\Classes\Selector.cs" />
     <Compile Include="Code\Extensions\System.Collections.Generic.IEnumerable.cs" />
     <Compile Include="Code\Extensions\ReferenceTypes.cs" />
+    <Compile Include="Code\Extensions\System.Double.cs" />
     <Compile Include="Code\Extensions\System.Dynamic.ExpandoObject.cs" />
     <Compile Include="Code\Extensions\System.Object.cs" />
     <Compile Include="Code\Extensions\System.Text.StringBuilder.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
     <Compile Include="Code\IO\FileExtensions.cs" />
+    <Compile Include="Code\IO\LineReader.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\ConsoleOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\DebugOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\FileOutputStream.cs" />
@@ -106,7 +109,9 @@
     <Compile Include="Code\IO\Output Streams\Classes\TextWriterOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Interfaces\IOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\IOutputStreamExtensions.cs" />
+    <Compile Include="Code\IO\Configuration.cs" />
     <Compile Include="Code\IO\Paths\Utilities.cs" />
+    <Compile Include="Code\IO\Properties.cs" />
     <Compile Include="Code\IO\Serialization\Classes\BinaryFileSerializer.cs" />
     <Compile Include="Code\IO\Serialization\Interfaces\IFileSerializer.cs" />
     <Compile Include="Code\IO\Serialization\Interfaces\IInstrumentedFileSerializer.cs" />
@@ -166,7 +171,7 @@
     <Compile Include="Code\Utilities\HashHelper.cs" />
     <Compile Include="Code\Utilities\HashHelperPrimeMultiplier.cs" />
     <Compile Include="Code\Programs\NotepadPlusPlus.cs" />
-    <Compile Include="Code\Utilities\ProcessStarter.cs" />
+    <Compile Include="Code\OS\ProcessStarter.cs" />
     <Compile Include="Code\Utilities\SearchPatternHelper.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifference.cs" />
     <Compile Include="Code\Utilities\Set Difference\SetDifferenceTextSerializer.cs" />
@@ -178,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Code\Logging\Notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Extensions\System.IO.StreamReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -27,12 +27,22 @@ namespace Public.Common.Lib.Extensions
             }
         }
 
-        public static void AddDictionary(this ExpandoObject expando, IDictionary<string, object> dictionary)
+        public static ExpandoObject AddDictionary(this ExpandoObject expando, IDictionary<string, object> dictionary)
         {
             foreach(var pair in dictionary)
             {
-                expando.AddElement(pair.Key, pair.Value);
+                if(pair.Value is IDictionary<string, object> subExpandoDict)
+                {
+                    ExpandoObject subExpando = new ExpandoObject().FromDictionary(subExpandoDict);
+                    expando.AddElement(pair.Key, subExpando);
+                }
+                else
+                {
+                    expando.AddElement(pair.Key, pair.Value);
+                }
             }
+
+            return expando;
         }
 
         public static Dictionary<string, object> ToDictionary(this ExpandoObject expando)
@@ -53,9 +63,10 @@ namespace Public.Common.Lib.Extensions
             return output;
         }
 
-        public static void FromDictionary(this ExpandoObject expando, IDictionary<string, object> dictionary)
+        public static ExpandoObject FromDictionary(this ExpandoObject expando, IDictionary<string, object> dictionary)
         {
             expando.AddDictionary(dictionary);
+            return expando;
         }
 
         public static void SerializeToFile(this ExpandoObject expando, string filePath)
@@ -65,11 +76,12 @@ namespace Public.Common.Lib.Extensions
             BinaryFileSerializer.Serialize(filePath, dictionary);
         }
 
-        public static void DeserializeFromFile(this ExpandoObject expando, string filePath)
+        public static ExpandoObject DeserializeFromFile(this ExpandoObject expando, string filePath)
         {
             var dictionary = BinaryFileSerializer.Deserialize<Dictionary<string, object>>(filePath);
-
             expando.AddDictionary(dictionary);
+
+            return expando;
         }
 
         /// <summary>
