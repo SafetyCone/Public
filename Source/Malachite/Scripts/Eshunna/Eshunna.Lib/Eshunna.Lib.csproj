@@ -74,8 +74,11 @@
     <Compile Include="Code\PLY\PlyFileHeader.cs" />
     <Compile Include="Code\PLY\PlyFileHeaderEqualityComparer.cs" />
     <Compile Include="Code\PLY\PlyPropertyDescriptor.cs" />
+    <Compile Include="Code\PLY\PlyPropertyDescriptorEqualityComparer.cs" />
+    <Compile Include="Code\PLY\PlyV1BinarySerializer.cs" />
     <Compile Include="Code\PLY\PlyV1TextSerializer.cs" />
     <Compile Include="Code\PLY\ValueConverter.cs" />
+    <Compile Include="Code\PLY\ValueComparer.cs" />
     <Compile Include="Code\Verification\Classes\RoundTripExternalDataStructureVerifier.cs" />
     <Compile Include="Code\Verification\Classes\RoundTripExternalFileFormat.cs" />
     <Compile Include="Code\Verification\Classes\TextFileComparer.cs" />

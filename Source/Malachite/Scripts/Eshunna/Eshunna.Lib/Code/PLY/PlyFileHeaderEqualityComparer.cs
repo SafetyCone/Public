@@ -19,6 +19,11 @@ namespace Eshunna.Lib.PLY
             this.Log = log;
         }
 
+        public PlyFileHeaderEqualityComparer(ILog log)
+            : this(new PlyElementDescriptorEqualityComparer(log), log)
+        {
+        }
+
         public bool Equals(PlyFileHeader x, PlyFileHeader y)
         {
             bool output = true;
@@ -63,10 +68,35 @@ namespace Eshunna.Lib.PLY
                 }
             }
 
-            x.
+            int nElementsX = x.Elements.Count;
+            int nElementsY = y.Elements.Count;
+            bool elementCountEquals = nElementsX == nElementsY;
+            if(!elementCountEquals)
+            {
+                output = false;
 
+                string message = $@"Element count mismatch: x: {nElementsX.ToString()}, y: {nElementsY.ToString()}";
+                this.Log.WriteLine(message);
+            }
+            else
+            {
+                for (int iElement = 0; iElement < nElementsX; iElement++)
+                {
+                    PlyElementDescriptor elementX = x.Elements[iElement];
+                    PlyElementDescriptor elementY = y.Elements[iElement];
 
-            //return output;
+                    bool elementsEqual = this.ElementComparer.Equals(elementX, elementY);
+                    if(!elementsEqual)
+                    {
+                        output = false;
+
+                        string message = $@"Element not equal: index: {iElement.ToString()}";
+                        this.Log.WriteLine(message);
+                    }
+                }
+            }
+
+            return output;
         }
 
         public int GetHashCode(PlyFileHeader obj)

@@ -73,5 +73,27 @@ namespace Public.Common.Lib.Extensions
             int[] output = source.ConvertTo<double, int>(Convert.ToInt32);
             return output;
         }
+
+        public static T[] Flatten<T>(this T[][] jagged)
+        {
+            int nArrays = jagged.Length;
+            int nElements = 0;
+            for (int iArray = 0; iArray < nArrays; iArray++)
+            {
+                nElements += jagged[iArray].Length;
+            }
+
+            T[] output = new T[nElements];
+            int index = 0;
+            for (int iArray = 0; iArray < nArrays; iArray++)
+            {
+                T[] array = jagged[iArray];
+
+                Array.Copy(array, 0, output, index, array.Length);
+                index += array.Length;
+            }
+
+            return output;
+        }
     }
 }

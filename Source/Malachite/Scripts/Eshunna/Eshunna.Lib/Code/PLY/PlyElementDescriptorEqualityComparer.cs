@@ -10,12 +10,19 @@ namespace Eshunna.Lib.PLY
 {
     public class PlyElementDescriptorEqualityComparer : IEqualityComparer<PlyElementDescriptor>
     {
+        public PlyPropertyDescriptorEqualityComparer PropertyComparer { get; }
         public ILog Log { get; }
 
 
-        public PlyElementDescriptorEqualityComparer(ILog log)
+        public PlyElementDescriptorEqualityComparer(PlyPropertyDescriptorEqualityComparer propertyComparer, ILog log)
         {
+            this.PropertyComparer = propertyComparer;
             this.Log = log;
+        }
+
+        public PlyElementDescriptorEqualityComparer(ILog log)
+            : this(new PlyPropertyDescriptorEqualityComparer(log), log)
+        {
         }
 
         public bool Equals(PlyElementDescriptor x, PlyElementDescriptor y)
@@ -34,10 +41,41 @@ namespace Eshunna.Lib.PLY
             bool countEquals = x.Count == y.Count;
             if(!countEquals)
             {
+                output = false;
 
+                string message = $@"Element instance counts were not equal - x: {x.Count.ToString()}, y: {y.Count.ToString()}";
+                this.Log.WriteLine(message);
             }
 
-            //return output;
+            int nPropertiesX = x.PropertyDescriptors.Count;
+            int nPropertiesY = y.PropertyDescriptors.Count;
+            bool propertyCountEquals = nPropertiesX == nPropertiesY;
+            if(!propertyCountEquals)
+            {
+                output = false;
+
+                string message = $@"Element property count mismatch: x: {nPropertiesX.ToString()}, y: {nPropertiesY.ToString()}";
+                this.Log.WriteLine(message);
+            }
+            else
+            {
+                for (int iProperty = 0; iProperty < nPropertiesX; iProperty++)
+                {
+                    PlyPropertyDescriptor propertyX = x.PropertyDescriptors[iProperty];
+                    PlyPropertyDescriptor propertyY = y.PropertyDescriptors[iProperty];
+
+                    bool propertiesEqual = this.PropertyComparer.Equals(propertyX, propertyY);
+                    if(!propertiesEqual)
+                    {
+                        output = false;
+
+                        string message = $@"Property mismatch: index: {iProperty.ToString()}";
+                        this.Log.WriteLine(message);
+                    }
+                }
+            }
+
+            return output;
         }
 
         public int GetHashCode(PlyElementDescriptor obj)

@@ -28,7 +28,72 @@ namespace Eshunna
             //Construction.DeserializePatchCollection();
             //Construction.RoundTripPatchFile();
             //Construction.DeserializePlyTextFile();
-            Construction.SerializePlyTextFile();
+            //Construction.SerializePlyTextFile();
+            //Construction.RoundTripPlyFile();
+            //Construction.DeserializePlyBinaryFile();
+            //Construction.SerializePlyBinaryFile();
+            Construction.RoundTripPlyFileBinary();
+        }
+
+        private static void RoundTripPlyFileBinary()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExamplePlyBinaryFilePathPropertyName];
+            string serializationFilePath = @"C:\temp\binary.ply";
+
+            var serializer = new PlyV1BinarySerializer();
+
+            var log = new StringListLog();
+            var plyFileComparer = new PlyFileEqualityComparer(log);
+
+            bool plyFilesEqual = RoundTripExternalDataStructureVerifier.Verify(serializer, exampleFilePath, serializationFilePath, plyFileComparer);
+
+            string logFilePath = @"C:\temp\ply file.txt";
+            if (plyFilesEqual)
+            {
+                File.WriteAllText(logFilePath, @"PLY files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(logFilePath, log.Lines);
+            }
+
+            var fileComparer = new TextFileComparer(log);
+
+            bool textFilesEqual = RoundTripExternalFileFormat.Verify(serializer, exampleFilePath, serializationFilePath, fileComparer);
+            string textFilePath = @"C:\temp\text file.txt";
+            if (textFilesEqual)
+            {
+                File.WriteAllText(textFilePath, @"Text files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(textFilePath, log.Lines);
+            }
+        }
+
+        private static void SerializePlyBinaryFile()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExamplePlyBinaryFilePathPropertyName];
+            string serializationFilePath = @"C:\temp\binary.ply";
+
+            PlyFile plyFile = PlyV1BinarySerializer.Deserialize(exampleFilePath);
+
+            PlyV1BinarySerializer.Serialize(serializationFilePath, plyFile);
+
+            PlyFile plyFile2 = PlyV1BinarySerializer.Deserialize(serializationFilePath);
+        }
+
+        private static void DeserializePlyBinaryFile()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExamplePlyBinaryFilePathPropertyName];
+
+            PlyFile plyFile = PlyV1BinarySerializer.Deserialize(exampleFilePath);
         }
 
         private static void RoundTripPlyFile()
@@ -41,22 +106,31 @@ namespace Eshunna
             var serializer = new PlyV1TextSerializer();
 
             var log = new StringListLog();
-            //var patchCollectionComparer = new PatchCollectionEqualityComparer(log);
+            var plyFileComparer = new PlyFileEqualityComparer(log);
 
-            bool patchCollectionsEqual = RoundTripExternalDataStructureVerifier.Verify(serializer, exampleFilePath, serializationFilePath, patchCollectionComparer);
-            if (!patchCollectionsEqual)
+            bool plyFilesEqual = RoundTripExternalDataStructureVerifier.Verify(serializer, exampleFilePath, serializationFilePath, plyFileComparer);
+
+            string logFilePath = @"C:\temp\ply file.txt";
+            if (plyFilesEqual)
             {
-                string logFilePath = @"C:\temp\patch collections.txt";
+                File.WriteAllText(logFilePath, @"PLY files are equal.");
+            }
+            else
+            {
                 File.WriteAllLines(logFilePath, log.Lines);
             }
 
             var fileComparer = new TextFileComparer(log);
 
             bool textFilesEqual = RoundTripExternalFileFormat.Verify(serializer, exampleFilePath, serializationFilePath, fileComparer);
-            if (!textFilesEqual)
+            string textFilePath = @"C:\temp\text file.txt";
+            if (textFilesEqual)
             {
-                string logFilePath = @"C:\temp\text file.txt";
-                File.WriteAllLines(logFilePath, log.Lines);
+                File.WriteAllText(textFilePath, @"Text files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(textFilePath, log.Lines);
             }
         }
 

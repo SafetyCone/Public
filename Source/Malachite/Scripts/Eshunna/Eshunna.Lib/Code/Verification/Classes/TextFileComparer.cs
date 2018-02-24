@@ -37,7 +37,7 @@ namespace Eshunna.Lib.Verification
                     {
                         output = false;
 
-                        string message = $@"Line mismatch. Line {iLine.ToString()}" + Environment.NewLine + line1 + Environment.NewLine + line2;
+                        string message = $@"Line mismatch. Line {(iLine + 1).ToString()}" + Environment.NewLine + line1 + Environment.NewLine + line2; // +1 to convert from zero-based to one-based line numbers.
                         this.Log.WriteLine(message);
                     }
                 }

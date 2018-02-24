@@ -25,58 +25,42 @@ namespace Eshunna.Lib.PLY
         public static readonly char[] Separators = new char[] { ' ' };
 
 
+        public static bool TryEnsureFileMarker(LineReader reader, out string fileMarkerFound)
+        {
+            // Ensure we have a PLY file.
+            fileMarkerFound = reader.ReadLine();
+
+            bool output = PlyFile.PlyFileMarker == fileMarkerFound;
+            return output;
+        }
+
+        public static void EnsureFileMarker(LineReader reader)
+        {
+            bool fileMarkerEnsured = PlyV1TextSerializer.TryEnsureFileMarker(reader, out string fileMarkerFound);
+            if (!fileMarkerEnsured)
+            {
+                string message = $@"PLY file marker not found. Found: {fileMarkerFound}, expected: {PlyFile.PlyFileMarker}";
+                throw new InvalidDataException(message);
+            }
+        }
+
         public static PlyFile Deserialize(string filePath)
         {
             using (LineReader reader = new LineReader(filePath))
             {
-                // Ensure we have a PLY file.
-                string plyFileMarker = reader.ReadLine();
-                if(PlyFile.PlyFileMarker != plyFileMarker)
-                {
-                    string message = $@"PLY file marker not found. Found: {plyFileMarker}, expected: {PlyFile.PlyFileMarker}";
-                    throw new InvalidDataException(message);
-                }
+                PlyV1TextSerializer.EnsureFileMarker(reader);
 
                 // Read the header.
                 PlyFileHeader header = PlyV1TextSerializer.DeserializeHeader(reader);
 
                 // Build the output.
-                PlyFile output = new PlyFile(header);
-
-                foreach (var elementDescriptor in header.Elements)
-                {
-                    var element = new Dictionary<string, object>();
-                    output.Values.Add(elementDescriptor.Name, element);
-
-                    foreach (var propertyDescriptor in elementDescriptor.PropertyDescriptors)
-                    {
-                        object valuesArray = PlyV1TextSerializer.GetValuesArray(propertyDescriptor, elementDescriptor.Count);
-                        element.Add(propertyDescriptor.Name, valuesArray);
-                    }
-                }
+                PlyFile output = PlyFile.Build(header);
 
                 // Build the value converters.
-                int nElements = header.Elements.Count;
-                ValueConverter[][] elementValueConverters = new ValueConverter[nElements][];
-                for (int iElement = 0; iElement < nElements; iElement++)
-                {
-                    var elementDescriptor = header.Elements[iElement];
-                    var element = output.Values[elementDescriptor.Name];
-
-                    int nProperties = elementDescriptor.PropertyDescriptors.Count;
-                    ValueConverter[] valueConverters = new ValueConverter[nProperties];
-                    elementValueConverters[iElement] = valueConverters;
-                    for (int iProperty = 0; iProperty < nProperties; iProperty++)
-                    {
-                        var propertyDescriptor = elementDescriptor.PropertyDescriptors[iProperty];
-                        var valuesArray = element[propertyDescriptor.Name];
-
-                        ValueConverter valueConverter = PlyV1TextSerializer.GetValueConverter(propertyDescriptor.DataType, valuesArray, propertyDescriptor.IsList);
-                        valueConverters[iProperty] = valueConverter;
-                    }
-                }
+                ValueConverter[][] elementValueConverters = PlyFile.BuildValueConverters(output);
 
                 // Fill the output.
+                int nElements = header.Elements.Count;
                 for (int iElement = 0; iElement < nElements; iElement++)
                 {
                     var elementDescriptor = header.Elements[iElement];
@@ -119,49 +103,6 @@ namespace Eshunna.Lib.PLY
             }
         }
 
-        private static ValueConverter GetValueConverter(PlyDataType plyDataType, object valuesArray, bool isList)
-        {
-            ValueConverter output;
-            switch (plyDataType)
-            {
-                case PlyDataType.Character:
-                    output = new ValueConverter<sbyte>(valuesArray, isList, Convert.ToSByte, Convert.ToString);
-                    break;
-
-                case PlyDataType.CharacterUnsigned:
-                    output = new ValueConverter<byte>(valuesArray, isList, Convert.ToByte, Convert.ToString);
-                    break;
-
-                case PlyDataType.Double:
-                    output = new ValueConverter<double>(valuesArray, isList, Convert.ToDouble, Convert.ToString);
-                    break;
-
-                case PlyDataType.Float:
-                    output = new ValueConverter<float>(valuesArray, isList, Convert.ToSingle, Convert.ToString);
-                    break;
-
-                case PlyDataType.Integer:
-                    output = new ValueConverter<int>(valuesArray, isList, Convert.ToInt32, Convert.ToString);
-                    break;
-
-                case PlyDataType.IntegerUnsigned:
-                    output = new ValueConverter<uint>(valuesArray, isList, Convert.ToUInt32, Convert.ToString);
-                    break;
-
-                case PlyDataType.Short:
-                    output = new ValueConverter<short>(valuesArray, isList, Convert.ToInt16, Convert.ToString);
-                    break;
-
-                case PlyDataType.ShortUnsigned:
-                    output = new ValueConverter<ushort>(valuesArray, isList, Convert.ToUInt16, Convert.ToString);
-                    break;
-
-                default:
-                    throw new UnexpectedEnumerationValueException<PlyDataType>(plyDataType);
-            }
-            return output;
-        }
-
         private static int GetListLength(string token, PlyDataType listLengthValueDataType)
         {
             int output;
@@ -170,107 +111,6 @@ namespace Eshunna.Lib.PLY
                 default:
                     output = Convert.ToInt32(token);
                     break;
-            }
-            return output;
-        }
-
-        private static object GetValuesArray(PlyPropertyDescriptor propertyDescriptor, int elementCount)
-        {
-            object output;
-            if(propertyDescriptor.IsList)
-            {
-                output = PlyV1TextSerializer.GetListValuesArray(propertyDescriptor.DataType, elementCount);
-            }
-            else
-            {
-                output = PlyV1TextSerializer.GetValuesArray(propertyDescriptor.DataType, elementCount);
-            }
-
-            return output;
-        }
-
-        private static object GetListValuesArray(PlyDataType plyDataType, int elementCount)
-        {
-            object output;
-            switch (plyDataType)
-            {
-                case PlyDataType.Character:
-                    output = new sbyte[elementCount][];
-                    break;
-
-                case PlyDataType.CharacterUnsigned:
-                    output = new byte[elementCount][];
-                    break;
-
-                case PlyDataType.Double:
-                    output = new double[elementCount][];
-                    break;
-
-                case PlyDataType.Float:
-                    output = new float[elementCount][];
-                    break;
-
-                case PlyDataType.Integer:
-                    output = new int[elementCount][];
-                    break;
-
-                case PlyDataType.IntegerUnsigned:
-                    output = new uint[elementCount][];
-                    break;
-
-                case PlyDataType.Short:
-                    output = new short[elementCount][];
-                    break;
-
-                case PlyDataType.ShortUnsigned:
-                    output = new ushort[elementCount][];
-                    break;
-
-                default:
-                    throw new UnexpectedEnumerationValueException<PlyDataType>(plyDataType);
-            }
-            return output;
-        }
-
-        private static object GetValuesArray(PlyDataType plyDataType, int count)
-        {
-            object output;
-            switch (plyDataType)
-            {
-                case PlyDataType.Character:
-                    output = new sbyte[count];
-                    break;
-
-                case PlyDataType.CharacterUnsigned:
-                    output = new byte[count];
-                    break;
-
-                case PlyDataType.Double:
-                    output = new double[count];
-                    break;
-
-                case PlyDataType.Float:
-                    output = new float[count];
-                    break;
-
-                case PlyDataType.Integer:
-                    output = new int[count];
-                    break;
-
-                case PlyDataType.IntegerUnsigned:
-                    output = new uint[count];
-                    break;
-
-                case PlyDataType.Short:
-                    output = new short[count];
-                    break;
-
-                case PlyDataType.ShortUnsigned:
-                    output = new ushort[count];
-                    break;
-
-                default:
-                    throw new UnexpectedEnumerationValueException<PlyDataType>(plyDataType);
             }
             return output;
         }
@@ -301,6 +141,12 @@ namespace Eshunna.Lib.PLY
                 output.Elements.Add(elementDescriptor);
             }
 
+            return output;
+        }
+
+        public static string SerializeComment(string comment)
+        {
+            string output = $@"{PlyFile.commentKeyword} {comment}";
             return output;
         }
 
@@ -366,9 +212,9 @@ namespace Eshunna.Lib.PLY
             return output;
         }
 
-        private static void SerializeElementDescriptor(StreamWriter writer, PlyElementDescriptor elementDescriptor)
+        public static void SerializeElementDescriptor(StreamWriter writer, PlyElementDescriptor elementDescriptor)
         {
-            string elementLine = $@"{PlyFile.elementKeyword} {elementDescriptor.Name}, {elementDescriptor.Count.ToString()}";
+            string elementLine = $@"{PlyFile.elementKeyword} {elementDescriptor.Name} {elementDescriptor.Count.ToString()}";
             writer.WriteLine(elementLine);
 
             foreach(var propertyDescriptor in elementDescriptor.PropertyDescriptors)
@@ -410,7 +256,7 @@ namespace Eshunna.Lib.PLY
             return output;
         }
 
-        private static void SerializeFormat(StreamWriter writer, PlyFileDataFormat plyFileDataFormat, Version version)
+        public static void SerializeFormat(StreamWriter writer, PlyFileDataFormat plyFileDataFormat, Version version)
         {
             var line = $@"{PlyFile.formatKeyword} {plyFileDataFormat.ToPlyFileDataFormatToken()} {version.ToString()}";
             writer.WriteLine(line);
@@ -433,6 +279,12 @@ namespace Eshunna.Lib.PLY
 
                 PlyV1TextSerializer.SerializeFormat(writer, header.FileDataFormat, header.FileFormatVersion);
 
+                foreach(var comment in header.Comments)
+                {
+                    string commentLine = PlyV1TextSerializer.SerializeComment(comment);
+                    writer.WriteLine(commentLine);
+                }
+
                 foreach(var elementDescriptor in header.Elements)
                 {
                     PlyV1TextSerializer.SerializeElementDescriptor(writer, elementDescriptor);
@@ -441,32 +293,14 @@ namespace Eshunna.Lib.PLY
                 writer.WriteLine(PlyFile.PlyFileHeaderEnd);
 
                 // Build the value converters.
-                int nElements = header.Elements.Count;
-                ValueConverter[][] elementValueConverters = new ValueConverter[nElements][];
-                for (int iElement = 0; iElement < nElements; iElement++)
-                {
-                    var elementDescriptor = header.Elements[iElement];
-                    var element = plyFile.Values[elementDescriptor.Name];
-
-                    int nProperties = elementDescriptor.PropertyDescriptors.Count;
-                    ValueConverter[] valueConverters = new ValueConverter[nProperties];
-                    elementValueConverters[iElement] = valueConverters;
-                    for (int iProperty = 0; iProperty < nProperties; iProperty++)
-                    {
-                        var propertyDescriptor = elementDescriptor.PropertyDescriptors[iProperty];
-                        var valuesArray = element[propertyDescriptor.Name];
-
-                        ValueConverter valueConverter = PlyV1TextSerializer.GetValueConverter(propertyDescriptor.DataType, valuesArray, propertyDescriptor.IsList);
-                        valueConverters[iProperty] = valueConverter;
-                    }
-                }
+                ValueConverter[][] elementValueConverters = PlyFile.BuildValueConverters(plyFile);
 
                 // Now write values.
                 StringBuilder builder = new StringBuilder();
+                int nElements = header.Elements.Count;
                 for (int iElement = 0; iElement < nElements; iElement++)
                 {
                     var elementDescriptor = header.Elements[iElement];
-                    var element = plyFile.Values[elementDescriptor.Name];
                     ValueConverter[] valueConverters = elementValueConverters[iElement];
 
                     int nElementValues = elementDescriptor.Count;

@@ -46,7 +46,7 @@ namespace Public.Common.Lib.IO
 
 
         public StreamReader StreamReader { get; }
-        public int LinesRead { get; private set; }
+        public int LinesRead { get; private set; } = 0;
         public bool LeaveOpen { get; }
 
 
