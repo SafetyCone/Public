@@ -8,9 +8,11 @@ using Public.Common.Lib.IO.Serialization;
 
 using Eshunna.Lib;
 using Eshunna.Lib.Logging;
+using Eshunna.Lib.Match;
 using Eshunna.Lib.NVM;
 using Eshunna.Lib.Patches;
 using Eshunna.Lib.PLY;
+using Eshunna.Lib.SIFT;
 using Eshunna.Lib.Verification;
 using EshunnaProperties = Eshunna.Properties;
 
@@ -32,7 +34,150 @@ namespace Eshunna
             //Construction.RoundTripPlyFile();
             //Construction.DeserializePlyBinaryFile();
             //Construction.SerializePlyBinaryFile();
-            Construction.RoundTripPlyFileBinary();
+            //Construction.RoundTripPlyFileBinary();
+            //Construction.DeserializeSiftFileBinary();
+            //Construction.SerializeSiftFileBinary();
+            //Construction.RoundTripSiftFileBinary();
+            //Construction.DeserializeMatchFile();
+            //Construction.SerializeMatchFile();
+            Construction.RoundTripMatchFile();
+        }
+
+        private static void RoundTripMatchFile()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleMatchFilePathPropertyName];
+            string serializationFilePath = @"C:\temp\match.mat";
+
+            var serializer = new MatchFileSerializer();
+
+            var log1 = new StringListLog();
+            var matchFileComparer = new MatchFileEqualityComparer(log1);
+
+            bool matchFilesEqual = RoundTripExternalDataStructureVerifier.Verify(serializer, exampleFilePath, serializationFilePath, matchFileComparer);
+
+            string logFilePath = @"C:\temp\match file.txt";
+            if (matchFilesEqual)
+            {
+                File.WriteAllText(logFilePath, @"Match files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(logFilePath, log1.Lines);
+            }
+
+            var log2 = new StringListLog();
+            //var fileComparer = new BinaryFileComparer(log2);
+            var fileComparer = new TextFileComparer(log2);
+
+            bool textFilesEqual = RoundTripExternalFileFormat.Verify(serializer, exampleFilePath, serializationFilePath, fileComparer);
+            string textFilePath = @"C:\temp\text file.txt";
+            if (textFilesEqual)
+            {
+                File.WriteAllText(textFilePath, @"Text files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(textFilePath, log2.Lines);
+            }
+        }
+
+        private static void SerializeMatchFile()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleMatchFilePathPropertyName];
+            string serializaztionFilePath = @"C:\temp\match.mat";
+
+            MatchFile matchFile = MatchFileSerializer.Deserialize(exampleFilePath);
+
+            MatchFileSerializer.Serialize(serializaztionFilePath, matchFile);
+
+            MatchFile matchFile2 = MatchFileSerializer.Deserialize(serializaztionFilePath);
+
+            var log1 = new StringListLog();
+            var matchFileComparer = new MatchFileEqualityComparer(log1);
+
+            bool matchFilesEqual = matchFileComparer.Equals(matchFile, matchFile2);
+
+            string logFilePath = @"C:\temp\match file.txt";
+            if (matchFilesEqual)
+            {
+                File.WriteAllText(logFilePath, @"Match files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(logFilePath, log1.Lines);
+            }
+        }
+
+        private static void DeserializeMatchFile()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleMatchFilePathPropertyName];
+
+            MatchFile matchFile = MatchFileSerializer.Deserialize(exampleFilePath);
+        }
+
+        private static void RoundTripSiftFileBinary()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleSiftBinaryFilePathPropertyName];
+            string serializationFilePath = @"C:\temp\binary.sift";
+
+            var serializer = new SiftBinarySerializer();
+
+            var log = new StringListLog();
+            var siftFileComparer = new SiftFileEqualityComparer(log);
+
+            bool siftFilesEqual = RoundTripExternalDataStructureVerifier.Verify(serializer, exampleFilePath, serializationFilePath, siftFileComparer);
+
+            string logFilePath = @"C:\temp\sift binary file.txt";
+            if (siftFilesEqual)
+            {
+                File.WriteAllText(logFilePath, @"Sift binary files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(logFilePath, log.Lines);
+            }
+
+            var fileComparer = new TextFileComparer(log);
+
+            bool textFilesEqual = RoundTripExternalFileFormat.Verify(serializer, exampleFilePath, serializationFilePath, fileComparer);
+            string textFilePath = @"C:\temp\text file.txt";
+            if (textFilesEqual)
+            {
+                File.WriteAllText(textFilePath, @"Text files are equal.");
+            }
+            else
+            {
+                File.WriteAllLines(textFilePath, log.Lines);
+            }
+        }
+
+        private static void SerializeSiftFileBinary()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleSiftBinaryFilePathPropertyName];
+            string serializationFilePath = @"C:\temp\binary.sift";
+
+            SiftFile siftFile = SiftBinarySerializer.Deserialize(exampleFilePath);
+
+            SiftBinarySerializer.Serialize(serializationFilePath, siftFile);
+        }
+
+        private static void DeserializeSiftFileBinary()
+        {
+            var properties = Program.GetProjectProperties();
+
+            string exampleFilePath = properties[EshunnaProperties.ExampleSiftBinaryFilePathPropertyName];
+
+            SiftFile siftFile = SiftBinarySerializer.Deserialize(exampleFilePath);
         }
 
         private static void RoundTripPlyFileBinary()
@@ -275,11 +420,14 @@ namespace Eshunna
             //double value = -9.8642e-005;
             //string valueStr = value.FormatPatch6SignificantDigits();
 
-            int[][] temp = new int[5][];
+            //int[][] temp = new int[5][];
 
-            temp[0] = new int[2];
-            temp[1] = new int[3];
-            temp[2] = new int[4];
+            //temp[0] = new int[2];
+            //temp[1] = new int[3];
+            //temp[2] = new int[4];
+
+            //var list = new List<string>(4);
+            //list.Add(@""); // list[0] = @""; // Errors.
         }
     }
 }

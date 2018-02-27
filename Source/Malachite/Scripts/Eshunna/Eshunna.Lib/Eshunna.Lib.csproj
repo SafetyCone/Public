@@ -40,10 +40,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Classes\ColorAlpha.cs" />
     <Compile Include="Code\Classes\Location3DHomogenous.cs" />
+    <Compile Include="Code\Classes\MatrixFloat.cs" />
+    <Compile Include="Code\Comparers\Array2DEqualityComparer.cs" />
+    <Compile Include="Code\Comparers\DictionaryEqualityComparer.cs" />
+    <Compile Include="Code\Comparers\IntegerEqualityComparer.cs" />
+    <Compile Include="Code\Comparers\StringEqualityComparer.cs" />
     <Compile Include="Code\Logging\DummyLog.cs" />
     <Compile Include="Code\Logging\ILog.cs" />
     <Compile Include="Code\Logging\StringListLog.cs" />
+    <Compile Include="Code\Match\MatchFile.cs" />
+    <Compile Include="Code\Match\MatchFileDefinition.cs" />
+    <Compile Include="Code\Match\MatchFileDefinitionEqualityComparer.cs" />
+    <Compile Include="Code\Match\MatchFileEqualityComparer.cs" />
+    <Compile Include="Code\Match\MatchFileHeader.cs" />
+    <Compile Include="Code\Match\MatchFileHeaderEqualityComparer.cs" />
+    <Compile Include="Code\Match\MatchFileSerializer.cs" />
+    <Compile Include="Code\Match\MatchRecordV3.cs" />
+    <Compile Include="Code\Match\MatchRecordV3EqualityComparer.cs" />
+    <Compile Include="Code\Match\RecordLocation.cs" />
+    <Compile Include="Code\Match\RecordLocationEqualityComparer.cs" />
+    <Compile Include="Code\Match\TwoViewGeometry.cs" />
+    <Compile Include="Code\Match\TwoViewGeometryEqualityComparer.cs" />
     <Compile Include="Code\NVM\Camera.cs" />
     <Compile Include="Code\Classes\Color.cs" />
     <Compile Include="Code\NVM\CameraEqualityComparer.cs" />
@@ -79,6 +98,16 @@
     <Compile Include="Code\PLY\PlyV1TextSerializer.cs" />
     <Compile Include="Code\PLY\ValueConverter.cs" />
     <Compile Include="Code\PLY\ValueComparer.cs" />
+    <Compile Include="Code\SIFT\SiftBinarySerializer.cs" />
+    <Compile Include="Code\SIFT\SiftDescriptor.cs" />
+    <Compile Include="Code\SIFT\SiftDescriptorEqualityComparer.cs" />
+    <Compile Include="Code\SIFT\SiftFeature.cs" />
+    <Compile Include="Code\SIFT\SiftFeatureEqualityComparer.cs" />
+    <Compile Include="Code\SIFT\SiftFile.cs" />
+    <Compile Include="Code\SIFT\SiftFileEqualityComparer.cs" />
+    <Compile Include="Code\SIFT\SiftHeader.cs" />
+    <Compile Include="Code\SIFT\SiftHeaderEqualityComparer.cs" />
+    <Compile Include="Code\Verification\Classes\BinaryFileComparer.cs" />
     <Compile Include="Code\Verification\Classes\RoundTripExternalDataStructureVerifier.cs" />
     <Compile Include="Code\Verification\Classes\RoundTripExternalFileFormat.cs" />
     <Compile Include="Code\Verification\Classes\TextFileComparer.cs" />
