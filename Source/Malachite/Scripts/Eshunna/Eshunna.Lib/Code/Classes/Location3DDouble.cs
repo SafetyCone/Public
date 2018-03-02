@@ -6,17 +6,17 @@ using Public.Common.Lib;
 namespace Eshunna.Lib
 {
     [Serializable]
-    public struct Location3D : IEquatable<Location3D>
+    public struct Location3DDouble : IEquatable<Location3DDouble>
     {
         #region Static
 
-        public static bool operator ==(Location3D lhs, Location3D rhs)
+        public static bool operator ==(Location3DDouble lhs, Location3DDouble rhs)
         {
             bool output = lhs.Equals(rhs);
             return output;
         }
 
-        public static bool operator !=(Location3D lhs, Location3D rhs)
+        public static bool operator !=(Location3DDouble lhs, Location3DDouble rhs)
         {
             bool output = !lhs.Equals(rhs);
             return output;
@@ -30,14 +30,14 @@ namespace Eshunna.Lib
         public double Z { get; }
 
 
-        public Location3D(double x, double y, double z)
+        public Location3DDouble(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public bool Equals(Location3D other)
+        public bool Equals(Location3DDouble other)
         {
             bool output =
                 this.X == other.X &&
@@ -49,7 +49,7 @@ namespace Eshunna.Lib
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj is Location3D objAsLocation3D)
+            if (obj is Location3DDouble objAsLocation3D)
             {
                 output = this.Equals(objAsLocation3D);
             }

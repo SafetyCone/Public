@@ -30,8 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.4.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,8 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\ColorAlpha.cs" />
-    <Compile Include="Code\Classes\Location3DHomogenous.cs" />
+    <Compile Include="Code\Classes\Location3DFloat.cs" />
+    <Compile Include="Code\Classes\Location3DHomogenousDouble.cs" />
+    <Compile Include="Code\Classes\Location3DHomogenousFloat.cs" />
+    <Compile Include="Code\Classes\MatrixDouble.cs" />
     <Compile Include="Code\Classes\MatrixFloat.cs" />
+    <Compile Include="Code\Classes\QuaternionFloat.cs" />
     <Compile Include="Code\Comparers\Array2DEqualityComparer.cs" />
     <Compile Include="Code\Comparers\DictionaryEqualityComparer.cs" />
     <Compile Include="Code\Comparers\IntegerEqualityComparer.cs" />
@@ -69,14 +78,14 @@
     <Compile Include="Code\Classes\Extensions.cs" />
     <Compile Include="Code\NVM\FeaturePoint.cs" />
     <Compile Include="Code\Classes\Location2D.cs" />
-    <Compile Include="Code\Classes\Location3D.cs" />
+    <Compile Include="Code\Classes\Location3DDouble.cs" />
     <Compile Include="Code\NVM\FeaturePointComparer.cs" />
     <Compile Include="Code\NVM\Measurement.cs" />
     <Compile Include="Code\NVM\MeasurementEqualityComparer.cs" />
     <Compile Include="Code\NVM\NViewMatch.cs" />
     <Compile Include="Code\NVM\NViewMatchEqualityComparer.cs" />
     <Compile Include="Code\NVM\NvmV3Serializer.cs" />
-    <Compile Include="Code\Classes\Quaternion.cs" />
+    <Compile Include="Code\Classes\QuaternionDouble.cs" />
     <Compile Include="Code\Patches\Patch.cs" />
     <Compile Include="Code\Patches\PatchCollection.cs" />
     <Compile Include="Code\Patches\PatchCollectionEqualityComparer.cs" />
@@ -120,6 +129,15 @@
       <Name>Public.Common.Lib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Code\Match\File Format Description.txt" />
+    <Content Include="Code\NVM\File Format Description.txt" />
+    <Content Include="Code\Patches\File Format Description.txt" />
+    <Content Include="Code\PLY\File Format Description.txt" />
+    <Content Include="Code\SIFT\File Format Description.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

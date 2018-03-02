@@ -8,15 +8,15 @@ namespace Eshunna.Lib.NVM
     {
         public string FileName { get; set; }
         public double FocalLength { get; set; }
-        public Quaternion Rotation { get; set; }
+        public QuaternionDouble Rotation { get; set; }
         /// <summary>
-        /// ? Location of camera in 3D space, or principal point of the camera?
+        /// Location of camera in 3D space.
         /// </summary>
-        public Location3D Location { get; set; }
+        public Location3DDouble Location { get; set; }
         public double RadialDistortionCoefficient { get; set; }
 
 
-        public Camera(string fileName, double focalLength, Quaternion rotation, Location3D location, double radialDistortionCoefficient)
+        public Camera(string fileName, double focalLength, QuaternionDouble rotation, Location3DDouble location, double radialDistortionCoefficient)
         {
             this.FileName = fileName;
             this.FocalLength = focalLength;

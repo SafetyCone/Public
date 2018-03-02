@@ -66,6 +66,7 @@
     <Compile Include="Code\Classes\BitmapLocker.cs" />
     <Compile Include="Code\Classes\ColorConversion.cs" />
     <Compile Include="Code\Classes\FileExtensions.cs" />
+    <Compile Include="Code\Classes\ImageMarker.cs" />
     <Compile Include="Code\Classes\ImageResizer.cs" />
     <Compile Include="Code\Classes\RgbFloatImageExternalFormatSerializer.cs" />
     <Compile Include="Code\Programs\WindowsPhotoViewer.cs" />

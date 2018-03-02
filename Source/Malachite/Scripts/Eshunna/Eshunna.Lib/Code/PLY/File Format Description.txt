@@ -1,0 +1,32 @@
+﻿http://paulbourke.net/dataformats/ply/ (description and good examples)
+
+A PLY file is an extensible file that generally contains vertices and faces, but can contain any other data elements as specified by the header.
+
+The PLY file is split into two sections:
+
+1. Header (always text)
+2. Body (can be either text or binary).
+
+
+The header is composed of:
+
+1. The file marker ("ply").
+2. The format, either "ascii", "binary_little_endian", or "binary_big_endian".
+3. Comment lines (it is assumed that comments can only follow the format line, and preceed the first element line).
+4. Element definitions.
+5. The end of header marker "end_header".
+
+
+Element definitions are composed of:
+
+1. The element line, containing the name of the element and the number of instances of this element.
+2. Property definitions.
+
+
+Property definitions are composed of:
+
+1. The data-type (one of a fixed number of values to be found at the top of the PlyFile class).
+2. The name of the property.
+
+
+The body is then composed of the values for each property, for each of the specified number of instances of each element.

@@ -32,8 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.4.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,11 +56,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Visuals\Lib.Visuals\Public.Common.Lib.Visuals.csproj">
+      <Project>{d28cae43-a1e4-4396-bb65-12c19ddbe764}</Project>
+      <Name>Public.Common.Lib.Visuals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Visuals\MetadataExtractor\Public.Common.Lib.Visuals.MetadataExtractor.csproj">
+      <Project>{68061087-bfb5-44a4-afd0-7aff912f3191}</Project>
+      <Name>Public.Common.Lib.Visuals.MetadataExtractor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Visuals\MSWindows\Public.Common.Lib.Visuals.MSWindows.csproj">
+      <Project>{981a0b90-77d5-4c90-8ba0-12320c2ddd90}</Project>
+      <Name>Public.Common.Lib.Visuals.MSWindows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.csproj">
       <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
       <Name>Public.Common.Lib</Name>

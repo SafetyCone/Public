@@ -6,17 +6,17 @@ using Public.Common.Lib;
 namespace Eshunna.Lib
 {
     [Serializable]
-    public struct Location3DHomogenous : IEquatable<Location3DHomogenous>
+    public struct Location3DHomogenousFloat : IEquatable<Location3DHomogenousFloat>
     {
         #region Static
 
-        public static bool operator ==(Location3DHomogenous lhs, Location3DHomogenous rhs)
+        public static bool operator ==(Location3DHomogenousFloat lhs, Location3DHomogenousFloat rhs)
         {
             bool output = lhs.Equals(rhs);
             return output;
         }
 
-        public static bool operator !=(Location3DHomogenous lhs, Location3DHomogenous rhs)
+        public static bool operator !=(Location3DHomogenousFloat lhs, Location3DHomogenousFloat rhs)
         {
             bool output = !lhs.Equals(rhs);
             return output;
@@ -25,13 +25,13 @@ namespace Eshunna.Lib
         #endregion
 
 
-        public double X { get; }
-        public double Y { get; }
-        public double Z { get; }
-        public double H { get; }
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
+        public float H { get; }
 
 
-        public Location3DHomogenous(double x, double y, double z, double h)
+        public Location3DHomogenousFloat(float x, float y, float z, float h)
         {
             this.X = x;
             this.Y = y;
@@ -39,7 +39,7 @@ namespace Eshunna.Lib
             this.H = h;
         }
 
-        public bool Equals(Location3DHomogenous other)
+        public bool Equals(Location3DHomogenousFloat other)
         {
             bool output =
                 this.X == other.X &&
@@ -52,7 +52,7 @@ namespace Eshunna.Lib
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj is Location3DHomogenous objAsLocation3DHomogenous)
+            if (obj is Location3DHomogenousFloat objAsLocation3DHomogenous)
             {
                 output = this.Equals(objAsLocation3DHomogenous);
             }

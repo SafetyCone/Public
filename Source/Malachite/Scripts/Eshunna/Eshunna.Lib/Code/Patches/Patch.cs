@@ -5,8 +5,8 @@ namespace Eshunna.Lib.Patches
 {
     public class Patch
     {
-        public Location3DHomogenous Location { get; }
-        public Location3DHomogenous Normal { get; }
+        public Location3DHomogenousDouble Location { get; }
+        public Location3DHomogenousDouble Normal { get; }
         /// <summary>
         /// Ranges from -1 to 1, where -1 is bad, and 1 is good.
         /// </summary>
@@ -23,7 +23,7 @@ namespace Eshunna.Lib.Patches
         public int[] ImageIndicesWithSomeAgreement { get; }
 
 
-        public Patch(Location3DHomogenous location, Location3DHomogenous normal, double photometricConsistencyScore, double debugging1, double debugging2, int[] imageIndicesWithGoodAgreement, int[] imageIndicesWithSomeAgreement)
+        public Patch(Location3DHomogenousDouble location, Location3DHomogenousDouble normal, double photometricConsistencyScore, double debugging1, double debugging2, int[] imageIndicesWithGoodAgreement, int[] imageIndicesWithSomeAgreement)
         {
             this.Location = location;
             this.Normal = normal;

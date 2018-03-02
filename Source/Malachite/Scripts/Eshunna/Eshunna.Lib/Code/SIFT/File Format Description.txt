@@ -1,0 +1,33 @@
+﻿http://ccwu.me/vsfm/doc.html#customize (see use your own feature detectors)
+
+The SIFT file format is composed of:
+
+1. A header.
+2. Location data.
+3. Descriptor data.
+4. End of file marker (0EOF);
+
+
+The header is composed of:
+
+1. SIFT file marker "SIFT".
+2. Version specifier (generally "V4.0" or "V5.0").
+3. Number of points.
+4. Number of location data specifiers (always 5).
+5. Number of descriptor components (always 128).
+
+
+The location data is always composed of 5 data specifiers:
+
+1. X as a float.
+2. Y as a float.
+3. Color as 4 bytes, RGBA?
+4. Scale as a float.
+5. Orientation as a float.
+
+
+The descriptor data is composed of 128 byte components (with the entire descriptor normalized to a value of 512).
+
+1. 128 byte-valued descriptors.
+
+

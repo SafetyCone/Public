@@ -1,0 +1,34 @@
+﻿http://ccwu.me/vsfm/doc.html#nvm (the file format)
+http://ccwu.me/vsfm/doc.html#basic (specification of the coordinate system for R, C, image center)
+
+The NVM file format is made up of three sections:
+
+1. The list of images (or cameras) used to compute the scene.
+2. The list of 3D points in the image.
+3. The list of model for which a PLY file exists.
+
+The third section can generally be ignored.
+
+
+The images (cameras) are specified by:
+
+1. File name.
+2. Focal length (assuming the same for x and y image directions).
+3. A rotation matrix specified as a quaternion.
+4. The location of the camera in 3D space (C = -R' * T).
+5. Radial distortion parameter (a single parameter).
+6. An ending 0.
+
+
+The 3D points are specified by:
+
+1. XYX as float positions.
+2. RGB as byte values.
+3. A list of measurements.
+
+
+A measurement is specified by:
+
+1. Image index (as given in section 1).
+2. Feature index (as given in the SIFT file for the image identified by the image index).
+3. X,Y float pixel positions specified relative to the image center.

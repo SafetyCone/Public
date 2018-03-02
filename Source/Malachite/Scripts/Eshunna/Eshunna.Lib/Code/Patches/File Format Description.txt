@@ -1,0 +1,20 @@
+﻿https://www.di.ens.fr/pmvs/documentation.html (see at the bottom)
+
+
+The Patch file format is composed of patches. The file is composed of:
+
+1. The file marker "PATCHES".
+2. The number of patches.
+3. Each patch.
+
+
+A patch is specified by:
+
+1. The patch marker "PATCHS" (nope! not a misspelling!)
+2. The 3D location of the patch, as a 4-element homogenous 3D location specified by 6 significant figure floats.
+3. The estimated normal of the patch, as a 3-element vector specified by 6 significant figure floats.
+4. The average normalized cross-correlation score (-1.0 is bad, 1.0 is good), followed by two numbers of unknown significance that are "used for debugging purposes".
+5. The number of images in which the point is visible and textures agree well.
+6. The indices of images in which texture agree well. These indices are relative to the images in the "cameras" file. This "cameras" file contains the cameras in the same order as the NVM file. (It might be worth guaranteeing this with a file-read and mapping, but for now I'll move on.)
+7. The number of images in which textures don't agree well, but the point *should* still be visible.
+8. The indices of images in which the textures don't agree well, but the point *should* still be visible.

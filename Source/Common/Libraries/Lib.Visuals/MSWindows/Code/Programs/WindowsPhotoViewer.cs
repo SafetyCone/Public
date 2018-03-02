@@ -4,6 +4,7 @@ using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 using System.IO;
 
 using Public.Common.Lib.IO.Extensions;
+using Public.Common.Lib.OS;
 
 
 namespace Public.Common.Lib.Visuals.MSWindows

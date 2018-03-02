@@ -1,0 +1,48 @@
+﻿https://groups.google.com/forum/#!topic/vsfm/yBLGiuZf3lc (really, the only way to understand the file format is to look at the C++ code reading it.)
+
+The name of the match file is basically the name of the image file for which the match file has been generated, but with a change of file extension (thus you cannot separate two images with the same name, but different file extensions (i.e. jpg and bmp)!)
+
+The match file format is specified by:
+
+1. A header.
+2. A definition containing record locations in a byte block, one for each image the image named for the match file has been matched against.
+3. Records in byte blocks, one for each matched image.
+
+
+The header is specified by 20-bytes, broken into 5 integers:
+
+1. The version string, as 4 chars "MT03"
+2. The number of files matched against (this is the number of record locations to expect).
+3. The used size of the definition byte block.
+4. The total available size of the definition byte block (i.e. where the first record is located).
+5. The feature count, which is generally left at zero.
+
+
+The definition is made up of:
+
+1. Record locations.
+2, Trivia bytes.
+
+
+Record locations are made of:
+
+1. The feature count in the matched image.
+2. The read location (start byte count of the record block).
+3. The block size of the record (the total number of bytes to read for the record block).
+4. The trash size (number of trash bytes, generally 0).
+5. The extra size (the size of the file name char array).
+6. The file name of the matched file (this is the relative file location of the matched file).
+
+
+A record is made up of:
+
+1. The total number of matches. ("Putative" matches.)
+2. The match record:
+2a.	Version string "MRV3"
+2b.	TwoViewGeometry object directly binary serialized.
+2c. An int[7], all zero.
+3. The 2 x total number of matches int array. ("Putative" matches.)
+4. The 2 x inlier number of matches.
+
+
+See the code for the TwoViewGeometry class to see what the TwoViewGeometry object is made up of.

@@ -114,7 +114,7 @@ namespace Eshunna.Lib.NVM
             double locationY = Convert.ToDouble(locationYStr);
             string locationZStr = tokens[2];
             double locationZ = Convert.ToDouble(locationZStr);
-            Location3D location = new Location3D(locationX, locationY, locationZ);
+            Location3DDouble location = new Location3DDouble(locationX, locationY, locationZ);
 
             string redStr = tokens[3];
             byte red = Convert.ToByte(redStr);
@@ -206,7 +206,7 @@ namespace Eshunna.Lib.NVM
             double quaternionY = Convert.ToDouble(quaternionYStr);
             string quaternionZStr = tokens[5];
             double quaternionZ = Convert.ToDouble(quaternionZStr);
-            Quaternion rotation = new Quaternion(quaternionW, quaternionX, quaternionY, quaternionZ);
+            QuaternionDouble rotation = new QuaternionDouble(quaternionW, quaternionX, quaternionY, quaternionZ);
 
             string locationXStr = tokens[6];
             double locationX = Convert.ToDouble(locationXStr);
@@ -214,7 +214,7 @@ namespace Eshunna.Lib.NVM
             double locationY = Convert.ToDouble(locationYStr);
             string locationZStr = tokens[8];
             double locationZ = Convert.ToDouble(locationZStr);
-            Location3D location = new Location3D(locationX, locationY, locationZ);
+            Location3DDouble location = new Location3DDouble(locationX, locationY, locationZ);
 
             string radialDistortionCoefficientStr = tokens[9];
             double radialDistortionCoefficient = Convert.ToDouble(radialDistortionCoefficientStr);

@@ -11,5 +11,6 @@ namespace Eshunna
         public static readonly string ExamplePlyTextFilePathPropertyName = @"Example PLY Text File Path";
         public static readonly string ExamplePlyBinaryFilePathPropertyName = @"Example PLY Binary File Path";
         public static readonly string ExampleSiftBinaryFilePathPropertyName = @"Example SIFT Binary File Path";
+        public static readonly string ImagesDirectoryPathPropertyName = @"Images Directory Path";
     }
 }

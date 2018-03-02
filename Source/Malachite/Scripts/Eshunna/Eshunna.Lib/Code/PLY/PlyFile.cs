@@ -41,6 +41,12 @@ namespace Eshunna.Lib.PLY
 
         #region Static
 
+        public static Version GetDefaultVersion()
+        {
+            var version = new Version(1, 0);
+            return version;
+        }
+
         /// <summary>
         /// Allocates, but does not fill, space for PLY file data.
         /// </summary>

@@ -60,8 +60,8 @@ namespace Eshunna.Lib.Patches
                 throw new InvalidDataException(message);
             }
 
-            Location3DHomogenous location = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
-            Location3DHomogenous normal = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
+            Location3DHomogenousDouble location = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
+            Location3DHomogenousDouble normal = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
 
             string infoLine = reader.ReadLine();
             string[] infoTokens = infoLine.Split(PatchCollectionV1Serializer.Separators, StringSplitOptions.None);
@@ -142,7 +142,7 @@ namespace Eshunna.Lib.Patches
             }
         }
 
-        private static Location3DHomogenous DeserializeLocation3DHomogenous(LineReader reader)
+        private static Location3DHomogenousDouble DeserializeLocation3DHomogenous(LineReader reader)
         {
             string line = reader.ReadLine();
 
@@ -155,11 +155,11 @@ namespace Eshunna.Lib.Patches
             double z = values[2];
             double h = values[3];
 
-            Location3DHomogenous output = new Location3DHomogenous(x, y, z, h);
+            Location3DHomogenousDouble output = new Location3DHomogenousDouble(x, y, z, h);
             return output;
         }
 
-        private static void SerializeLocation3DHomogenous(StreamWriter writer, Location3DHomogenous location3DHomogenous)
+        private static void SerializeLocation3DHomogenous(StreamWriter writer, Location3DHomogenousDouble location3DHomogenous)
         {
             string xStr = location3DHomogenous.X.FormatPatch6SignificantDigits();
             string yStr = location3DHomogenous.Y.FormatPatch6SignificantDigits();
