@@ -46,12 +46,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\ColorAlpha.cs" />
-    <Compile Include="Code\Classes\Location3DFloat.cs" />
-    <Compile Include="Code\Classes\Location3DHomogenousDouble.cs" />
-    <Compile Include="Code\Classes\Location3DHomogenousFloat.cs" />
+    <Compile Include="Code\Classes\Facet.cs" />
+    <Compile Include="Code\Classes\Location2Float.cs" />
+    <Compile Include="Code\Classes\Location2Integer.cs" />
+    <Compile Include="Code\Classes\Location3Float.cs" />
+    <Compile Include="Code\Classes\Location3HomogenousDouble.cs" />
+    <Compile Include="Code\Classes\Location3HomogenousFloat.cs" />
     <Compile Include="Code\Classes\MatrixDouble.cs" />
     <Compile Include="Code\Classes\MatrixFloat.cs" />
+    <Compile Include="Code\Classes\Operations.cs" />
     <Compile Include="Code\Classes\QuaternionFloat.cs" />
+    <Compile Include="Code\Classes\StructureModel.cs" />
+    <Compile Include="Code\Classes\VectorDouble.cs" />
+    <Compile Include="Code\Classes\VectorFloat.cs" />
+    <Compile Include="Code\Classes\Vector3Double.cs" />
+    <Compile Include="Code\Classes\Vector3Float.cs" />
+    <Compile Include="Code\Classes\Vector2Double.cs" />
+    <Compile Include="Code\Classes\Vector2Float.cs" />
+    <Compile Include="Code\Classes\Vector4Double.cs" />
+    <Compile Include="Code\Classes\Vector4Float.cs" />
     <Compile Include="Code\Comparers\Array2DEqualityComparer.cs" />
     <Compile Include="Code\Comparers\DictionaryEqualityComparer.cs" />
     <Compile Include="Code\Comparers\IntegerEqualityComparer.cs" />
@@ -77,8 +90,8 @@
     <Compile Include="Code\NVM\CameraEqualityComparer.cs" />
     <Compile Include="Code\Classes\Extensions.cs" />
     <Compile Include="Code\NVM\FeaturePoint.cs" />
-    <Compile Include="Code\Classes\Location2D.cs" />
-    <Compile Include="Code\Classes\Location3DDouble.cs" />
+    <Compile Include="Code\Classes\Location2Double.cs" />
+    <Compile Include="Code\Classes\Location3Double.cs" />
     <Compile Include="Code\NVM\FeaturePointComparer.cs" />
     <Compile Include="Code\NVM\Measurement.cs" />
     <Compile Include="Code\NVM\MeasurementEqualityComparer.cs" />
@@ -87,10 +100,11 @@
     <Compile Include="Code\NVM\NvmV3Serializer.cs" />
     <Compile Include="Code\Classes\QuaternionDouble.cs" />
     <Compile Include="Code\Patches\Patch.cs" />
-    <Compile Include="Code\Patches\PatchCollection.cs" />
+    <Compile Include="Code\Patches\PatchFile.cs" />
     <Compile Include="Code\Patches\PatchCollectionEqualityComparer.cs" />
     <Compile Include="Code\Patches\PatchCollectionV1Serializer.cs" />
     <Compile Include="Code\Patches\PatchEqualityComparer.cs" />
+    <Compile Include="Code\PLY\Constants.cs" />
     <Compile Include="Code\PLY\Enumerations\PlyDataType.cs" />
     <Compile Include="Code\PLY\PlyDataTypeExtensions.cs" />
     <Compile Include="Code\PLY\PlyElementDescriptor.cs" />

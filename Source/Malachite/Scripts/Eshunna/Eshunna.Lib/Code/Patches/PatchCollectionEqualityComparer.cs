@@ -6,7 +6,7 @@ using Eshunna.Lib.Logging;
 
 namespace Eshunna.Lib.Patches
 {
-    public class PatchCollectionEqualityComparer : IEqualityComparer<PatchCollection>
+    public class PatchCollectionEqualityComparer : IEqualityComparer<PatchFile>
     {
         public IEqualityComparer<Patch> PatchComparer { get; }
         public ILog Log { get; }
@@ -23,7 +23,7 @@ namespace Eshunna.Lib.Patches
         {
         }
 
-        public bool Equals(PatchCollection x, PatchCollection y)
+        public bool Equals(PatchFile x, PatchFile y)
         {
             bool output = true;
 
@@ -58,7 +58,7 @@ namespace Eshunna.Lib.Patches
             return output;
         }
 
-        public int GetHashCode(PatchCollection obj)
+        public int GetHashCode(PatchFile obj)
         {
             throw new NotImplementedException();
         }

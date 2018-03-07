@@ -8,7 +8,7 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Eshunna.Lib.Patches
 {
-    public class PatchCollectionV1Serializer : IFileSerializer<PatchCollection>
+    public class PatchCollectionV1Serializer : IFileSerializer<PatchFile>
     {
         #region Static
 
@@ -17,7 +17,7 @@ namespace Eshunna.Lib.Patches
         private static readonly char[] Separators = new char[] { ' ' };
 
 
-        public static PatchCollection Deserialize(string filePath)
+        public static PatchFile Deserialize(string filePath)
         {
             using (LineReader reader = new LineReader(filePath))
             {
@@ -46,7 +46,7 @@ namespace Eshunna.Lib.Patches
                     throw new InvalidDataException(message);
                 }
 
-                PatchCollection output = new PatchCollection(patches);
+                PatchFile output = new PatchFile(patches);
                 return output;
             }
         }
@@ -60,8 +60,8 @@ namespace Eshunna.Lib.Patches
                 throw new InvalidDataException(message);
             }
 
-            Location3DHomogenousDouble location = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
-            Location3DHomogenousDouble normal = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
+            Location3HomogenousDouble location = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
+            Vector4Double normal = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader).ToVector4Double();
 
             string infoLine = reader.ReadLine();
             string[] infoTokens = infoLine.Split(PatchCollectionV1Serializer.Separators, StringSplitOptions.None);
@@ -84,7 +84,7 @@ namespace Eshunna.Lib.Patches
             writer.WriteLine(PatchCollectionV1Serializer.PatchMarker);
 
             PatchCollectionV1Serializer.SerializeLocation3DHomogenous(writer, patch.Location);
-            PatchCollectionV1Serializer.SerializeLocation3DHomogenous(writer, patch.Normal);
+            PatchCollectionV1Serializer.SerializeLocation3DHomogenous(writer, patch.Normal.ToLocation3HomogenousDouble());
 
             string line = $@"{patch.PhotometricConsistencyScore.FormatPatch6SignificantDigits()} {patch.Debugging1.FormatPatch6SignificantDigits()} {patch.Debugging2.FormatPatch6SignificantDigits()}";
             writer.WriteLine(line);
@@ -142,7 +142,7 @@ namespace Eshunna.Lib.Patches
             }
         }
 
-        private static Location3DHomogenousDouble DeserializeLocation3DHomogenous(LineReader reader)
+        private static Location3HomogenousDouble DeserializeLocation3DHomogenous(LineReader reader)
         {
             string line = reader.ReadLine();
 
@@ -155,11 +155,11 @@ namespace Eshunna.Lib.Patches
             double z = values[2];
             double h = values[3];
 
-            Location3DHomogenousDouble output = new Location3DHomogenousDouble(x, y, z, h);
+            Location3HomogenousDouble output = new Location3HomogenousDouble(x, y, z, h);
             return output;
         }
 
-        private static void SerializeLocation3DHomogenous(StreamWriter writer, Location3DHomogenousDouble location3DHomogenous)
+        private static void SerializeLocation3DHomogenous(StreamWriter writer, Location3HomogenousDouble location3DHomogenous)
         {
             string xStr = location3DHomogenous.X.FormatPatch6SignificantDigits();
             string yStr = location3DHomogenous.Y.FormatPatch6SignificantDigits();
@@ -170,7 +170,7 @@ namespace Eshunna.Lib.Patches
             writer.WriteLine(line);
         }
 
-        public static void Serialize(string filePath, PatchCollection patchCollection, bool overwrite = true)
+        public static void Serialize(string filePath, PatchFile patchCollection, bool overwrite = true)
         {
             FileMode fileMode = FileMode.Create;
             if (!overwrite)
@@ -197,7 +197,7 @@ namespace Eshunna.Lib.Patches
         #endregion
 
 
-        public PatchCollection this[string filePath, bool overwrite = true]
+        public PatchFile this[string filePath, bool overwrite = true]
         {
             get
             {

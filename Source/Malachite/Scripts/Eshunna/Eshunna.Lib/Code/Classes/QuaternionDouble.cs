@@ -53,7 +53,7 @@ namespace Eshunna.Lib
 
         public static QuaternionDouble GetQuaternion(MatrixDouble rotationMatrix)
         {
-            https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
+            // https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
 
             // Construct a 4 x 4 symmetric matrix, and find the eigenvector with the largest eigenvalue. Measure eigenvalue difference from 1 (which would be a pure rotation).
 

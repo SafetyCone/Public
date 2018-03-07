@@ -114,7 +114,7 @@ namespace Eshunna.Lib.NVM
             double locationY = Convert.ToDouble(locationYStr);
             string locationZStr = tokens[2];
             double locationZ = Convert.ToDouble(locationZStr);
-            Location3DDouble location = new Location3DDouble(locationX, locationY, locationZ);
+            Location3Double location = new Location3Double(locationX, locationY, locationZ);
 
             string redStr = tokens[3];
             byte red = Convert.ToByte(redStr);
@@ -173,7 +173,7 @@ namespace Eshunna.Lib.NVM
             double locationX = Convert.ToDouble(locationXStr);
             string locationYStr = tokens[startIndex + 3];
             double locationY = Convert.ToDouble(locationYStr);
-            Location2D location = new Location2D(locationX, locationY);
+            Location2Double location = new Location2Double(locationX, locationY);
 
             Measurement output = new Measurement(imageIndex, featureIndex, location);
             return output;
@@ -214,7 +214,7 @@ namespace Eshunna.Lib.NVM
             double locationY = Convert.ToDouble(locationYStr);
             string locationZStr = tokens[8];
             double locationZ = Convert.ToDouble(locationZStr);
-            Location3DDouble location = new Location3DDouble(locationX, locationY, locationZ);
+            Location3Double location = new Location3Double(locationX, locationY, locationZ);
 
             string radialDistortionCoefficientStr = tokens[9];
             double radialDistortionCoefficient = Convert.ToDouble(radialDistortionCoefficientStr);

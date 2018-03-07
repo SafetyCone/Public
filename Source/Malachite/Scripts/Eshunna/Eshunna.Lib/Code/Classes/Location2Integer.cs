@@ -6,17 +6,17 @@ using Public.Common.Lib;
 namespace Eshunna.Lib
 {
     [Serializable]
-    public struct Location2D : IEquatable<Location2D>
+    public struct Location2Integer : IEquatable<Location2Integer>
     {
         #region Static
 
-        public static bool operator==(Location2D lhs, Location2D rhs)
+        public static bool operator ==(Location2Integer lhs, Location2Integer rhs)
         {
             bool output = lhs.Equals(rhs);
             return output;
         }
 
-        public static bool operator !=(Location2D lhs, Location2D rhs)
+        public static bool operator !=(Location2Integer lhs, Location2Integer rhs)
         {
             bool output = !lhs.Equals(rhs);
             return output;
@@ -25,17 +25,17 @@ namespace Eshunna.Lib
         #endregion
 
 
-        public double X { get; }
-        public double Y { get; }
+        public int X { get; }
+        public int Y { get; }
 
 
-        public Location2D(double x, double y)
+        public Location2Integer(int x, int y)
         {
             this.X = x;
             this.Y = y;
         }
 
-        public bool Equals(Location2D other)
+        public bool Equals(Location2Integer other)
         {
             bool output =
                 this.X == other.X &&
@@ -46,9 +46,9 @@ namespace Eshunna.Lib
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj is Location2D objAsLocation2D)
+            if (obj is Location2Integer objAsLocation2Integer)
             {
-                output = this.Equals(objAsLocation2D);
+                output = this.Equals(objAsLocation2Integer);
             }
             return output;
         }
@@ -61,7 +61,7 @@ namespace Eshunna.Lib
 
         public override string ToString()
         {
-            string output = $@"X: {this.X.ToString()}, Y: {this.Y.ToString()}";
+            string output = $@"X: {this.X.ToString()}, Y: {this.Y.ToString()} (int)";
             return output;
         }
     }

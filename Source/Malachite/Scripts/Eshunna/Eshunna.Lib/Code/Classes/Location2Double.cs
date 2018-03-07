@@ -6,17 +6,17 @@ using Public.Common.Lib;
 namespace Eshunna.Lib
 {
     [Serializable]
-    public struct Location3DDouble : IEquatable<Location3DDouble>
+    public struct Location2Double : IEquatable<Location2Double>
     {
         #region Static
 
-        public static bool operator ==(Location3DDouble lhs, Location3DDouble rhs)
+        public static bool operator==(Location2Double lhs, Location2Double rhs)
         {
             bool output = lhs.Equals(rhs);
             return output;
         }
 
-        public static bool operator !=(Location3DDouble lhs, Location3DDouble rhs)
+        public static bool operator !=(Location2Double lhs, Location2Double rhs)
         {
             bool output = !lhs.Equals(rhs);
             return output;
@@ -27,44 +27,41 @@ namespace Eshunna.Lib
 
         public double X { get; }
         public double Y { get; }
-        public double Z { get; }
 
 
-        public Location3DDouble(double x, double y, double z)
+        public Location2Double(double x, double y)
         {
             this.X = x;
             this.Y = y;
-            this.Z = z;
         }
 
-        public bool Equals(Location3DDouble other)
+        public bool Equals(Location2Double other)
         {
             bool output =
                 this.X == other.X &&
-                this.Y == other.Y &&
-                this.Z == other.Z;
+                this.Y == other.Y;
             return output;
         }
 
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj is Location3DDouble objAsLocation3D)
+            if (obj is Location2Double objAsLocation2Double)
             {
-                output = this.Equals(objAsLocation3D);
+                output = this.Equals(objAsLocation2Double);
             }
             return output;
         }
 
         public override int GetHashCode()
         {
-            int output = HashHelper.GetHashCode(this.X, this.Y, this.Z);
+            int output = HashHelper.GetHashCode(this.X, this.Y);
             return output;
         }
 
         public override string ToString()
         {
-            string output = $@"X: {this.X.ToString()}, Y: {this.Y.ToString()}, Z: {this.Z.ToString()}";
+            string output = $@"X: {this.X.ToString()}, Y: {this.Y.ToString()} (double)";
             return output;
         }
     }

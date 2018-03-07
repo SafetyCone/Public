@@ -16,5 +16,7 @@ A patch is specified by:
 4. The average normalized cross-correlation score (-1.0 is bad, 1.0 is good), followed by two numbers of unknown significance that are "used for debugging purposes".
 5. The number of images in which the point is visible and textures agree well.
 6. The indices of images in which texture agree well. These indices are relative to the images in the "cameras" file. This "cameras" file contains the cameras in the same order as the NVM file. (It might be worth guaranteeing this with a file-read and mapping, but for now I'll move on.)
+	- Indices start at zero.
 7. The number of images in which textures don't agree well, but the point *should* still be visible.
 8. The indices of images in which the textures don't agree well, but the point *should* still be visible.
+	- Indices start at zero.

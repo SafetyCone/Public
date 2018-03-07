@@ -3,12 +3,12 @@
 
 namespace Eshunna.Lib.Patches
 {
-    public class PatchCollection
+    public class PatchFile
     {
         public Patch[] Patches { get; }
 
 
-        public PatchCollection(Patch[] patches)
+        public PatchFile(Patch[] patches)
         {
             this.Patches = patches;
         }

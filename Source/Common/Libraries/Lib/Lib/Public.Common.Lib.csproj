@@ -100,6 +100,7 @@
     <Compile Include="Code\IO\Email\Gmail.cs" />
     <Compile Include="Code\IO\Email\SmtpEmail.cs" />
     <Compile Include="Code\IO\FileExtensions.cs" />
+    <Compile Include="Code\IO\Files\CsvFile.cs" />
     <Compile Include="Code\IO\LineReader.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\ConsoleOutputStream.cs" />
     <Compile Include="Code\IO\Output Streams\Classes\DebugOutputStream.cs" />

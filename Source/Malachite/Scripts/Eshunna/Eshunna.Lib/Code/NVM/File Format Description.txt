@@ -14,8 +14,8 @@ The images (cameras) are specified by:
 
 1. File name.
 2. Focal length (assuming the same for x and y image directions).
-3. A rotation matrix specified as a quaternion.
-4. The location of the camera in 3D space (C = -R' * T).
+3. A rotation matrix specified as a quaternion (4 values).
+4. The location of the camera in 3D space (C = -R' * T) (3 values).
 5. Radial distortion parameter (a single parameter).
 6. An ending 0.
 

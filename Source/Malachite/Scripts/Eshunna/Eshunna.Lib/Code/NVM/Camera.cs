@@ -12,11 +12,11 @@ namespace Eshunna.Lib.NVM
         /// <summary>
         /// Location of camera in 3D space.
         /// </summary>
-        public Location3DDouble Location { get; set; }
+        public Location3Double Location { get; set; }
         public double RadialDistortionCoefficient { get; set; }
 
 
-        public Camera(string fileName, double focalLength, QuaternionDouble rotation, Location3DDouble location, double radialDistortionCoefficient)
+        public Camera(string fileName, double focalLength, QuaternionDouble rotation, Location3Double location, double radialDistortionCoefficient)
         {
             this.FileName = fileName;
             this.FocalLength = focalLength;
