@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Classes\Coordinate.cs" />
+    <Compile Include="Code\Classes\PixelLocationUpperLeft.cs" />
     <Compile Include="Code\IO\FileExtensions.cs" />
     <Compile Include="Code\Classes\ImageConverter.cs" />
     <Compile Include="Code\Classes\ImageDirectorySource.cs" />

@@ -1,5 +1,9 @@
 ﻿using System;
 
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Single;
+
+
 using Public.Common.Lib;
 
 
@@ -144,6 +148,16 @@ namespace Eshunna.Lib
             float firstValue = this.RowMajorValues.Length > 0 ? this.RowMajorValues[0] : 0;
 
             int output = HashHelper.GetHashCode(this.RowCount, this.ColumnCount, firstValue);
+            return output;
+        }
+    }
+
+
+    public static class MatrixFloatExtensions
+    {
+        public static Matrix<float> ToMathNetMatrix(this MatrixFloat matrix)
+        {
+            var output = DenseMatrix.Build.DenseOfRowMajor(matrix.RowCount, matrix.ColumnCount, matrix.RowMajorValues);
             return output;
         }
     }

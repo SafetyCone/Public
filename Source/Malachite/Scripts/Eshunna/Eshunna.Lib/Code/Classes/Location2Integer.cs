@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Public.Common.Lib;
 
@@ -62,6 +63,43 @@ namespace Eshunna.Lib
         public override string ToString()
         {
             string output = $@"X: {this.X.ToString()}, Y: {this.Y.ToString()} (int)";
+            return output;
+        }
+    }
+
+    public static class Location2IntegerExtensions
+    {
+        public static BoundingBoxInteger GetBoundingBox(this IEnumerable<Location2Integer> locations)
+        {
+            int xMin = Int32.MaxValue;
+            int xMax = Int32.MinValue;
+            int yMin = Int32.MaxValue;
+            int yMax = Int32.MinValue;
+
+            foreach (var location in locations)
+            {
+                if (location.X < xMin)
+                {
+                    xMin = location.X;
+                }
+
+                if (location.X > xMax)
+                {
+                    xMax = location.X;
+                }
+
+                if (location.Y < yMin)
+                {
+                    yMin = location.Y;
+                }
+
+                if (location.Y > yMax)
+                {
+                    yMax = location.Y;
+                }
+            }
+
+            var output = new BoundingBoxInteger(xMin, xMax, yMin, yMax);
             return output;
         }
     }

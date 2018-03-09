@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Public.Common.Lib;
 
@@ -105,6 +106,44 @@ namespace Eshunna.Lib
             var values = this.ToArray();
             var normalizedValues = VectorDouble.L2Normalize(values);
             var output = new Vector2Double(normalizedValues);
+            return output;
+        }
+    }
+
+
+    public static class Vector2DoubleExtensions
+    {
+        public static BoundingBoxDouble GetBoundingBox(this IEnumerable<Vector2Double> locations)
+        {
+            double xMin = Double.MaxValue;
+            double xMax = Double.MinValue;
+            double yMin = Double.MaxValue;
+            double yMax = Double.MinValue;
+
+            foreach (var location in locations)
+            {
+                if (location.X < xMin)
+                {
+                    xMin = location.X;
+                }
+
+                if (location.X > xMax)
+                {
+                    xMax = location.X;
+                }
+
+                if (location.Y < yMin)
+                {
+                    yMin = location.Y;
+                }
+
+                if (location.Y > yMax)
+                {
+                    yMax = location.Y;
+                }
+            }
+
+            var output = new BoundingBoxDouble(xMin, xMax, yMin, yMax);
             return output;
         }
     }

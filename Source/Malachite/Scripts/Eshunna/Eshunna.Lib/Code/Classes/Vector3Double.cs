@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Public.Common.Lib;
 
@@ -37,6 +38,28 @@ namespace Eshunna.Lib
         public static Vector3Double operator -(Vector3Double vector)
         {
             var output = new Vector3Double(-vector.X, -vector.Y, -vector.Z);
+            return output;
+        }
+
+        public static List<Vector3Double> operator +(IEnumerable<Vector3Double> lhs, Vector3Double rhs)
+        {
+            var output = new List<Vector3Double>();
+            foreach (var vector in lhs)
+            {
+                var sum = vector + rhs;
+                output.Add(sum);
+            }
+            return output;
+        }
+
+        public static List<Vector3Double> operator -(IEnumerable<Vector3Double> lhs, Vector3Double rhs)
+        {
+            var output = new List<Vector3Double>();
+            foreach (var vector in lhs)
+            {
+                var sum = vector - rhs;
+                output.Add(sum);
+            }
             return output;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -66,12 +67,189 @@ namespace Eshunna
             //Construction.CreateCubeObjFile();
             //Construction.CreateCubeTexture();
             //Construction.CreateCubeMaterialFile();
-            Construction.DetermineMostFrontalImage();
+            //Construction.DetermineMostFrontalImage();
             //Construction.DetermineAllPatchImageIndices();
             //Construction.CreateStructureModel();
             //Construction.CompareVectorNormals();
             //Construction.TestPointInTriangleInteger();
             //Construction.TestPointInTriangleDouble();
+            //Construction.CutFacetFromAllImages();
+            Construction.RotateFacetFullyTowardsCamera();
+        }
+
+        private static void RotateFacetFullyTowardsCamera()
+        {
+            var properties = Program.GetProjectProperties();
+            string imagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            string nvmFilePath = properties[EshunnaProperties.ExampleNvmFilePathPropertyName];
+            string patchFilePath = properties[EshunnaProperties.ExamplePatchFilePathPropertyName];
+            string meshedPlyFilePath = properties[EshunnaProperties.ExamplePlyBinaryFilePathPropertyName];
+
+            var nvm = NvmV3Serializer.Deserialize(nvmFilePath);
+            var patchFile = PatchCollectionV1Serializer.Deserialize(patchFilePath);
+            var plyFile = PlyV1BinarySerializer.Deserialize(meshedPlyFilePath);
+
+            var structureModel = Operations.BuildStructureModel(plyFile);
+
+            // Get the 3D vertex locations of a facet.
+            int facetIndex = 1399;
+            var facet = structureModel.Facets[facetIndex];
+
+            var v1 = structureModel.Vertices[facet.Vertex1Index].ToVector3Double();
+            var v2 = structureModel.Vertices[facet.Vertex2Index].ToVector3Double();
+            var v3 = structureModel.Vertices[facet.Vertex3Index].ToVector3Double();
+            var vertices = new Vector3Double[] { v1, v2, v3 };
+
+            // Determine the facet centroid.
+            var facetCentroid = Operations.FacetCentroid(structureModel, facetIndex).ToVector3Double();
+
+            // Determine the normal vector.
+            var facetNormal = Operations.FacetNormal(structureModel, facetIndex);
+
+            // Determine the vector from facet centroid to camera.
+            int imageIndex = 4;
+            var cameraLocation = nvm.Cameras[imageIndex].Location.ToVector3Double();
+            var facetToCamera = cameraLocation - facetCentroid;
+            var facetToCameraUnit = facetToCamera.L2Normalize();
+
+            // Get the cross-product vector and dot-product value of the facet normal and the facet to camera unit vectors.
+            var crossProduct = facetToCameraUnit.Cross(facetNormal);
+            var crossProductUnit = crossProduct.L2Normalize();
+            var dotProduct = facetToCameraUnit.Dot(facetNormal);
+
+            // Create the rotation matrix.
+            var rotationAngle = Math.Acos(dotProduct);
+            var rotationQuaternion = new QuaternionDouble(rotationAngle, crossProductUnit.X, crossProductUnit.Y, crossProductUnit.Z);
+            var rotationQuaternionUnit = rotationQuaternion.L2Normalize();
+            var rotationMatrix = QuaternionDouble.GetRotationMatrix(rotationQuaternionUnit).ToMathNetMatrix();
+
+            // Compute the facet vertex locations relative to the facet centroid.
+            var verticesCentroid = vertices - facetCentroid;
+
+            var verticesCentroidMat = Operations.CreateInhomogenousVectorArray(verticesCentroid);
+
+            // Rotate the facet.
+            var rotatedVerticesCentroidHomogenous = rotationMatrix * verticesCentroidMat;
+
+            var centroidRotated = Operations.CreateVector3Array(rotatedVerticesCentroidHomogenous);
+
+            var rotated = centroidRotated + facetCentroid;
+
+            // Now project both the facet and the rotated facet onto the camera.
+            var cameraMatrix = Operations.CameraMatrix(nvm, imageIndex);
+
+            var verticesHomogenous = Operations.CreateHomogenousVectorArray(v1, v2, v3);
+            var projectedVerticesHomogenous = Operations.ProductHomogenousNormalizeColumnVectors(cameraMatrix, verticesHomogenous);
+
+            var verticesRotatedHomogenous = Operations.CreateHomogenousVectorArray(rotated);
+            var projectedVerticesRotatedHomogenous = Operations.ProductHomogenousNormalizeColumnVectors(cameraMatrix, verticesRotatedHomogenous);
+
+            var projectedVertices = Operations.CreateVector2Array(projectedVerticesHomogenous);
+
+            var projectedVerticesRotated = Operations.CreateVector2Array(projectedVerticesRotatedHomogenous);
+
+            Operations.DrawPoints(projectedVertices, @"C:\temp\projected vertices.bmp", SysImageFormat.Bmp, false);
+
+            Operations.DrawPoints(projectedVerticesRotated, @"C:\temp\projected vertices rotated.bmp", SysImageFormat.Bmp, false);
+        }
+
+        private static void CutFacetFromAllImages()
+        {
+            var properties = Program.GetProjectProperties();
+            string imagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            string nvmFilePath = properties[EshunnaProperties.ExampleNvmFilePathPropertyName];
+            string patchFilePath = properties[EshunnaProperties.ExamplePatchFilePathPropertyName];
+            string meshedPlyFilePath = properties[EshunnaProperties.ExamplePlyBinaryFilePathPropertyName];
+
+            var nvm = NvmV3Serializer.Deserialize(nvmFilePath);
+            var patchFile = PatchCollectionV1Serializer.Deserialize(patchFilePath);
+            var plyFile = PlyV1BinarySerializer.Deserialize(meshedPlyFilePath);
+
+            var structureModel = Operations.BuildStructureModel(plyFile);
+
+            int facetIndex = 1399;
+            var facet = structureModel.Facets[facetIndex];
+
+            var v1 = structureModel.Vertices[facet.Vertex1Index].ToVector3Double();
+            var v2 = structureModel.Vertices[facet.Vertex2Index].ToVector3Double();
+            var v3 = structureModel.Vertices[facet.Vertex3Index].ToVector3Double();
+
+            var homogenousPointLocations = Operations.CreateHomogenousVectorArray(v1, v2, v3);
+
+            // To pick the facet triangle out of each image and place them on a single slide image:
+            // For each image.
+            //  Load the image.
+            //  Create a mini-image that is the size of the facet bounding box in the image.
+            //  For each pixel location within the facet triangle:
+            //      Get the pixel color from the main image at that location.
+            //      Put the pixel color into the mini-image at the location, minus the facet image bounding box XMin and YMin.
+
+            int[] imageIndicesForFacet = Operations.ImageIndicesForFacet(structureModel, facetIndex, patchFile);
+            int nImages = imageIndicesForFacet.Length;
+            var boundingBoxes = new List<BoundingBoxInteger>(nImages);
+            var miniImages = new List<Bitmap>(nImages);
+            for (int iImage = 0; iImage < nImages; iImage++)
+            {
+                int imageIndex = imageIndicesForFacet[iImage];
+
+                var cameraMatrix = Operations.CameraMatrix(nvm, imageIndex);
+
+                var imageVertexLocationsCenterOrigin = Operations.GetImageLocations(cameraMatrix, homogenousPointLocations);
+
+                string imageFileName = nvm.Cameras[imageIndex].FileName;
+                string imageFilePath = Operations.FilePathForImage(imagesDirectoryPath, nvm, imageIndex);
+                var image = new Bitmap(imageFilePath);
+
+                var imageVertexLocationsUpperLeftOrigin = Operations.ConvertOriginCenteredToUpperLeft(imageVertexLocationsCenterOrigin, image.Width, image.Height);
+
+                var imageVertexLocations = Operations.Round(imageVertexLocationsUpperLeftOrigin);
+
+                var v1Image = imageVertexLocations[0];
+                var v2Image = imageVertexLocations[1];
+                var v3Image = imageVertexLocations[2];
+
+                var imagePixelLocations = Geometry.ListTriangleLocations(v1Image, v2Image, v3Image);
+
+                var boundingBox = imagePixelLocations.GetBoundingBox();
+                boundingBoxes.Add(boundingBox);
+
+                var miniImageRectangle = boundingBox.RectangleXWidth();
+                var miniImage = new Bitmap(miniImageRectangle.Width, miniImageRectangle.Height);
+                miniImages.Add(miniImage);
+
+                foreach (var imagePixelLocation in imagePixelLocations)
+                {
+                    var color = image.GetPixel(imagePixelLocation.X, imagePixelLocation.Y);
+
+                    int miniImageX = imagePixelLocation.X - boundingBox.XMin;
+                    int miniImageY = imagePixelLocation.Y - boundingBox.YMin;
+                    miniImage.SetPixel(miniImageX, miniImageY, color);
+                }
+
+                string fileNameNoExtension = Path.GetFileNameWithoutExtension(imageFileName);
+                string miniImageFilePath = $@"C:\temp\mini image {iImage.ToString()} {fileNameNoExtension}.bmp";
+                miniImage.Save(miniImageFilePath, System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+
+            var outputRectangle = Operations.RectangleHorizontal(boundingBoxes);
+            var slide = new Bitmap(outputRectangle.Width + nImages + 1, outputRectangle.Height + 6); // Allow for a single line of vertical space between specimens.
+            using (var gfx = Graphics.FromImage(slide))
+            {
+                int leftPixelStart = 1;
+                for (int iImage = 0; iImage < nImages; iImage++)
+                {
+                    var miniImage = miniImages[iImage];
+                    gfx.DrawImage(miniImage, leftPixelStart, 3);
+
+                    var boundingBox = boundingBoxes[iImage];
+                    var miniImageRectangle = boundingBox.RectangleXWidth();
+
+                    leftPixelStart += miniImageRectangle.Width + 1;
+                }
+            }
+
+            string slideImageFilePath = @"C:\temp\slide.bmp";
+            slide.Save(slideImageFilePath, System.Drawing.Imaging.ImageFormat.Bmp);
         }
 
         private static void TestPointInTriangleDouble()
@@ -88,7 +266,7 @@ namespace Eshunna
             {
                 for (int iCol = 0; iCol < nCols; iCol++)
                 {
-                    bool isPointInTriangle = Construction.IsPointInTriangle(new Location2Double(iRow, iCol), v1, v2, v3);
+                    bool isPointInTriangle = Geometry.IsPointInTriangle(new Location2Double(iRow, iCol), v1, v2, v3);
                     if (isPointInTriangle)
                     {
                         b.SetPixel(iRow, iCol, System.Drawing.Color.Black);
@@ -102,23 +280,7 @@ namespace Eshunna
 
             string outputFileName = @"C:\temp\triangle test.bmp";
             b.Save(outputFileName, System.Drawing.Imaging.ImageFormat.Bmp);
-        }
-
-        private static bool IsPointInTriangle(Location2Double point, Location2Double v1, Location2Double v2, Location2Double v3, double tolerance = 0)
-        {
-            bool b1 = Construction.Sign(point, v1, v2) < tolerance;
-            bool b2 = Construction.Sign(point, v2, v3) < tolerance;
-            bool b3 = Construction.Sign(point, v3, v1) < tolerance;
-
-            bool output = ((b1 == b2) && (b2 == b3));
-            return output;
-        }
-
-        private static double Sign(Location2Double point, Location2Double u, Location2Double v)
-        {
-            double output = (point.X - v.X) * (u.Y - v.Y) - (point.Y - v.Y) * (u.X - v.X);
-            return output;
-        }
+        }      
 
         private static void TestPointInTriangleInteger()
         {
@@ -134,7 +296,7 @@ namespace Eshunna
             {
                 for (int iCol = 0; iCol < nCols; iCol++)
                 {
-                    bool isPointInTriangle = Construction.IsPointInTriangle(new Location2Integer(iRow, iCol), v1, v2, v3, 1);
+                    bool isPointInTriangle = Geometry.IsPointInTriangle(new Location2Integer(iRow, iCol), v1, v2, v3);
                     if(isPointInTriangle)
                     {
                         b.SetPixel(iRow, iCol, System.Drawing.Color.Black);
@@ -150,22 +312,6 @@ namespace Eshunna
             b.Save(outputFileName, System.Drawing.Imaging.ImageFormat.Bmp);
         }
 
-        private static bool IsPointInTriangle(Location2Integer point, Location2Integer v1, Location2Integer v2, Location2Integer v3, int tolerance)
-        {
-            bool b1 = Construction.Sign(point, v1, v2) < tolerance;
-            bool b2 = Construction.Sign(point, v2, v3) < tolerance;
-            bool b3 = Construction.Sign(point, v3, v1) < tolerance;
-
-            bool output = ((b1 == b2) && (b2 == b3));
-            return output;
-        }
-
-        private static int Sign(Location2Integer point, Location2Integer u, Location2Integer v)
-        {
-            int output = (point.X - v.X) * (u.Y - v.Y) - (point.Y - v.Y) * (u.X - v.X);
-            return output;
-        }
-
         private static void CompareVectorNormals()
         {
             var properties = Program.GetProjectProperties();
@@ -176,7 +322,7 @@ namespace Eshunna
             var plyFile = PlyV1BinarySerializer.Deserialize(plyFilePath);
             var patchFile = PatchCollectionV1Serializer.Deserialize(patchFilePath);
 
-            var structureModel = Operations.GetStructureModel(plyFile);
+            var structureModel = Operations.BuildStructureModel(plyFile);
 
             int nFacets = structureModel.Facets.Count;
             Vector3Double[] vertexCrossProductNormals = new Vector3Double[nFacets];
@@ -189,10 +335,10 @@ namespace Eshunna
             double[] negDotProducts = new double[nFacets];
             for (int iFacet = 0; iFacet < nFacets; iFacet++)
             {
-                Vector3Double vertexCrossProductNormal = Operations.GetFacetNormal(structureModel, iFacet);
+                Vector3Double vertexCrossProductNormal = Operations.FacetNormal(structureModel, iFacet);
                 vertexCrossProductNormals[iFacet] = vertexCrossProductNormal;
 
-                Vector3Double vertexPatchNormalsAverageNormal = Operations.GetFacetNormal(structureModel, iFacet, patchFile);
+                Vector3Double vertexPatchNormalsAverageNormal = Operations.FacetNormal(structureModel, iFacet, patchFile);
                 vertexPatchNormalsAverageNormals[iFacet] = vertexPatchNormalsAverageNormal;
 
                 Vector3Double diff = vertexCrossProductNormal - vertexPatchNormalsAverageNormal;
@@ -229,7 +375,7 @@ namespace Eshunna
 
             var plyFile = PlyV1BinarySerializer.Deserialize(meshedPlyFilePath);
 
-            var structureModel = Operations.GetStructureModel(plyFile);
+            var structureModel = Operations.BuildStructureModel(plyFile);
         }
 
         private static void DetermineAllPatchImageIndices()
@@ -261,14 +407,14 @@ namespace Eshunna
             var patchFile = PatchCollectionV1Serializer.Deserialize(patchFilePath);
             var plyFile = PlyV1BinarySerializer.Deserialize(meshedPlyFilePath);
 
-            var structureModel = Operations.GetStructureModel(plyFile);
+            var structureModel = Operations.BuildStructureModel(plyFile);
 
             int facetIndex = 1399;
-            int[] imageIndicesForFacet = Operations.GetImageIndicesForFacet(structureModel, facetIndex, patchFile);
+            int[] imageIndicesForFacet = Operations.ImageIndicesForFacet(structureModel, facetIndex, patchFile);
 
-            var facetCentroidLocation = Operations.GetFacetCentroid(structureModel, facetIndex).ToVector3Double();
+            var facetCentroidLocation = Operations.FacetCentroid(structureModel, facetIndex).ToVector3Double();
 
-            var facetNormal = Operations.GetFacetNormal(structureModel, facetIndex);
+            var facetNormal = Operations.FacetNormal(structureModel, facetIndex);
 
             int nImages = imageIndicesForFacet.Length;
             double[] dotProducts = new double[nImages];
@@ -537,7 +683,7 @@ namespace Eshunna
             var patchFile = PatchCollectionV1Serializer.Deserialize(patchFilePath);
 
             // Get the face of interest.
-            int faceOfInterestIndex = 7945;
+            int faceOfInterestIndex = 1399; // 7945;
             int[] vertexIndices = Construction.GetFaceVertexIndices(plyFile, faceOfInterestIndex);
             int nVertices = vertexIndices.Length; // Should be 3.
 
@@ -568,7 +714,9 @@ namespace Eshunna
                 patch.ImageIndicesWithGoodAgreement.ForEach((x) => allImageIndices.Add(x));
             }
 
-            int[] imageIndices = allImageIndices.ToArray();
+            var imageIndicesInOrder = new List<int>(allImageIndices);
+            imageIndicesInOrder.Sort();
+            int[] imageIndices = imageIndicesInOrder.ToArray();
             int nImageIndices = imageIndices.Length;
 
             // Get the camera information for each image.
@@ -589,7 +737,7 @@ namespace Eshunna
                 MatrixDouble rotation = QuaternionDouble.GetRotationMatrix(camera.Rotation);
                 rotations[iImageIndex] = rotation;
 
-                Location3Double translation = Construction.GetTranslation(rotation, camera.Location);
+                Location3Double translation = Operations.GetTranslation(rotation, camera.Location);
                 translations[iImageIndex] = translation;
 
                 focalLengths[iImageIndex] = camera.FocalLength;
@@ -684,7 +832,7 @@ namespace Eshunna
 
                 var pixelLocations = imagePixelLocations[iImage];
 
-                ImageMarker.MarkImage(imageFilePath, outputFilePath, pixelLocations);
+                ImageMarker.MarkImage(imageFilePath, outputFilePath, pixelLocations, System.Drawing.Imaging.ImageFormat.Bmp, false);
             }
         }
 
@@ -735,7 +883,7 @@ namespace Eshunna
                 MatrixDouble rotation = QuaternionDouble.GetRotationMatrix(camera.Rotation);
                 rotations[iImageIndex] = rotation;
 
-                Location3Double translation = Construction.GetTranslation(rotation, camera.Location);
+                Location3Double translation = Operations.GetTranslation(rotation, camera.Location);
                 translations[iImageIndex] = translation;
 
                 focalLengths[iImageIndex] = camera.FocalLength;
@@ -798,18 +946,6 @@ namespace Eshunna
 
                 ImageMarker.MarkImage(imageFilePath, outputFilePath, pixel.Item1, pixel.Item2);
             }
-        }
-
-        private static Location3Double GetTranslation(MatrixDouble rotation, Location3Double cameraLocation)
-        {
-            double[] values = rotation.RowMajorValues;
-
-            double x = -(values[0] * cameraLocation.X + values[1] * cameraLocation.Y + values[2] * cameraLocation.Z);
-            double y = -(values[3] * cameraLocation.X + values[4] * cameraLocation.Y + values[5] * cameraLocation.Z);
-            double z = -(values[6] * cameraLocation.X + values[7] * cameraLocation.Y + values[8] * cameraLocation.Z);
-
-            Location3Double output = new Location3Double(x, y, z);
-            return output;
         }
 
         private static Location3HomogenousFloat GetPlyFileVertex(PlyFile plyFile, int index)

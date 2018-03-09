@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-//using System.Drawing.
+using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 
 namespace Public.Common.Lib.Visuals.MSWindows
 {
@@ -22,10 +22,15 @@ namespace Public.Common.Lib.Visuals.MSWindows
 
         public static void MarkImage(string inputImagePath, string outputImagePath, Tuple<int, int>[] pixelLocations)
         {
+            ImageMarker.MarkImage(inputImagePath, outputImagePath, pixelLocations, SysImageFormat.Jpeg, true); // Ignore the dummy specified image format.
+        }
+
+        public static void MarkImage(string inputImagePath, string outputImagePath, Tuple<int, int>[] pixelLocations, SysImageFormat imageFormat, bool useDefaultImageFormat = true)
+        {
             int nPoints = pixelLocations.Length;
 
             var image = Image.FromFile(inputImagePath);
-            using (var pen = new Pen(Color.LightGreen, 3))
+            using (var pen = new Pen(Color.LightGreen, 1))
             using (var graphics = Graphics.FromImage(image))
             {
                 Point[] points = new Point[nPoints];
@@ -37,7 +42,14 @@ namespace Public.Common.Lib.Visuals.MSWindows
                 graphics.DrawPolygon(pen, points);
             }
 
-            image.Save(outputImagePath);
+            if (useDefaultImageFormat)
+            {
+                image.Save(outputImagePath);
+            }
+            else
+            {
+                image.Save(outputImagePath, imageFormat);
+            }
         }
 
         #endregion

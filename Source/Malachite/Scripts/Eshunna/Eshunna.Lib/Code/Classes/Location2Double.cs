@@ -65,4 +65,17 @@ namespace Eshunna.Lib
             return output;
         }
     }
+
+
+    public static class Location2DoubleExtensions
+    {
+        public static Location2Integer ToLocation2Integer(this Location2Double location)
+        {
+            int x = Convert.ToInt32(Math.Round(location.X));
+            int y = Convert.ToInt32(Math.Round(location.Y));
+
+            var output = new Location2Integer(x, y);
+            return output;
+        }
+    }
 }

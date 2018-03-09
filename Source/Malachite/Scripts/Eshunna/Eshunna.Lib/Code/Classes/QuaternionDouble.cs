@@ -77,6 +77,14 @@ namespace Eshunna.Lib
             this.Z = z;
         }
 
+        public QuaternionDouble(double[] values)
+        {
+            this.W = values[0];
+            this.X = values[1];
+            this.Y = values[2];
+            this.Z = values[3];
+        }
+
         public bool Equals(QuaternionDouble other)
         {
             bool output =
@@ -106,6 +114,26 @@ namespace Eshunna.Lib
         public override string ToString()
         {
             string output = $@"W: {this.W.ToString()}, X: {this.X.ToString()}, Y: {this.Y.ToString()}, Z: {this.Z.ToString()}";
+            return output;
+        }
+
+        public double[] ToArray()
+        {
+            var output = new double[] {this.W, this.X, this.Y, this.Z };
+            return output;
+        }
+
+        public double L2Norm()
+        {
+            double output = VectorDouble.L2Norm(this.ToArray());
+            return output;
+        }
+
+        public QuaternionDouble L2Normalize()
+        {
+            var values = this.ToArray();
+            var normalizedValues = VectorDouble.L2Normalize(values);
+            var output = new QuaternionDouble(normalizedValues);
             return output;
         }
     }

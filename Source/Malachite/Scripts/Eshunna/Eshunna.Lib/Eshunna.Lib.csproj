@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -45,8 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Classes\BoundingBoxDouble.cs" />
+    <Compile Include="Code\Classes\BoundingBoxInteger.cs" />
     <Compile Include="Code\Classes\ColorAlpha.cs" />
     <Compile Include="Code\Classes\Facet.cs" />
+    <Compile Include="Code\Classes\Geometry.cs" />
     <Compile Include="Code\Classes\Location2Float.cs" />
     <Compile Include="Code\Classes\Location2Integer.cs" />
     <Compile Include="Code\Classes\Location3Float.cs" />
@@ -56,6 +60,8 @@
     <Compile Include="Code\Classes\MatrixFloat.cs" />
     <Compile Include="Code\Classes\Operations.cs" />
     <Compile Include="Code\Classes\QuaternionFloat.cs" />
+    <Compile Include="Code\Classes\RectangleDouble.cs" />
+    <Compile Include="Code\Classes\RectangleInteger.cs" />
     <Compile Include="Code\Classes\StructureModel.cs" />
     <Compile Include="Code\Classes\VectorDouble.cs" />
     <Compile Include="Code\Classes\VectorFloat.cs" />
@@ -138,6 +144,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Graphics\Lib.Graphics\Public.Common.Lib.Graphics.csproj">
+      <Project>{fb6379ba-bc67-40cb-854a-47990618c310}</Project>
+      <Name>Public.Common.Lib.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.Visuals\Lib.Visuals\Public.Common.Lib.Visuals.csproj">
+      <Project>{d28cae43-a1e4-4396-bb65-12c19ddbe764}</Project>
+      <Name>Public.Common.Lib.Visuals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.csproj">
       <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
       <Name>Public.Common.Lib</Name>
