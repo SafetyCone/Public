@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Dynamic;
-
-using Public.Common.Lib.Extensions;
+using System.Collections.Generic;
 
 
 namespace Public.Common.MATLAB
@@ -82,6 +80,33 @@ namespace Public.Common.MATLAB
             return output;
         }
 
+        /// <summary>
+        /// Allows loading a single variable previously saved with the specify variable name save command. This is required to have both load and save agree on the name of the saved variable.
+        /// </summary>
+        public static void LoadSpecific(this MatlabApplication matlabApplication, string filePath, string variableName)
+        {
+            using (Variable loadSaveStruct = new Variable(matlabApplication, Matlab.LoadSaveFixedStructureName))
+            using (Variable filePathVar = new Variable(matlabApplication, (object)filePath))
+            {
+                List<string> commands = new List<string>
+                {
+                    $@"load({filePathVar.Name});",
+                    $@"{variableName} = {loadSaveStruct.Name}.{Matlab.LoadSaveFixedFieldName}"
+                };
+
+                matlabApplication.Execute(commands);
+            }
+        }
+
+        public static void Load(this MatlabApplication matlabApplication, string filepath)
+        {
+            using (var filePathVar = new Variable(matlabApplication, (object)filepath))
+            {
+                string command = $@"load({filePathVar.Name});";
+                matlabApplication.Execute(command);
+            }
+        }
+
         public static string[] Path(this MatlabApplication matlabApplication)
         {
             string command = $@"{Matlab.AnswerVariableName} = path;";
@@ -102,6 +127,41 @@ namespace Public.Common.MATLAB
             matlabApplication.Execute(command);
         }
 
+        public static void Reshape(this MatlabApplication matlabApplication, string inputVariableName, string outputVariableName, int[] size)
+        {
+            using (var sizesTemp = new Variable(matlabApplication, size))
+            {
+                string command = $@"{outputVariableName} = reshape({inputVariableName}, {sizesTemp.Name});";
+                matlabApplication.Execute(command);
+            }
+        }
+
+        public static string Reshape(this MatlabApplication matlabApplication, string inputVariableName, int[] size)
+        {
+            string outputVariableName = Matlab.GetTemporaryVariableName();
+            matlabApplication.Reshape(inputVariableName, outputVariableName, size);
+
+            return outputVariableName;
+        }
+
+        /// <summary>
+        /// Allows saving a single variable in MATLAB such that it can later be loaded into a specified variable name. 
+        /// </summary>
+        public static void SaveSpecific(this MatlabApplication matlabApplication, string filePath, string variableName)
+        {
+            using (Variable loadSaveStruct = new Variable(matlabApplication, Matlab.LoadSaveFixedStructureName))
+            using (Variable filePathVar = new Variable(matlabApplication, (object)filePath))
+            {
+                List<string> commands = new List<string>
+                {
+                    $@"{loadSaveStruct.Name}.{Matlab.LoadSaveFixedFieldName} = {variableName}",
+                    $@"save({filePathVar.Name}, '{loadSaveStruct.Name}');"
+                };
+
+                matlabApplication.Execute(commands);
+            }
+        }
+
         public static int[] Size(this MatlabApplication matlabApplication, string variableName)
         {
             string tempVariableName = @"SizeTempVariable";
@@ -109,7 +169,7 @@ namespace Public.Common.MATLAB
             int[] output;
             using (Variable var = new Variable(matlabApplication, tempVariableName, creationCommand))
             {
-                output = matlabApplication.GetRowArrayInt(tempVariableName);
+                output = matlabApplication.GetIntegerArrayRow(tempVariableName);
             }
 
             return output;

@@ -75,6 +75,7 @@
     <Compile Include="Code\Comparers\DictionaryEqualityComparer.cs" />
     <Compile Include="Code\Comparers\IntegerEqualityComparer.cs" />
     <Compile Include="Code\Comparers\StringEqualityComparer.cs" />
+    <Compile Include="Code\Classes\ImagePacker.cs" />
     <Compile Include="Code\Logging\DummyLog.cs" />
     <Compile Include="Code\Logging\ILog.cs" />
     <Compile Include="Code\Logging\StringListLog.cs" />
@@ -105,10 +106,15 @@
     <Compile Include="Code\NVM\NViewMatchEqualityComparer.cs" />
     <Compile Include="Code\NVM\NvmV3Serializer.cs" />
     <Compile Include="Code\Classes\QuaternionDouble.cs" />
+    <Compile Include="Code\OBJ\MaterialFile.cs" />
+    <Compile Include="Code\OBJ\MaterialFileSerializer.cs" />
+    <Compile Include="Code\OBJ\ObjFacet.cs" />
+    <Compile Include="Code\OBJ\ObjFacetVertex.cs" />
+    <Compile Include="Code\OBJ\ObjFileSerializer.cs" />
     <Compile Include="Code\Patches\Patch.cs" />
     <Compile Include="Code\Patches\PatchFile.cs" />
-    <Compile Include="Code\Patches\PatchCollectionEqualityComparer.cs" />
-    <Compile Include="Code\Patches\PatchCollectionV1Serializer.cs" />
+    <Compile Include="Code\Patches\PatchFileEqualityComparer.cs" />
+    <Compile Include="Code\Patches\PatchFileV1Serializer.cs" />
     <Compile Include="Code\Patches\PatchEqualityComparer.cs" />
     <Compile Include="Code\PLY\Constants.cs" />
     <Compile Include="Code\PLY\Enumerations\PlyDataType.cs" />
@@ -167,5 +173,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

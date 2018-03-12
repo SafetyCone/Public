@@ -8,7 +8,7 @@ using Public.Common.Lib.IO.Serialization;
 
 namespace Eshunna.Lib.Patches
 {
-    public class PatchCollectionV1Serializer : IFileSerializer<PatchFile>
+    public class PatchFileV1Serializer : IFileSerializer<PatchFile>
     {
         #region Static
 
@@ -22,9 +22,9 @@ namespace Eshunna.Lib.Patches
             using (LineReader reader = new LineReader(filePath))
             {
                 string patchesMarkerLine = reader.ReadLine();
-                if(PatchCollectionV1Serializer.PatchesFileMarker != patchesMarkerLine)
+                if(PatchFileV1Serializer.PatchesFileMarker != patchesMarkerLine)
                 {
-                    string message = $@"Invalid patches file marker. Found: {patchesMarkerLine}, expected: {PatchCollectionV1Serializer.PatchesFileMarker}";
+                    string message = $@"Invalid patches file marker. Found: {patchesMarkerLine}, expected: {PatchFileV1Serializer.PatchesFileMarker}";
                     throw new InvalidDataException(message);
                 }
 
@@ -34,7 +34,7 @@ namespace Eshunna.Lib.Patches
                 Patch[] patches = new Patch[nPatches];
                 for (int iPatch = 0; iPatch < nPatches; iPatch++)
                 {
-                    Patch patch = PatchCollectionV1Serializer.DeserializePatch(reader);
+                    Patch patch = PatchFileV1Serializer.DeserializePatch(reader);
                     patches[iPatch] = patch;
                 }
 
@@ -54,24 +54,24 @@ namespace Eshunna.Lib.Patches
         private static Patch DeserializePatch(LineReader reader)
         {
             string patchMarkerLine = reader.ReadLine();
-            if(PatchCollectionV1Serializer.PatchMarker != patchMarkerLine)
+            if(PatchFileV1Serializer.PatchMarker != patchMarkerLine)
             {
-                string message = $@"Invalid patch marker. Found: {patchMarkerLine}, expected:{PatchCollectionV1Serializer.PatchMarker}";
+                string message = $@"Invalid patch marker. Found: {patchMarkerLine}, expected:{PatchFileV1Serializer.PatchMarker}";
                 throw new InvalidDataException(message);
             }
 
-            Location3HomogenousDouble location = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader);
-            Vector4Double normal = PatchCollectionV1Serializer.DeserializeLocation3DHomogenous(reader).ToVector4Double();
+            Location3HomogenousDouble location = PatchFileV1Serializer.DeserializeLocation3DHomogenous(reader);
+            Vector4Double normal = PatchFileV1Serializer.DeserializeLocation3DHomogenous(reader).ToVector4Double();
 
             string infoLine = reader.ReadLine();
-            string[] infoTokens = infoLine.Split(PatchCollectionV1Serializer.Separators, StringSplitOptions.None);
+            string[] infoTokens = infoLine.Split(PatchFileV1Serializer.Separators, StringSplitOptions.None);
             double[] infoValues = infoTokens.ConvertTo(Convert.ToDouble);
             double photometricConsistencyScore = infoValues[0];
             double debugging1 = infoValues[1];
             double debugging2 = infoValues[2];
 
-            int[] imageIndicesWithGoodAgreement = PatchCollectionV1Serializer.DeserializeImageIndices(reader);
-            int[] imageIndicesWithSomeAgreement = PatchCollectionV1Serializer.DeserializeImageIndices(reader);
+            int[] imageIndicesWithGoodAgreement = PatchFileV1Serializer.DeserializeImageIndices(reader);
+            int[] imageIndicesWithSomeAgreement = PatchFileV1Serializer.DeserializeImageIndices(reader);
 
             reader.ReadLine(); // Blank line.
 
@@ -81,16 +81,16 @@ namespace Eshunna.Lib.Patches
 
         private static void SerializePatch(StreamWriter writer, Patch patch)
         {
-            writer.WriteLine(PatchCollectionV1Serializer.PatchMarker);
+            writer.WriteLine(PatchFileV1Serializer.PatchMarker);
 
-            PatchCollectionV1Serializer.SerializeLocation3DHomogenous(writer, patch.Location);
-            PatchCollectionV1Serializer.SerializeLocation3DHomogenous(writer, patch.Normal.ToLocation3HomogenousDouble());
+            PatchFileV1Serializer.SerializeLocation3DHomogenous(writer, patch.Location);
+            PatchFileV1Serializer.SerializeLocation3DHomogenous(writer, patch.Normal.ToLocation3HomogenousDouble());
 
             string line = $@"{patch.PhotometricConsistencyScore.FormatPatch6SignificantDigits()} {patch.Debugging1.FormatPatch6SignificantDigits()} {patch.Debugging2.FormatPatch6SignificantDigits()}";
             writer.WriteLine(line);
 
-            PatchCollectionV1Serializer.SerializeImageIndices(writer, patch.ImageIndicesWithGoodAgreement);
-            PatchCollectionV1Serializer.SerializeImageIndices(writer, patch.ImageIndicesWithSomeAgreement);
+            PatchFileV1Serializer.SerializeImageIndices(writer, patch.ImageIndicesWithGoodAgreement);
+            PatchFileV1Serializer.SerializeImageIndices(writer, patch.ImageIndicesWithSomeAgreement);
 
             writer.WriteLine(); // Blank line.
         }
@@ -101,7 +101,7 @@ namespace Eshunna.Lib.Patches
             int nIndices = Convert.ToInt32(nIndicesStr);
 
             string indicesLine = reader.ReadLine().Trim(); // Trailing space.
-            string[] indexTokens = indicesLine.Split(PatchCollectionV1Serializer.Separators, StringSplitOptions.RemoveEmptyEntries);
+            string[] indexTokens = indicesLine.Split(PatchFileV1Serializer.Separators, StringSplitOptions.RemoveEmptyEntries);
             if(indexTokens.Length != nIndices)
             {
                 string message = $@"Image index count mismatch. Found: {indexTokens.Length}, expected: {nIndices}.";
@@ -146,7 +146,7 @@ namespace Eshunna.Lib.Patches
         {
             string line = reader.ReadLine();
 
-            string[] tokens = line.Split(PatchCollectionV1Serializer.Separators, StringSplitOptions.None);
+            string[] tokens = line.Split(PatchFileV1Serializer.Separators, StringSplitOptions.None);
 
             double[] values = tokens.ConvertTo(Convert.ToDouble);
 
@@ -181,7 +181,7 @@ namespace Eshunna.Lib.Patches
             using (FileStream fStream = new FileStream(filePath, fileMode)) // Will allow the familiar error to percolate upwards if no overwriting.
             using (StreamWriter writer = new StreamWriter(fStream)) // If you need text writing.
             {
-                writer.WriteLine(PatchCollectionV1Serializer.PatchesFileMarker);
+                writer.WriteLine(PatchFileV1Serializer.PatchesFileMarker);
 
                 int nPatches = patchCollection.Patches.Length;
                 writer.WriteLine(nPatches.ToString());
@@ -189,7 +189,7 @@ namespace Eshunna.Lib.Patches
                 for (int iPatch = 0; iPatch < nPatches; iPatch++)
                 {
                     Patch patch = patchCollection.Patches[iPatch];
-                    PatchCollectionV1Serializer.SerializePatch(writer, patch);
+                    PatchFileV1Serializer.SerializePatch(writer, patch);
                 }
             }
         }
@@ -201,12 +201,12 @@ namespace Eshunna.Lib.Patches
         {
             get
             {
-                var output = PatchCollectionV1Serializer.Deserialize(filePath);
+                var output = PatchFileV1Serializer.Deserialize(filePath);
                 return output;
             }
             set
             {
-                PatchCollectionV1Serializer.Serialize(filePath, value, overwrite);
+                PatchFileV1Serializer.Serialize(filePath, value, overwrite);
             }
         }
     }

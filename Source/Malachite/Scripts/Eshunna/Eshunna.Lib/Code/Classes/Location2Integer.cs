@@ -23,6 +23,29 @@ namespace Eshunna.Lib
             return output;
         }
 
+        public static Location2Integer operator +(Location2Integer lhs, Location2Integer rhs)
+        {
+            var output = new Location2Integer(lhs.X + rhs.X, lhs.Y + rhs.Y);
+            return output;
+        }
+
+        public static Location2Integer operator -(Location2Integer lhs, Location2Integer rhs)
+        {
+            var output = new Location2Integer(lhs.X - rhs.X, lhs.Y - rhs.Y);
+            return output;
+        }
+
+        public static List<Location2Integer> operator +(IEnumerable<Location2Integer> locations, Location2Integer rhs)
+        {
+            var output = new List<Location2Integer>();
+            foreach (var location in locations)
+            {
+                var newLocation = location + rhs;
+                output.Add(newLocation);
+            }
+            return output;
+        }
+
         #endregion
 
 
@@ -69,7 +92,7 @@ namespace Eshunna.Lib
 
     public static class Location2IntegerExtensions
     {
-        public static BoundingBoxInteger GetBoundingBox(this IEnumerable<Location2Integer> locations)
+        public static BoundingBoxInteger BoundingBoxGet(this IEnumerable<Location2Integer> locations)
         {
             int xMin = Int32.MaxValue;
             int xMax = Int32.MinValue;

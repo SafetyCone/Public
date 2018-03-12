@@ -6,19 +6,19 @@ using Eshunna.Lib.Logging;
 
 namespace Eshunna.Lib.Patches
 {
-    public class PatchCollectionEqualityComparer : IEqualityComparer<PatchFile>
+    public class PatchFileEqualityComparer : IEqualityComparer<PatchFile>
     {
         public IEqualityComparer<Patch> PatchComparer { get; }
         public ILog Log { get; }
 
 
-        public PatchCollectionEqualityComparer(IEqualityComparer<Patch> patchComparer, ILog log)
+        public PatchFileEqualityComparer(IEqualityComparer<Patch> patchComparer, ILog log)
         {
             this.PatchComparer = patchComparer;
             this.Log = log;
         }
 
-        public PatchCollectionEqualityComparer(ILog log)
+        public PatchFileEqualityComparer(ILog log)
             : this(new PatchEqualityComparer(log), log)
         {
         }

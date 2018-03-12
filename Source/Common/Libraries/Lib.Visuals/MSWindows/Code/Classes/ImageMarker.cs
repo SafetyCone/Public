@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 
@@ -20,26 +21,24 @@ namespace Public.Common.Lib.Visuals.MSWindows
             image.Save(outputImagePath);
         }
 
-        public static void MarkImage(string inputImagePath, string outputImagePath, Tuple<int, int>[] pixelLocations)
+        public static void MarkImage(string inputImagePath, string outputImagePath, IEnumerable<Tuple<int, int>> pixelLocations)
         {
             ImageMarker.MarkImage(inputImagePath, outputImagePath, pixelLocations, SysImageFormat.Jpeg, true); // Ignore the dummy specified image format.
         }
 
-        public static void MarkImage(string inputImagePath, string outputImagePath, Tuple<int, int>[] pixelLocations, SysImageFormat imageFormat, bool useDefaultImageFormat = true)
+        public static void MarkImage(string inputImagePath, string outputImagePath, IEnumerable<Tuple<int, int>> pixelLocations, SysImageFormat imageFormat, bool useDefaultImageFormat = true)
         {
-            int nPoints = pixelLocations.Length;
-
             var image = Image.FromFile(inputImagePath);
             using (var pen = new Pen(Color.LightGreen, 1))
             using (var graphics = Graphics.FromImage(image))
             {
-                Point[] points = new Point[nPoints];
-                for (int iPoint = 0; iPoint < nPoints; iPoint++)
+                var points = new List<Point>();
+                foreach (var pixelLocation in pixelLocations)
                 {
-                    points[iPoint] = new Point(pixelLocations[iPoint].Item1, pixelLocations[iPoint].Item2);
+                    points.Add(new Point(pixelLocation.Item1, pixelLocation.Item2));
                 }
 
-                graphics.DrawPolygon(pen, points);
+                graphics.DrawPolygon(pen, points.ToArray());
             }
 
             if (useDefaultImageFormat)

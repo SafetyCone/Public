@@ -78,7 +78,7 @@ namespace Eshunna.Lib
         /// <summary>
         /// Assumes that X is the width direction, and Y is the height direction. The output rectangle is assumed be its own objects, thus has X = 0, and Y = 0.
         /// </summary>
-        public static RectangleInteger RectangleXWidth(this BoundingBoxInteger boundingBox)
+        public static RectangleInteger RectangleXWidthGet(this BoundingBoxInteger boundingBox)
         {
             int width = boundingBox.XMax - boundingBox.XMin + 1; // +1 for both end-points inclusive.
             int height = boundingBox.YMax - boundingBox.YMin + 1; // +1 for both end-points inclusive.

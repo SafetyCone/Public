@@ -46,10 +46,13 @@
   <ItemGroup>
     <Compile Include="Code\Classes\Axes.cs" />
     <Compile Include="Code\Classes\Base Classes\HandleBase.cs" />
+    <Compile Include="Code\Classes\ExternalFormatImageFileUndistorter.cs" />
     <Compile Include="Code\Classes\Figure.cs" />
     <Compile Include="Code\Classes\MatlabException.cs" />
+    <Compile Include="Code\Classes\RgbByteImageUndistorter.cs" />
     <Compile Include="Code\Classes\VariableInfo.cs" />
     <Compile Include="Code\Classes\Variable.cs" />
+    <Compile Include="Code\Commands\PublicCommonLibVisualsCommands.cs" />
     <Compile Include="Code\Enumerations\MatlabDataType.cs" />
     <Compile Include="Code\Extensions\System.ArrayInt.cs" />
     <Compile Include="Code\Extensions\System.Dynamic.ExpandoObject.cs" />
@@ -58,7 +61,7 @@
     <Compile Include="Code\Matlab.cs" />
     <Compile Include="Code\MatlabApplication.cs" />
     <Compile Include="Code\Commands\Commands.cs" />
-    <Compile Include="Code\Commands\CommonLibraryCommands.cs" />
+    <Compile Include="Code\Commands\PublicCommonLibCommands.cs" />
     <Compile Include="Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -75,6 +78,14 @@
     <Content Include="Project Plan.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lib.Math\Lib.Math\Public.Common.Lib.Math.csproj">
+      <Project>{ff3b6fff-9b8a-4b35-b7a9-654719302113}</Project>
+      <Name>Public.Common.Lib.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Lib.Visuals\Lib.Visuals\Public.Common.Lib.Visuals.csproj">
+      <Project>{d28cae43-a1e4-4396-bb65-12c19ddbe764}</Project>
+      <Name>Public.Common.Lib.Visuals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Lib\Lib\Public.Common.Lib.csproj">
       <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
       <Name>Public.Common.Lib</Name>

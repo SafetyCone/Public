@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using SysImageFormat = System.Drawing.Imaging.ImageFormat;
 using System.IO;
+using System.Linq;
 
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
@@ -22,9 +23,15 @@ namespace Eshunna.Lib
         {
             var camera = nvm.Cameras[imageIndex];
 
+            var output = Operations.CameraMatrix(camera);
+            return output;
+        }
+
+        public static Matrix<double> CameraMatrix(Camera camera)
+        {
             double focalLength = camera.FocalLength;
             MatrixDouble rotation = QuaternionDouble.GetRotationMatrix(camera.Rotation);
-            Location3Double translation = Operations.GetTranslation(rotation, camera.Location);
+            Location3Double translation = Operations.TranslationGet(rotation, camera.Location);
 
             var K = DenseMatrix.Build.DenseIdentity(3, 3);
             K[0, 0] = focalLength;
@@ -38,68 +45,9 @@ namespace Eshunna.Lib
             return cameraMatrix;
         }
 
-        public static Matrix<double> CreateHomogenousVectorArray(IList<Vector3Double> vectors)
+        public static Vector3Double CameraLocation(NViewMatch nvm, int cameraIndex)
         {
-            int nVectors = vectors.Count;
-            var output = DenseMatrix.Build.Dense(4, nVectors);
-            for (int iVector = 0; iVector < nVectors; iVector++)
-            {
-                var vector = vectors[iVector];
-                output[0, iVector] = vector.X;
-                output[1, iVector] = vector.Y;
-                output[2, iVector] = vector.Z;
-                output[3, iVector] = 1;
-            }
-            return output;
-        }
-
-        public static Matrix<double> CreateHomogenousVectorArray(params Vector3Double[] vectors)
-        {
-            var output = Operations.CreateHomogenousVectorArray(vectors as IList<Vector3Double>);
-            return output;
-        }
-
-        public static Matrix<double> CreateInhomogenousVectorArray(IList<Vector3Double> vectors)
-        {
-            int nVectors = vectors.Count;
-            var output = DenseMatrix.Build.Dense(3, nVectors);
-            for (int iVector = 0; iVector < nVectors; iVector++)
-            {
-                var vector = vectors[iVector];
-                output[0, iVector] = vector.X;
-                output[1, iVector] = vector.Y;
-                output[2, iVector] = vector.Z;
-            }
-            return output;
-        }
-
-        public static Matrix<double> CreateInhomogenousVectorArray(params Vector3Double[] vectors)
-        {
-            var output = Operations.CreateInhomogenousVectorArray(vectors as IList<Vector3Double>);
-            return output;
-        }
-
-        public static List<Vector3Double> CreateVector3Array(Matrix<double> homogenousColumnVectors)
-        {
-            int nVectors = homogenousColumnVectors.ColumnCount;
-            var output = new List<Vector3Double>(nVectors);
-            for (int iVector = 0; iVector < nVectors; iVector++)
-            {
-                var vector = new Vector3Double(homogenousColumnVectors[0, iVector], homogenousColumnVectors[1, iVector], homogenousColumnVectors[2, iVector]);
-                output.Add(vector);
-            }
-            return output;
-        }
-
-        public static List<Vector2Double> CreateVector2Array(Matrix<double> homogenousColumnVectors)
-        {
-            int nVectors = homogenousColumnVectors.ColumnCount;
-            var output = new List<Vector2Double>(nVectors);
-            for (int iVector = 0; iVector < nVectors; iVector++)
-            {
-                var vector = new Vector2Double(homogenousColumnVectors[0, iVector], homogenousColumnVectors[1, iVector]);
-                output.Add(vector);
-            }
+            var output = nvm.Cameras[cameraIndex].Location.ToVector3Double();
             return output;
         }
 
@@ -112,14 +60,14 @@ namespace Eshunna.Lib
         {
             var boundingBox = points.GetBoundingBox();
             var boundingBoxInt = boundingBox.ToBoundingBoxInteger();
-            var rectangle = boundingBoxInt.RectangleXWidth();
+            var rectangle = boundingBoxInt.RectangleXWidthGet();
             var bitmap = new Bitmap(rectangle.Width, rectangle.Height);
             foreach (var point in points)
             {
                 bitmap.SetPixel(Convert.ToInt32(Math.Round(point.X)) - boundingBoxInt.XMin, Convert.ToInt32(Math.Round(point.Y)) - boundingBoxInt.YMin, System.Drawing.Color.Green);
             }
 
-            if(useDefault)
+            if (useDefault)
             {
                 bitmap.Save(filePath);
             }
@@ -129,120 +77,21 @@ namespace Eshunna.Lib
             }
         }
 
-        public static List<Location2Double> GetImageLocations(Matrix<double> cameraMatrix, Matrix<double> homogenousPointLocations)
+        public static List<Vector3Double> FacetVertices(StructureModel structureModel, int facetIndex)
         {
-            var unNormalizedHomogenous2D = cameraMatrix * homogenousPointLocations;
-
-            var xVector = unNormalizedHomogenous2D.Row(0) / unNormalizedHomogenous2D.Row(2);
-            var yVector = unNormalizedHomogenous2D.Row(1) / unNormalizedHomogenous2D.Row(2);
-
-            int nVertices = unNormalizedHomogenous2D.ColumnCount;
-            var output = new List<Location2Double>(nVertices);
-            for (int iVertex = 0; iVertex < nVertices; iVertex++)
-            {
-                var location2D = new Location2Double(xVector[iVertex], yVector[iVertex]);
-                output.Add(location2D);
-            }
+            var facet = structureModel.Facets[facetIndex];
+            var output = Operations.FacetVertices(structureModel, facet);
             return output;
         }
 
-        public static List<Location2Integer> Round(IEnumerable<Location2Double> locations)
+        public static List<Vector3Double> FacetVertices(StructureModel structureModel, Facet facet)
         {
-            var output = new List<Location2Integer>();
-            foreach (var location in locations)
+            var output = new List<Vector3Double>
             {
-                var locationInt = location.ToLocation2Integer();
-                output.Add(locationInt);
-            }
-            return output;
-        }
-
-        public static List<Location2Double> ConvertOriginCenteredToUpperLeft(IEnumerable<Location2Double> imagePixelLocations, int imageWidth, int imageHeight)
-        {
-            int halfWidth = imageWidth / 2;
-            int halfHeight = imageHeight / 2;
-
-            var output = new List<Location2Double>();
-            foreach (var imagePixelLocation in imagePixelLocations)
-            {
-                var upperLeftRelativeLocation = new Location2Double(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
-                output.Add(upperLeftRelativeLocation);
-            }
-            return output;
-        }
-
-        public static List<Location2Float> ConvertOriginCenteredToUpperLeft(IEnumerable<Location2Float> imagePixelLocations, int imageWidth, int imageHeight)
-        {
-            int halfWidth = imageWidth / 2;
-            int halfHeight = imageHeight / 2;
-
-            var output = new List<Location2Float>();
-            foreach (var imagePixelLocation in imagePixelLocations)
-            {
-                var upperLeftRelativeLocation = new Location2Float(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
-                output.Add(upperLeftRelativeLocation);
-            }
-            return output;
-        }
-
-        public static List<Location2Integer> ConvertOriginCenteredToUpperLeft(IEnumerable<Location2Integer> imagePixelLocations, int imageWidth, int imageHeight)
-        {
-            int halfWidth = imageWidth / 2;
-            int halfHeight = imageHeight / 2;
-
-            var output = new List<Location2Integer>();
-            foreach (var imagePixelLocation in imagePixelLocations)
-            {
-                var upperLeftRelativeLocation = new Location2Integer(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
-                output.Add(upperLeftRelativeLocation);
-            }
-            return output;
-        }
-
-        public static Matrix<double> ProductHomogenousNormalizeColumnVectors(Matrix<double> m1, Matrix<double> m2)
-        {
-            var output = m1 * m2;
-
-            int homogenousRowIndex = output.RowCount - 1;
-            int maxNonHomogenousRow = homogenousRowIndex;
-            for (int iRow = 0; iRow < maxNonHomogenousRow; iRow++)
-            {
-                var row = output.Row(iRow) / output.Row(homogenousRowIndex);
-                output.SetRow(iRow, row);
-            }
-
-            return output;
-        }
-
-        public static Matrix<double> HomogenousToInhomogenousColumnVectors(Matrix<double> homogenous)
-        {
-            var output = DenseMatrix.Build.DenseOfMatrix(homogenous);
-
-            int lastRowIndex = homogenous.RowCount - 1;
-            output.RemoveRow(lastRowIndex);
-            return output;
-        }
-
-        /// <summary>
-        /// Creates a rectangle capable of containing all provided bounding boxes, arranged horizontally. The output rectangle is assumed be its own objects, thus has X = 0, and Y = 0.
-        /// </summary>
-        public static RectangleInteger RectangleHorizontal(IEnumerable<BoundingBoxInteger> boundingBoxes)
-        {
-            int width = 0;
-            int maxHeight = Int32.MinValue;
-            foreach (var boundingBox in boundingBoxes)
-            {
-                var rectangle = boundingBox.RectangleXWidth();
-
-                width += (rectangle.Width);
-
-                if (rectangle.Height > maxHeight)
-                {
-                    maxHeight = rectangle.Height;
-                }
-            }
-
-            var output = new RectangleInteger(0, 0, width, maxHeight);
+                structureModel.Vertices[facet.Vertex1Index].ToVector3Double(),
+                structureModel.Vertices[facet.Vertex2Index].ToVector3Double(),
+                structureModel.Vertices[facet.Vertex3Index].ToVector3Double(),
+            };
             return output;
         }
 
@@ -271,6 +120,20 @@ namespace Eshunna.Lib
             double z = (vertex1.Z + vertex2.Z + vertex3.Z) / 3;
 
             var output = new Location3Double(x, y, z);
+            return output;
+        }
+
+        public static Vector3Double FacetCentroidVector(StructureModel structureModel, int facetIndex)
+        {
+            var centroidLocation = Operations.FacetCentroid(structureModel, facetIndex);
+            var output = centroidLocation.ToVector3Double();
+            return output;
+        }
+
+        public static Vector3Double FacetCentroidVector(StructureModel structureModel, Facet facet)
+        {
+            var centroidLocation = Operations.FacetCentroid(structureModel, facet);
+            var output = centroidLocation.ToVector3Double();
             return output;
         }
 
@@ -310,43 +173,279 @@ namespace Eshunna.Lib
         {
             var facet = structureModel.Facets[facetIndex];
 
-            var normalVertex1 = patchFile.Patches[facet.Vertex1Index].Normal.L2Normalize();
-            var normalVertex2 = patchFile.Patches[facet.Vertex2Index].Normal.L2Normalize();
-            var normalVertex3 = patchFile.Patches[facet.Vertex3Index].Normal.L2Normalize();
+            var p1 = patchFile.Patches[facet.Vertex1Index];
+            var p2 = patchFile.Patches[facet.Vertex2Index];
+            var p3 = patchFile.Patches[facet.Vertex3Index];
 
-            double x = (normalVertex1.X + normalVertex2.X + normalVertex3.X) / 3;
-            double y = (normalVertex1.Y + normalVertex2.Y + normalVertex3.Y) / 3;
-            double z = (normalVertex1.Z + normalVertex2.Z + normalVertex3.Z) / 3;
-
-            var average = new Vector3Double(x, y, z);
-            var output = average.L2Normalize();
+            var output = Operations.FacetNormal(p1, p2, p3);
             return output;
         }
 
-        public static string FilePathForImage(string imageDirectorypath, NViewMatch nvm, int imageIndex)
+        public static Vector3Double FacetNormal(Patch p1, Patch p2, Patch p3)
+        {
+            // Make sure the normals are actually normalized.
+            var normalV1 = p1.Normal.L2Normalize();
+            var normalV2 = p2.Normal.L2Normalize();
+            var normalV3 = p3.Normal.L2Normalize();
+
+            double x = (normalV1.X + normalV2.X + normalV3.X) / 3;
+            double y = (normalV1.Y + normalV2.Y + normalV3.Y) / 3;
+            double z = (normalV1.Z + normalV2.Z + normalV3.Z) / 3;
+
+            var average = new Vector3Double(x, y, z);
+            var output = average.L2Normalize(); // Normalize the normal.
+            return output;
+        }
+
+        public static string ImageFilePathGet(string imageDirectorypath, NViewMatch nvm, int imageIndex)
         {
             string fileName = nvm.Cameras[imageIndex].FileName;
             string filePath = Path.Combine(imageDirectorypath, fileName);
             return filePath;
         }
 
+        public static Matrix<double> HomogenousToInhomogenousColumnVectors(Matrix<double> homogenous)
+        {
+            var output = DenseMatrix.Build.DenseOfMatrix(homogenous);
+
+            int lastRowIndex = homogenous.RowCount - 1;
+            output.RemoveRow(lastRowIndex);
+            return output;
+        }
+
+        public static Matrix<double> HomogenousVectorArrayCreate(IList<Vector3Double> vectors)
+        {
+            int nVectors = vectors.Count;
+            var output = DenseMatrix.Build.Dense(4, nVectors);
+            for (int iVector = 0; iVector < nVectors; iVector++)
+            {
+                var vector = vectors[iVector];
+                output[0, iVector] = vector.X;
+                output[1, iVector] = vector.Y;
+                output[2, iVector] = vector.Z;
+                output[3, iVector] = 1;
+            }
+            return output;
+        }
+
+        public static Matrix<double> HomogenousVectorArrayCreate(params Vector3Double[] vectors)
+        {
+            var output = Operations.HomogenousVectorArrayCreate(vectors as IList<Vector3Double>);
+            return output;
+        }
+
         public static int[] ImageIndicesForFacet(StructureModel structureModel, int facetIndex, PatchFile patchFile)
         {
-            var facet = structureModel.Facets[facetIndex];
+            var vertices = Operations.FacetVertices(structureModel, facetIndex);
 
-            Patch vertex1Patch = patchFile.Patches[facet.Vertex1Index];
-            Patch vertex2Patch = patchFile.Patches[facet.Vertex2Index];
-            Patch vertex3Patch = patchFile.Patches[facet.Vertex3Index];
+            var patches = Operations.PatchesClosest(patchFile, vertices);
 
+            var output = Operations.ImageIndicesWithGoodAgreement(patches);
+            return output;
+        }
+
+        public static int[] ImageIndicesWithGoodAgreement(IEnumerable<Patch> patches)
+        {
             HashSet<int> imageIndices = new HashSet<int>();
-            vertex1Patch.ImageIndicesWithGoodAgreement.ForEach((x) => imageIndices.Add(x));
-            vertex2Patch.ImageIndicesWithGoodAgreement.ForEach((x) => imageIndices.Add(x));
-            vertex3Patch.ImageIndicesWithGoodAgreement.ForEach((x) => imageIndices.Add(x));
+            foreach (var patch in patches)
+            {
+                patch.ImageIndicesWithGoodAgreement.ForEach((x) => imageIndices.Add(x));
+            }
 
             List<int> indicesInOrder = new List<int>(imageIndices);
             indicesInOrder.Sort();
 
             var output = indicesInOrder.ToArray();
+            return output;
+        }
+
+        public static List<Location2Double> ImageLocationsGet(Matrix<double> cameraMatrix, Matrix<double> homogenousPointLocations)
+        {
+            var unNormalizedHomogenous2D = cameraMatrix * homogenousPointLocations;
+
+            var xVector = unNormalizedHomogenous2D.Row(0) / unNormalizedHomogenous2D.Row(2);
+            var yVector = unNormalizedHomogenous2D.Row(1) / unNormalizedHomogenous2D.Row(2);
+
+            int nVertices = unNormalizedHomogenous2D.ColumnCount;
+            var output = new List<Location2Double>(nVertices);
+            for (int iVertex = 0; iVertex < nVertices; iVertex++)
+            {
+                var location2D = new Location2Double(xVector[iVertex], yVector[iVertex]);
+                output.Add(location2D);
+            }
+            return output;
+        }
+
+        public static Matrix<double> InhomogenousVectorArrayCreate(IList<Vector3Double> vectors)
+        {
+            int nVectors = vectors.Count;
+            var output = DenseMatrix.Build.Dense(3, nVectors);
+            for (int iVector = 0; iVector < nVectors; iVector++)
+            {
+                var vector = vectors[iVector];
+                output[0, iVector] = vector.X;
+                output[1, iVector] = vector.Y;
+                output[2, iVector] = vector.Z;
+            }
+            return output;
+        }
+
+        public static Matrix<double> InhomogenousVectorArrayCreate(params Vector3Double[] vectors)
+        {
+            var output = Operations.InhomogenousVectorArrayCreate(vectors as IList<Vector3Double>);
+            return output;
+        }
+
+        public static List<Location2Double> Location2Double(Matrix<double> columnVectors)
+        {
+            int nLocations = columnVectors.ColumnCount;
+            var locations = new List<Location2Double>(nLocations);
+            for (int iLocation = 0; iLocation < nLocations; iLocation++)
+            {
+                var location = new Location2Double(columnVectors[0, iLocation], columnVectors[1, iLocation]);
+                locations.Add(location);
+            }
+            return locations;
+        }
+
+        public static Tuple<Bitmap, List<Location2Integer>> MiniImageOfTriangle(Bitmap image, IList<Location2Integer> vertexImagePixelLocations)
+        {
+            var miniImageBoundingBox = vertexImagePixelLocations.BoundingBoxGet();
+            var miniImageRectangle = miniImageBoundingBox.RectangleXWidthGet();
+            var miniImage = new Bitmap(miniImageRectangle.Width, miniImageRectangle.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var vertexMiniImagePixelLocations = Operations.OriginTranslate(vertexImagePixelLocations, miniImageBoundingBox.XMin, miniImageBoundingBox.YMin);
+
+            // Color the mini-image.
+            bool allPixelsInImage = Operations.PixelLocationsInImage(vertexImagePixelLocations, image.Width, image.Height);
+            if (allPixelsInImage)
+            {
+                var pixelsInImage = Geometry.ListTriangleLocations(vertexImagePixelLocations[0], vertexImagePixelLocations[1], vertexImagePixelLocations[2]);
+                var pixelsInMiniImage = Geometry.ListTriangleLocations(vertexMiniImagePixelLocations[0], vertexMiniImagePixelLocations[1], vertexMiniImagePixelLocations[2]);
+                int nPixels = pixelsInImage.Count;
+                for (int iPixel = 0; iPixel < nPixels; iPixel++)
+                {
+                    var pixelInImage = pixelsInImage[iPixel];
+                    var color = image.GetPixel(pixelInImage.X, pixelInImage.Y);
+                    var pixelInMiniImage = pixelsInMiniImage[iPixel];
+                    miniImage.SetPixel(pixelInMiniImage.X, pixelInMiniImage.Y, color);
+                }
+            }
+            else
+            {
+                // No nothing.
+            }
+
+            var output = Tuple.Create(miniImage, vertexMiniImagePixelLocations);
+            return output;
+        }
+
+        public static List<Location2Double> OriginTranslateCenteredToUpperLeft(IEnumerable<Location2Double> imagePixelLocations, int imageWidth, int imageHeight)
+        {
+            int halfWidth = imageWidth / 2;
+            int halfHeight = imageHeight / 2;
+
+            var output = new List<Location2Double>();
+            foreach (var imagePixelLocation in imagePixelLocations)
+            {
+                var upperLeftRelativeLocation = new Location2Double(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
+                output.Add(upperLeftRelativeLocation);
+            }
+            return output;
+        }
+
+        public static List<Location2Float> OriginTranslateCenteredToUpperLeft(IEnumerable<Location2Float> imagePixelLocations, int imageWidth, int imageHeight)
+        {
+            int halfWidth = imageWidth / 2;
+            int halfHeight = imageHeight / 2;
+
+            var output = new List<Location2Float>();
+            foreach (var imagePixelLocation in imagePixelLocations)
+            {
+                var upperLeftRelativeLocation = new Location2Float(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
+                output.Add(upperLeftRelativeLocation);
+            }
+            return output;
+        }
+
+        public static List<Location2Integer> OriginTranslateCenteredToUpperLeft(IEnumerable<Location2Integer> imagePixelLocations, int imageWidth, int imageHeight)
+        {
+            int halfWidth = imageWidth / 2;
+            int halfHeight = imageHeight / 2;
+
+            var output = new List<Location2Integer>();
+            foreach (var imagePixelLocation in imagePixelLocations)
+            {
+                var upperLeftRelativeLocation = new Location2Integer(imagePixelLocation.X + halfWidth, imagePixelLocation.Y + halfHeight);
+                output.Add(upperLeftRelativeLocation);
+            }
+            return output;
+        }
+
+        public static List<Location2Integer> OriginTranslate(IEnumerable<Location2Integer> locations, int originX, int originY)
+        {
+            var origin = new Location2Integer(originX, originY);
+            var output = Operations.OriginTranslate(locations, origin);
+            return output;
+        }
+
+        public static List<Location2Integer> OriginTranslate(IEnumerable<Location2Integer> locations, Location2Integer origin)
+        {
+            var output = new List<Location2Integer>();
+            foreach (var location in locations)
+            {
+                var translatedLocation = location - origin;
+                output.Add(translatedLocation);
+            }
+            return output;
+        }
+
+        public static Matrix<double> ProductHomogenousNormalizeColumnVectors(Matrix<double> m1, Matrix<double> m2)
+        {
+            var output = m1 * m2;
+
+            int homogenousRowIndex = output.RowCount - 1;
+            int maxNonHomogenousRow = homogenousRowIndex;
+            for (int iRow = 0; iRow < maxNonHomogenousRow; iRow++)
+            {
+                var row = output.Row(iRow) / output.Row(homogenousRowIndex);
+                output.SetRow(iRow, row);
+            }
+
+            return output;
+        }
+
+        public static List<Patch> PatchesClosest(PatchFile patchFile, IEnumerable<Vector3Double> vertices)
+        {
+            var output = new List<Patch>();
+            foreach (var vertex in vertices)
+            {
+                var vertexPatch = Operations.PatchClosest(patchFile, vertex);
+                output.Add(vertexPatch);
+            }
+            return output;
+        }
+
+        public static Patch PatchClosest(PatchFile patchFile, Vector3Double vertex)
+        {
+            double minDiff = Double.MaxValue;
+            int index = 0;
+            int minIndex = -1;
+            foreach (var patch in patchFile.Patches)
+            {
+                double diffX = patch.Location.X - vertex.X;
+                double diffY = patch.Location.Y - vertex.Y;
+                double diffZ = patch.Location.Z - vertex.Z;
+
+                double diff = diffX * diffX + diffY * diffY + diffZ * diffZ;
+                if (diff < minDiff)
+                {
+                    minDiff = diff;
+                    minIndex = index;
+                }
+                index++;
+            }
+
+            var output = patchFile.Patches[minIndex];
             return output;
         }
 
@@ -364,19 +463,59 @@ namespace Eshunna.Lib
             return output;
         }
 
-        public static Location3Double GetTranslation(MatrixDouble rotation, Location3Double cameraLocation)
+        public static bool PixelLocationsInImage(IEnumerable<Location2Integer> locations, int imageWidth, int imageHeight)
         {
-            double[] values = rotation.RowMajorValues;
+            bool output = true;
+            foreach (var location in locations)
+            {
+                if(location.X >= imageWidth || location.X < 0 || location.Y >= imageHeight || location.Y < 0)
+                {
+                    output = false;
+                    break;
+                }
+            }
 
-            double x = -(values[0] * cameraLocation.X + values[1] * cameraLocation.Y + values[2] * cameraLocation.Z);
-            double y = -(values[3] * cameraLocation.X + values[4] * cameraLocation.Y + values[5] * cameraLocation.Z);
-            double z = -(values[6] * cameraLocation.X + values[7] * cameraLocation.Y + values[8] * cameraLocation.Z);
-
-            Location3Double output = new Location3Double(x, y, z);
             return output;
         }
 
-        public static StructureModel BuildStructureModel(PlyFile plyFile)
+        public static Vector3Double PointToCameraVector(NViewMatch nvm, int cameraIndex, Vector3Double point)
+        {
+            var cameraLocation = Operations.CameraLocation(nvm, cameraIndex);
+            var output = cameraLocation - point;
+            return output;
+        }
+
+        public static Vector3Double PointToCameraVectorUnit(NViewMatch nvm, int cameraIndex, Vector3Double point)
+        {
+            var pointToCamera = Operations.PointToCameraVector(nvm, cameraIndex, point);
+            var output = pointToCamera.L2Normalize();
+            return output;
+        }
+
+        /// <summary>
+        /// Creates a rectangle capable of containing all provided bounding boxes, arranged horizontally. The output rectangle is assumed be its own objects, thus has X = 0, and Y = 0.
+        /// </summary>
+        public static RectangleInteger RectangleHorizontal(IEnumerable<BoundingBoxInteger> boundingBoxes)
+        {
+            int width = 0;
+            int maxHeight = Int32.MinValue;
+            foreach (var boundingBox in boundingBoxes)
+            {
+                var rectangle = boundingBox.RectangleXWidthGet();
+
+                width += (rectangle.Width);
+
+                if (rectangle.Height > maxHeight)
+                {
+                    maxHeight = rectangle.Height;
+                }
+            }
+
+            var output = new RectangleInteger(0, 0, width, maxHeight);
+            return output;
+        }
+
+        public static StructureModel StructureModelBuild(PlyFile plyFile)
         {
             Operations.CheckPlyFileForGetStructureModel(plyFile, out float[] xVertexValues, out float[] yVertexValues, out float[] zVertexValues, out int[][] faceVertexValues);
 
@@ -486,6 +625,70 @@ namespace Eshunna.Lib
                     throw new ArgumentException($@"Incorrect number of vertices for triangular facet. Expected: {Facet.NumberOfVertices}, found: {vertexIndices.Length}.", nameof(plyFile));
                 }
             }
+        }
+
+        public static Location3Double TranslationGet(MatrixDouble rotation, Location3Double cameraLocation)
+        {
+            double[] values = rotation.RowMajorValues;
+
+            double x = -(values[0] * cameraLocation.X + values[1] * cameraLocation.Y + values[2] * cameraLocation.Z);
+            double y = -(values[3] * cameraLocation.X + values[4] * cameraLocation.Y + values[5] * cameraLocation.Z);
+            double z = -(values[6] * cameraLocation.X + values[7] * cameraLocation.Y + values[8] * cameraLocation.Z);
+
+            Location3Double output = new Location3Double(x, y, z);
+            return output;
+        }
+
+        public static List<Tuple<int, int>> Tuple2Integer(IEnumerable<Location2Integer> locations)
+        {
+            var output = new List<Tuple<int, int>>();
+            foreach (var location in locations)
+            {
+                var tuple = Tuple.Create(location.X, location.Y);
+                output.Add(tuple);
+            }
+            return output;
+        }
+
+        public static List<Location2Double> UVMapPixels(IEnumerable<Location2Integer> locations, int uvImageWidth, int uvImageHeight)
+        {
+            double width = Convert.ToDouble(uvImageWidth);
+            double height = Convert.ToDouble(uvImageHeight);
+
+            var output = new List<Location2Double>();
+            foreach (var location in locations)
+            {
+                double x = Convert.ToDouble(location.X) / width;
+                double y = Convert.ToDouble(location.Y) / height;
+                double yInverted = 1 - y; // MeshLab assumes the origin is in the lower-left of the image and Y increases upwards (this is the opposite of the image convention).
+                var uvImageLocation = new Location2Double(x, yInverted);
+                output.Add(uvImageLocation);
+            }
+            return output;
+        }
+
+        public static List<Vector3Double> Vector3ArrayCreate(Matrix<double> columnVectors)
+        {
+            int nVectors = columnVectors.ColumnCount;
+            var output = new List<Vector3Double>(nVectors);
+            for (int iVector = 0; iVector < nVectors; iVector++)
+            {
+                var vector = new Vector3Double(columnVectors[0, iVector], columnVectors[1, iVector], columnVectors[2, iVector]);
+                output.Add(vector);
+            }
+            return output;
+        }
+
+        public static List<Vector2Double> Vector2ArrayCreate(Matrix<double> columnVectors)
+        {
+            int nVectors = columnVectors.ColumnCount;
+            var output = new List<Vector2Double>(nVectors);
+            for (int iVector = 0; iVector < nVectors; iVector++)
+            {
+                var vector = new Vector2Double(columnVectors[0, iVector], columnVectors[1, iVector]);
+                output.Add(vector);
+            }
+            return output;
         }
     }
 }

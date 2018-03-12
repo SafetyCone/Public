@@ -5,6 +5,7 @@ using System.Dynamic;
 using ML = MLApp;
 
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.Math;
 
 
 namespace Public.Common.MATLAB
@@ -76,25 +77,15 @@ namespace Public.Common.MATLAB
             return output;
         }
 
-        public static string GetTemporaryVariableName()
+        private static int[] GetIntegerArray(double[,] values, int count, IEnumerable<MatrixLocation> locations)
         {
-            string output = Guid.NewGuid().ToString().Replace(@"-", String.Empty); // OK, less than the 63 character max variable name length of MATLAB.
-            return output;
-        }
+            int[] output = new int[count];
 
-        public static string GetTemporaryVariableName(string baseVariableName)
-        {
-            string suffix = MatlabApplication.GetTemporaryVariableName();
-
-            string combination = baseVariableName + suffix;
-            string output;
-            if (64 > combination.Length)
+            int iIndex = 0;
+            foreach (var location in locations)
             {
-                output = combination;
-            }
-            else
-            {
-                output = combination.Substring(0, 63);
+                output[iIndex] = Convert.ToInt32(values[location.Row, location.Column]);
+                iIndex++;
             }
 
             return output;
@@ -105,7 +96,7 @@ namespace Public.Common.MATLAB
             T[] output;
             if (obj is T[,] tArray)
             {
-                int nElements = tArray.GetLength(0);
+                int nElements = tArray.GetLength(1);
                 output = new T[nElements];
                 for (int iElement = 0; iElement < nElements; iElement++)
                 {
@@ -114,7 +105,7 @@ namespace Public.Common.MATLAB
             }
             else if (obj is object[,] objArray)
             {
-                int nElements = objArray.GetLength(0);
+                int nElements = objArray.GetLength(1);
                 output = new T[nElements];
                 for (int iElement = 0; iElement < nElements; iElement++)
                 {
@@ -241,9 +232,19 @@ namespace Public.Common.MATLAB
             return output;
         }
 
-        #region Marshalling
+        public List<string> Execute(IEnumerable<string> commands, bool throwOnError = true)
+        {
+            var output = new List<string>();
+            foreach(var command in commands)
+            {
+                string result = this.Execute(command, throwOnError);
+                output.Add(result);
+            }
 
-        
+            return output;
+        }
+
+        #region Marshalling        
 
         public double GetDouble(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
         {
@@ -252,6 +253,17 @@ namespace Public.Common.MATLAB
         }
 
         public void PutDouble(string variableName, double value, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            this.PutObject(variableName, value, workspaceName);
+        }
+
+        public double[] GetDoubleArray(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            double[] output = this.GetObject<double[]>(variableName, workspaceName);
+            return output;
+        }
+
+        public void PutDoubleArray(string variableName, double[] value, string workspaceName = Matlab.BaseWorkspaceName)
         {
             this.PutObject(variableName, value, workspaceName);
         }
@@ -267,14 +279,6 @@ namespace Public.Common.MATLAB
             this.PutObject(variableName, value, workspaceName);
         }
 
-        public int GetInteger(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
-        {
-            object doubleAsObject = this.GetObject(variableName, workspaceName);
-
-            int output = Convert.ToInt32(doubleAsObject); // Use convert since it's likely the 'integer' was a double in MATLAB since double is the preferred MATLAB numeric type. This means a cast from object to integer will fail at runtime (not compiletime) since the object is in fact a double and doubles cannot be casted to integers.
-            return output;
-        }
-
         public double[,,] GetDoubleArray3D(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
         {
             double[,,] output = this.GetObject<double[,,]>(variableName, workspaceName);
@@ -283,7 +287,15 @@ namespace Public.Common.MATLAB
 
         public void PutDoubleArray3D(string variableName, double[,,] value, string workspaceName = Matlab.BaseWorkspaceName)
         {
-            this.PutObject(variableName, value, workspaceName);
+            this.PutRealArray3D(variableName, value, workspaceName);
+        }
+
+        public int GetInteger(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            object doubleAsObject = this.GetObject(variableName, workspaceName);
+
+            int output = Convert.ToInt32(doubleAsObject); // Use convert since it's likely the 'integer' was a double in MATLAB since double is the preferred MATLAB numeric type. This means a cast from object to integer will fail at runtime (not compiletime) since the object is in fact a double and doubles cannot be casted to integers.
+            return output;
         }
 
         public void PutInteger(string variableName, int value, string workspaceName = Matlab.BaseWorkspaceName)
@@ -292,6 +304,39 @@ namespace Public.Common.MATLAB
             double doubleValue = Convert.ToDouble(value);
 
             this.PutObject(variableName, doubleValue, workspaceName);
+        }
+
+        public int[] GetIntegerArrayColumn(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            double[,] values = this.GetObject<double[,]>(variableName, workspaceName);
+
+            int count = values.GetLength(0);
+            var locationGenerator = new ColumnMatrixLocationGenerator(0);
+            int[] output = MatlabApplication.GetIntegerArray(values, count, locationGenerator.GetLocations(count));
+            return output;
+        }
+
+        public int[] GetIntegerArrayRow(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            double[,] values = this.GetObject<double[,]>(variableName, workspaceName);
+
+            int count = values.GetLength(1);
+            var locationGenerator = new RowMatrixLocationGenerator(0);
+            int[] output = MatlabApplication.GetIntegerArray(values, count, locationGenerator.GetLocations(count));
+            return output;
+        }
+        
+        public int[] GetIntegerArray(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            int[] output = this.GetIntegerArrayColumn(variableName, workspaceName);
+            return output;
+        }
+
+        public void PutIntegerArray(string variableName, int[] value, string workspaceName = Matlab.BaseWorkspaceName)
+        {
+            double[] doubles = value.ConvertTo<int, double>(Convert.ToDouble);
+
+            this.PutDoubleArray(variableName, doubles, workspaceName);
         }
 
         public object GetObject(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
@@ -327,9 +372,6 @@ namespace Public.Common.MATLAB
 
         #endregion
 
-
-
-
         public T GetData<T>(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
         {
             object obj = this.GetData(variableName, workspaceName);
@@ -346,50 +388,6 @@ namespace Public.Common.MATLAB
         public object GetData(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
         {
             this.MlApplication.GetWorkspaceData(variableName, workspaceName, out object output);
-
-            return output;
-        }
-
-        public int[] GetColumnArrayInt(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
-        {
-            object obj = this.GetData(variableName, workspaceName);
-
-            int[] output;
-            if (obj is double[,] doubleArray)
-            {
-                int nElements = doubleArray.GetLength(0);
-                output = new int[nElements];
-                for (int iElement = 0; iElement < nElements; iElement++)
-                {
-                    output[iElement] = Convert.ToInt32(doubleArray[iElement, 0]); // Go down the column.
-                }
-            }
-            else
-            {
-                output = null;
-            }
-
-            return output;
-        }
-
-        public int[] GetRowArrayInt(string variableName, string workspaceName = Matlab.BaseWorkspaceName)
-        {
-            object obj = this.GetData(variableName, workspaceName);
-
-            int[] output;
-            if (obj is double[,] doubleArray)
-            {
-                int nElements = doubleArray.GetLength(1);
-                output = new int[nElements];
-                for (int iElement = 0; iElement < nElements; iElement++)
-                {
-                    output[iElement] = Convert.ToInt32(doubleArray[0, iElement]); // Go across the row.
-                }
-            }
-            else
-            {
-                output = null;
-            }
 
             return output;
         }
@@ -550,12 +548,12 @@ namespace Public.Common.MATLAB
                 }
             }
 
-            string dataTempVariableName = MatlabApplication.GetTemporaryVariableName(variableName);
+            string dataTempVariableName = Matlab.GetTemporaryVariableName(variableName);
             this.MlApplication.PutWorkspaceData(dataTempVariableName, workspaceName, data);
 
             int[] lengths = values.GetLengths();
 
-            string tempDimensionsVariableName = MatlabApplication.GetTemporaryVariableName(@"dimensions");
+            string tempDimensionsVariableName = Matlab.GetTemporaryVariableName(@"dimensions");
             this.MlApplication.PutWorkspaceData(tempDimensionsVariableName, workspaceName, lengths);
 
             string command;
@@ -604,8 +602,7 @@ namespace Public.Common.MATLAB
         /// </summary>
         public static ExpandoObject GetStructure(this MatlabApplication matlabApplication, string structureName)
         {
-            string tempVariableName = $@"{nameof(GetStructure)}TempVariable";
-            using (Variable var = new Variable(matlabApplication, tempVariableName))
+            using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 VariableInfo[] fieldInfos = MatlabApplicationExtensions.GetFieldInfos(matlabApplication, structureName);
 
@@ -614,10 +611,10 @@ namespace Public.Common.MATLAB
                 {
                     string variableName = $@"{structureName}.{fieldInfo.Name}";
 
-                    string command = $@"{tempVariableName} = {variableName}";
+                    string command = $@"{temp.Name} = {variableName}";
                     matlabApplication.Execute(command);
 
-                    VariableInfo variableInfo = new VariableInfo(tempVariableName, fieldInfo);
+                    VariableInfo variableInfo = new VariableInfo(temp.Name, fieldInfo);
 
                     object value = MatlabApplicationExtensions.GetObjectValue(matlabApplication, variableInfo);
 
@@ -639,10 +636,11 @@ namespace Public.Common.MATLAB
             switch (variableInfo.DataType)
             {
                 case MatlabDataType.Cell:
-                    command = $@"tempCellName = {variableInfo.Name}"; // Rename the structure for recursion. Note that this will interestingly switch the name back and forth at different levels of recursion, so only two names are needed.
-                    using (Variable var = new Variable(matlabApplication, @"tempCellName", command))
+                    using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
                     {
-                        value = MatlabApplicationExtensions.GetCellArray(matlabApplication, @"tempCellName");
+                        command = $@"{temp.Name} = {variableInfo.Name}"; // Rename the structure for recursion. Note that this will interestingly switch the name back and forth at different levels of recursion, so only two names are needed.
+                        matlabApplication.Execute(command);
+                        value = MatlabApplicationExtensions.GetCellArray(matlabApplication, temp.Name);
                     }
                     break;
 
@@ -654,10 +652,11 @@ namespace Public.Common.MATLAB
 
                 case MatlabDataType.Struct:
                 case MatlabDataType.UNKNOWN: // Generally a class, with property names that can be treated just like a struct.
-                    command = $@"tempStructName = {variableInfo.Name}"; // Rename the structure for recursion. Note that this will interestingly switch the name back and forth at different levels of recursion, so only two names are needed.
-                    using (Variable var = new Variable(matlabApplication, @"tempStructName", command))
+                    using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
                     {
-                        value = MatlabApplicationExtensions.GetStructure(matlabApplication, @"tempStructName");
+                        command = $@"{temp.Name} = {variableInfo.Name}"; // Rename the structure for recursion. Note that this will interestingly switch the name back and forth at different levels of recursion, so only two names are needed.
+                        matlabApplication.Execute(command);
+                        value = MatlabApplicationExtensions.GetStructure(matlabApplication, temp.Name);
                     }
                     break;
 
@@ -682,23 +681,22 @@ namespace Public.Common.MATLAB
         /// </summary>
         public static VariableInfo GetVariableInfo(this MatlabApplication matlabApplication, string variableName)
         {
-            string tempVariableName = $@"{nameof(GetVariableInfo)}TempVariable";
-            using (Variable var = new Variable(matlabApplication, tempVariableName))
+            using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 string command;
 
                 // Get the type.
-                command = $@"{tempVariableName} = class({variableName})";
+                command = $@"{temp.Name} = class({variableName})";
                 matlabApplication.Execute(command);
 
-                string fieldType = matlabApplication.GetString(tempVariableName);
+                string fieldType = matlabApplication.GetString(temp.Name);
                 MatlabDataType dataType = MatlabDataTypeExtensions.ToMatlabDataType(fieldType);
 
                 // Get the size.
-                command = $@"{tempVariableName} = numel({variableName})";
+                command = $@"{temp.Name} = numel({variableName})";
                 matlabApplication.Execute(command);
 
-                int numericalLength = matlabApplication.GetScalarInt(tempVariableName);
+                int numericalLength = matlabApplication.GetScalarInt(temp.Name);
 
                 bool isScalar;
                 if (dataType != MatlabDataType.Char)
@@ -726,15 +724,14 @@ namespace Public.Common.MATLAB
         /// </summary>
         public static VariableInfo[] GetFieldInfos(this MatlabApplication matlabApplication, string structureName)
         {
-            string tempVariableName = $@"{nameof(GetFieldInfos)}TempVariable";
-            using (Variable var = new Variable(matlabApplication, tempVariableName))
+            using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 string command;
 
                 // Get the field names of the structure.
-                command = $@"{tempVariableName} = fieldnames({structureName});";
+                command = $@"{temp.Name} = fieldnames({structureName});";
                 matlabApplication.Execute(command);
-                string[] fieldNames = matlabApplication.GetStringArray(tempVariableName);
+                string[] fieldNames = matlabApplication.GetStringArray(temp.Name);
 
                 int nFields = fieldNames.Length;
                 VariableInfo[] fieldInfos = new VariableInfo[nFields];
@@ -758,8 +755,7 @@ namespace Public.Common.MATLAB
         /// </summary>
         public static object[] GetCellArray(this MatlabApplication matlabApplication, string variableName)
         {
-            string tempVariableName = $@"{nameof(GetCellArray)}TempVariable";
-            using (Variable var = new Variable(matlabApplication, tempVariableName))
+            using (Variable temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 string command;
 
@@ -770,10 +766,10 @@ namespace Public.Common.MATLAB
                 for (int iElement = 0; iElement < nElements; iElement++) // Currently only works for 1 dimensional column vectors.
                 {
                     int matlabIElement = iElement + 1;
-                    command = $@"{tempVariableName} = {variableName}{{{matlabIElement.ToString()}}}";
+                    command = $@"{temp.Name} = {variableName}{{{matlabIElement.ToString()}}}";
                     matlabApplication.Execute(command);
 
-                    object element = MatlabApplicationExtensions.GetObjectValue(matlabApplication, tempVariableName);
+                    object element = MatlabApplicationExtensions.GetObjectValue(matlabApplication, temp.Name);
                     output[iElement] = element;
                 }
 
@@ -791,16 +787,15 @@ namespace Public.Common.MATLAB
             int nElements = elements.Length;
             matlabApplication.Cell(variableName, nElements);
 
-            string tempVariableName = $@"{nameof(PutCellArray)}TempVariable";
-            using (var temp = new Variable(matlabApplication, tempVariableName))
+            using (var temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 for (int iElement = 0; iElement < nElements; iElement++)
                 {
                     object element = elements[iElement];
-                    matlabApplication.PutObjectByTypeDispatch(tempVariableName, element);
+                    matlabApplication.PutObjectByTypeDispatch(temp.Name, element);
 
-                    int iElementMatlab = iElement = 1;
-                    string command = $@"{variableName}{{{iElementMatlab.ToString()}}} = {tempVariableName};";
+                    int iElementMatlab = iElement + 1;
+                    string command = $@"{variableName}{{{iElementMatlab.ToString()}}} = {temp.Name};";
                     matlabApplication.Execute(command);
                 }
             }
@@ -821,15 +816,14 @@ namespace Public.Common.MATLAB
             var expandoDict = expandoObject as IDictionary<string, object>;
 
             // Use a disposable temporary variable to transfer fields.
-            string tempVariableName = $@"{variableName}TempVariable";
-            using (var tempVariable = new Variable(matlabApplication, tempVariableName))
+            using (var temp = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
             {
                 foreach (var fieldName in expandoDict.Keys)
                 {
                     object fieldValue = expandoDict[fieldName];
-                    matlabApplication.PutObjectByTypeDispatch(tempVariableName, fieldValue, recursionLevel);
+                    matlabApplication.PutObjectByTypeDispatch(temp.Name, fieldValue, recursionLevel);
 
-                    string command = $@"{variableName}.{fieldName} = {tempVariable.Name}";
+                    string command = $@"{variableName}.{fieldName} = {temp.Name}";
                     matlabApplication.Execute(command);
                 }
             }
@@ -862,6 +856,10 @@ namespace Public.Common.MATLAB
                     matlabApplication.PutInteger(variableName, i);
                     break;
 
+                case int[] intArray:
+                    matlabApplication.PutIntegerArray(variableName, intArray);
+                    break;
+
                 case double d:
                     matlabApplication.PutDouble(variableName, d);
                     break;
@@ -875,23 +873,21 @@ namespace Public.Common.MATLAB
                     break;
 
                 case ExpandoObject expando:
-                    string structureRecursionVariableName = $@"{variableName}StructureRecursionVariable{recursionLevel.ToString()}";
-                    using (var structureVariable = new Variable(matlabApplication, structureRecursionVariableName))
+                    using (var structureVariable = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
                     {
-                        MatlabApplicationExtensions.PutStructure(matlabApplication, structureRecursionVariableName, expando, recursionLevel++);
+                        MatlabApplicationExtensions.PutStructure(matlabApplication, structureVariable.Name, expando, recursionLevel++);
 
-                        string command = $@"{variableName} = {structureRecursionVariableName};";
+                        string command = $@"{variableName} = {structureVariable.Name};";
                         matlabApplication.Execute(command);
                     }
                     break;
 
                 case object[] cellArray:
-                    string cellArrayRecursionVariableName = $@"{variableName}CellArrayRecursionVariable{recursionLevel.ToString()}";
-                    using (var cellArrayVariable = new Variable(matlabApplication, cellArrayRecursionVariableName))
+                    using (var cellArrayVariable = new Variable(matlabApplication, Matlab.GetTemporaryVariableName()))
                     {
-                        MatlabApplicationExtensions.PutCellArray(matlabApplication, cellArrayRecursionVariableName, cellArray, recursionLevel++);
+                        MatlabApplicationExtensions.PutCellArray(matlabApplication, cellArrayVariable.Name, cellArray, recursionLevel++);
 
-                        string command = $@"{variableName} = {cellArrayRecursionVariableName};";
+                        string command = $@"{variableName} = {cellArrayVariable.Name};";
                         matlabApplication.Execute(command);
                     }
                     break;

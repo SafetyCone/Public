@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Public.Common.Lib;
 
@@ -69,6 +70,23 @@ namespace Eshunna.Lib
 
     public static class Location2DoubleExtensions
     {
+        public static Location2Integer Round(this Location2Double location)
+        {
+            var output = location.ToLocation2Integer();
+            return output;
+        }
+
+        public static List<Location2Integer> Round(this IEnumerable<Location2Double> locations)
+        {
+            var output = new List<Location2Integer>();
+            foreach (var location in locations)
+            {
+                var roundedLocation = location.ToLocation2Integer();
+                output.Add(roundedLocation);
+            }
+            return output;
+        }
+
         public static Location2Integer ToLocation2Integer(this Location2Double location)
         {
             int x = Convert.ToInt32(Math.Round(location.X));

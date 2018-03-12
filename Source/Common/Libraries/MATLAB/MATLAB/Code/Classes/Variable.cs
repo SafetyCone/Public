@@ -45,12 +45,20 @@ namespace Public.Common.MATLAB
         public string Name { get; private set; }
 
 
+        public Variable(MatlabApplication matlabApplication, object value)
+        {
+            this.MatlabApplication = matlabApplication;
+            this.Name = Matlab.GetTemporaryVariableName();
+
+            this.MatlabApplication.PutObjectByTypeDispatch(this.Name, value);
+        }
+
         public Variable(MatlabApplication matlabApplication, string name, object value)
         {
             this.MatlabApplication = matlabApplication;
             this.Name = name;
 
-            this.MatlabApplication.PutData(this.Name, value);
+            this.MatlabApplication.PutObjectByTypeDispatch(this.Name, value);
         }
 
         public Variable(MatlabApplication matlabApplication, string name, string creationCommand)
@@ -59,6 +67,15 @@ namespace Public.Common.MATLAB
             this.Name = name;
 
             this.MatlabApplication.Execute(creationCommand);
+        }
+
+        public Variable(MatlabApplication matlabApplication)
+        {
+            this.MatlabApplication = matlabApplication;
+            this.Name = Matlab.GetTemporaryVariableName();
+
+            string command = Matlab.GetCreateEmptyStructureCommand(this.Name);
+            this.MatlabApplication.Execute(command);
         }
 
         public Variable(MatlabApplication matlabApplication, string name)

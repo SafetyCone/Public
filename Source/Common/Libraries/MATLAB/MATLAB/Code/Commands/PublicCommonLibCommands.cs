@@ -10,7 +10,7 @@ namespace Public.Common.Lib.MATLAB
     /// <summary>
     /// Contains functionality for commands that are part of the Public.Common library of MATLAB commands.
     /// </summary>
-    public static class CommonLibraryCommands
+    public static class PublicCommonLibCommands
     {
         private static string PublicCommonDirectoryName { get; } = @"Public.Common";
 
@@ -26,7 +26,7 @@ namespace Public.Common.Lib.MATLAB
         {
             string libraryLocation = MatlabUtilities.LibraryDirectoryPath;
 
-            string output = Path.Combine(libraryLocation, Matlab.MFilesDirectoryName, CommonLibraryCommands.PublicCommonDirectoryName);
+            string output = Path.Combine(libraryLocation, Matlab.MFilesDirectoryName, PublicCommonLibCommands.PublicCommonDirectoryName);
             return output;
         }
 
