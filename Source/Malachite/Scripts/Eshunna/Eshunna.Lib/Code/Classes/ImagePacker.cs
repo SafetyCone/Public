@@ -30,34 +30,51 @@ namespace Eshunna.Lib
             sizesAndIndices.Reverse(); // Largest to smallest.
 
             // Determine bounding rectangles for all mini-images.
-            int compositeImageWidth = 1000;
+            int targetCompositeImageWidth = 1000; // Might be more than this.
             int miniImageIndex = 0;
+            int upperLeftX = 0;
+            int upperLeftY = 0;
             var rowFirstImageIndices = new List<int>();
-            int rowWidth = compositeImageWidth + 1; // Ensure an initial reset on the first image.
-            int priorImageHeight = 0;
-            int currentImageHeight = 0;
             var miniImageRectangles = new List<RectangleInteger>();
+            int rowWidth = targetCompositeImageWidth; // Make sure the first image causes a reset below and is added as the first image of a row.
+            int maxRowWidth = targetCompositeImageWidth;
+            int rowHeight = 0;
+            int imageHeight = 0;
             foreach (var sizeAndIndex in sizesAndIndices)
             {
-                rowWidth += sizeAndIndex.Item1.Width;
-                if (rowWidth >= compositeImageWidth)
-                {
-                    rowFirstImageIndices.Add(miniImageIndex);
-                    rowWidth = 0; // Reset.
+                int miniImageWidth = sizeAndIndex.Item1.Width;
+                int miniImageHeight = sizeAndIndex.Item1.Height;
 
-                    priorImageHeight = currentImageHeight;
-                    currentImageHeight += sizeAndIndex.Item1.Height;
+                // If adding this image to the row would cause the row to be wider than the target composite image width, make it the first image of the next row.
+                // Ensure to do this only once, so that large mini-images will actually be placed instead of infinite looping.
+                if(rowWidth + miniImageWidth > targetCompositeImageWidth)
+                {
+                    if(rowWidth > maxRowWidth)
+                    {
+                        maxRowWidth = rowWidth;
+                    }
+
+                    rowFirstImageIndices.Add(miniImageIndex);
+
+                    upperLeftX = 0;
+                    upperLeftY += rowHeight; // Prior row height.
+                    rowWidth = 0;
+                    rowHeight = miniImageHeight; // New row height. Mini-images had been sorted according to height, largest to smallest, thus all following mini-images will have less height than this first mini-image of the row.
+                    imageHeight += miniImageHeight;
                 }
 
-                var miniImageRectangle = new RectangleInteger(rowWidth, priorImageHeight, sizeAndIndex.Item1.Width, sizeAndIndex.Item1.Height);
+                var miniImageRectangle = new RectangleInteger(upperLeftX, upperLeftY, miniImageWidth, miniImageHeight);
                 miniImageRectangles.Add(miniImageRectangle);
+
+                upperLeftX += miniImageWidth;
+                rowWidth += miniImageWidth;
 
                 miniImageIndex++;
             }
 
             // Create the composite image.
-            int compositeImageHeight = currentImageHeight;
-            var compositeImage = new Bitmap(compositeImageWidth, compositeImageHeight, PixelFormat.Format24bppRgb);
+            int compositeImageHeight = imageHeight;
+            var compositeImage = new Bitmap(maxRowWidth, compositeImageHeight, PixelFormat.Format24bppRgb);
             using (var gfx = Graphics.FromImage(compositeImage))
             {
                 for (int iMiniImage = 0; iMiniImage < nMiniImages; iMiniImage++)

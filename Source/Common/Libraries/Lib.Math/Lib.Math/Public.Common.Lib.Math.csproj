@@ -42,7 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Classes\ColumnMatrixLocationGenerator.cs" />
+    <Compile Include="Code\Classes\MatrixLocation.cs" />
+    <Compile Include="Code\Classes\MatrixSize.cs" />
     <Compile Include="Code\Classes\RandomNumberGenerator.cs" />
+    <Compile Include="Code\Classes\RowMatrixLocationGenerator.cs" />
     <Compile Include="Code\Classes\Shuffler.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\Linear Algebra\Matrix.cs" />

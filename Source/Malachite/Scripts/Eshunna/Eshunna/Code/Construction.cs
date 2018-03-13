@@ -81,11 +81,13 @@ namespace Eshunna
             Construction.CreateObjFile();
         }
 
-        private static void CreateObjFile()
+        private static void CreateObjFileWithDifferentImages()
         {
             // Load data files.
             var properties = Program.GetProjectProperties();
-            string imagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            //string imagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            //string imagesOriginalHdDirectoryPath = properties[EshunnaProperties.ImagesOriginalHdDirectoryPathPropertyName];
+            string imagesDirectoryPath = properties[EshunnaProperties.ImagesOriginalHdDirectoryPathPropertyName];
             string nvmFilePath = properties[EshunnaProperties.ExampleNvmFilePathPropertyName];
             string patchFilePath = properties[EshunnaProperties.ExamplePatchFilePathPropertyName];
             string meshedPlyFilePath = properties[EshunnaProperties.ExampleMeshPoissonSimplePlyFilePathPropertyName];
@@ -99,12 +101,68 @@ namespace Eshunna
 
             // Create OBJ required file paths.
             string outputDirectoryPath = @"C:\temp";
-            string objFileName = @"mesh_poisson_simple.obj";
+            string objFileNameWithoutExtension = @"mesh_hd";
+            string objFileName = $@"{objFileNameWithoutExtension}.obj";
             string objFilePath = Path.Combine(outputDirectoryPath, objFileName);
-            string materialFileName = @"mesh_poisson_simple.mtl";
+            string materialFileName = $@"{objFileNameWithoutExtension}.mtl";
             string materialFilePath = Path.Combine(outputDirectoryPath, materialFileName);
             string materialFileRelativePathFromObjFile = materialFileName;
-            string textureFileName = @"mesh_poisson_simple.bmp"; // No spaces in relative path from OBJ file to 
+            string textureFileName = $@"{objFileNameWithoutExtension}.bmp"; // No spaces in relative path from OBJ file to 
+            string textureFilePath = Path.Combine(outputDirectoryPath, textureFileName);
+            string textureFileRelativePathFromMaterialFile = textureFileName;
+
+            // Create the vertices in the same order as given by the structure model.
+            int nVertices = structureModel.Vertices.Count;
+            List<Vector3Double> vertices = new List<Vector3Double>(nVertices);
+            foreach (var vertex in structureModel.Vertices)
+            {
+                var vertexVector = vertex.ToVector3Double();
+                vertices.Add(vertexVector);
+            }
+
+            // Create the facets, using the vertex indices in the same order as given by the structure model.
+            // The vertex texture UV vector indices will be created in the same order as the facets given by the structure model.
+            int nFacets = structureModel.Facets.Count;
+            List<ObjFacet> facets = new List<ObjFacet>(nFacets);
+            int uvCoordinateVectorIndex = 1; // OBJ file starts at 1.
+            foreach (var facet in structureModel.Facets)
+            {
+                ObjFacetVertex v1 = new ObjFacetVertex(facet.Vertex1Index + 1, ObjFacetVertex.NotSpecifiedValue, uvCoordinateVectorIndex++); // OBJ file starts at 1.
+                ObjFacetVertex v2 = new ObjFacetVertex(facet.Vertex2Index + 1, ObjFacetVertex.NotSpecifiedValue, uvCoordinateVectorIndex++); // OBJ file starts at 1.
+                ObjFacetVertex v3 = new ObjFacetVertex(facet.Vertex3Index + 1, ObjFacetVertex.NotSpecifiedValue, uvCoordinateVectorIndex++); // OBJ file starts at 1.
+
+                ObjFacet objFacet = new ObjFacet(v1, v2, v3);
+                facets.Add(objFacet);
+            }
+        }
+
+        private static void CreateObjFile()
+        {
+            // Load data files.
+            var properties = Program.GetProjectProperties();
+            string sfmImagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            string wedgeImagesDirectoryPath = properties[EshunnaProperties.ImagesDirectoryPathPropertyName];
+            //string wedgeImagesDirectoryPath = properties[EshunnaProperties.ImagesOriginalHdDirectoryPathPropertyName];
+            string nvmFilePath = properties[EshunnaProperties.ExampleNvmFilePathPropertyName];
+            string patchFilePath = properties[EshunnaProperties.ExamplePatchFilePathPropertyName];
+            string meshedPlyFilePath = properties[EshunnaProperties.ExampleMeshPoissonSimplePlyFilePathPropertyName];
+
+            var nvm = NvmV3Serializer.Deserialize(nvmFilePath);
+            var patchFile = PatchFileV1Serializer.Deserialize(patchFilePath);
+            var plyFile = PlyV1TextSerializer.Deserialize(meshedPlyFilePath);
+
+            // Create the structure model data structure.
+            var structureModel = Operations.StructureModelBuild(plyFile);
+
+            // Create OBJ required file paths.
+            string outputDirectoryPath = @"C:\temp";
+            string objFileNameWithoutExtension = @"mesh_simplified_poisson_regular";
+            string objFileName = $@"{objFileNameWithoutExtension}.obj";
+            string objFilePath = Path.Combine(outputDirectoryPath, objFileName);
+            string materialFileName = $@"{objFileNameWithoutExtension}.mtl";
+            string materialFilePath = Path.Combine(outputDirectoryPath, materialFileName);
+            string materialFileRelativePathFromObjFile = materialFileName;
+            string textureFileName = $@"{objFileNameWithoutExtension}.bmp"; // No spaces in relative path from OBJ file to 
             string textureFilePath = Path.Combine(outputDirectoryPath, textureFileName);
             string textureFileRelativePathFromMaterialFile = textureFileName;
 
@@ -136,86 +194,27 @@ namespace Eshunna
             // Setup, create camera matrices for all cameras, get image sizes, load images.
             int nCameras = nvm.Cameras.Length;
             List<Matrix<double>> cameraMatrices = new List<Matrix<double>>(nCameras);
-            List<ImageSize> imageSizes = new List<ImageSize>(nCameras);
-            List<Bitmap> images = new List<Bitmap>();
             foreach (var camera in nvm.Cameras)
             {
                 var cameraMatrix = Operations.CameraMatrix(camera);
                 cameraMatrices.Add(cameraMatrix);
-
-                string imageFilePath = Path.Combine(imagesDirectoryPath, camera.FileName);
-                var image = new Bitmap(imageFilePath);
-                images.Add(image);
-
-                var imageSize = new ImageSize(image.Height, image.Width);
-                imageSizes.Add(imageSize);
             }
 
             // Setup, find patches closest to each vertex, with patches being repeated but for each vertex index in order, the closest patch is identified.
-            List<Patch> patchesClosestToVertexIndex = Operations.PatchesClosest(patchFile, vertices);
+            List<Patch> patchesClosestToVertex = Operations.PatchesClosest(patchFile, vertices);
+
+            // Setup, get image info for both SFM and wedge images.
+            var imageInfoSets = Operations.ImageInfoSets(sfmImagesDirectoryPath, wedgeImagesDirectoryPath, nvm.Cameras);
 
             // Create a mini-image for each facet.
-            List<Bitmap> miniImages = new List<Bitmap>(nFacets);
-            List<List<Location2Integer>> miniImageVertexPixels = new List<List<Location2Integer>>(nFacets);
-            foreach (var facet in structureModel.Facets)
-            {
-                // Get the facet centroid.
-                var facetCentroid = Operations.FacetCentroidVector(structureModel, facet);
-
-                // Find patches close to each vertex.
-                var patches = new Patch[] { patchesClosestToVertexIndex[facet.Vertex1Index], patchesClosestToVertexIndex[facet.Vertex2Index], patchesClosestToVertexIndex[facet.Vertex3Index] };
-
-                // Get the facet normal.
-                var facetNormal = Operations.FacetNormal(patchesClosestToVertexIndex[facet.Vertex1Index], patchesClosestToVertexIndex[facet.Vertex2Index], patchesClosestToVertexIndex[facet.Vertex3Index]);
-
-                // Get the list of image indices with good agreement.
-                var imageIndices = Operations.ImageIndicesWithGoodAgreement(patches);
-
-                // Determine which image has the most frontal view of the patch.
-                double bestDotProduct = Double.MinValue;
-                int bestImageIndex = -1;
-                foreach (var imageIndex in imageIndices)
-                {
-                    var camera = nvm.Cameras[imageIndex];
-                    var facetCentroidToCamera = camera.Location.ToVector3Double() - facetCentroid;
-                    var facetCentroidToCameraUnit = facetCentroidToCamera.L2Normalize();
-                    var facetNormalToCentroidToCameraDotProduct = facetNormal.Dot(facetCentroidToCameraUnit);
-
-                    if(facetNormalToCentroidToCameraDotProduct > bestDotProduct)
-                    {
-                        bestDotProduct = facetNormalToCentroidToCameraDotProduct;
-                        bestImageIndex = imageIndex;
-                    }
-                }
-
-                var cameraMatrix = cameraMatrices[bestImageIndex];
-                var image = images[bestImageIndex];
-                var imageSize = imageSizes[bestImageIndex];
-
-                // Get the vertices for facet.
-                var facetVertices = new Vector3Double[] {
-                    structureModel.Vertices[facet.Vertex1Index].ToVector3Double(),
-                    structureModel.Vertices[facet.Vertex2Index].ToVector3Double(),
-                    structureModel.Vertices[facet.Vertex3Index].ToVector3Double()
-                };
-
-                // Create a homogenous column vector array for the facet vertices.
-                var facetVerticesHomogenous = Operations.HomogenousVectorArrayCreate(facetVertices);
-
-                // Get the image vertex pixel locations.
-                var imageVerticesCenterOriginHomogenous = Operations.ProductHomogenousNormalizeColumnVectors(cameraMatrix, facetVerticesHomogenous);
-                var imageVerticesCenterOrigin = Operations.Location2Double(imageVerticesCenterOriginHomogenous);
-                var imageVerticesUpperLeftOrigin = Operations.OriginTranslateCenteredToUpperLeft(imageVerticesCenterOrigin, imageSize.Width, imageSize.Height);
-                var imageVertexPixels = imageVerticesUpperLeftOrigin.Round();
-
-                // Adjust for the case where vertices are not in the image.
-                var miniImageAndMiniImageVertexPixels = Operations.MiniImageOfTriangle(image, imageVertexPixels);
-                miniImages.Add(miniImageAndMiniImageVertexPixels.Item1);
-                miniImageVertexPixels.Add(miniImageAndMiniImageVertexPixels.Item2);
-            }
+            var miniImagesAndVertexPixels = Operations.MiniImagePerFacet(nvm.Cameras, structureModel, patchesClosestToVertex, imageInfoSets, cameraMatrices);
+            List<Bitmap> miniImages = miniImagesAndVertexPixels.Item1;
+            List<List<Location2Integer>> miniImageVertexPixels = miniImagesAndVertexPixels.Item2;
 
             // Pack the facet mini-images into a single texture image.
+            Console.WriteLine($@"Packing {miniImages.Count.ToString()} mini-images...");
             var compositeImageAndTranslatedVertexPixels = ImagePacker.PackImages(miniImages, miniImageVertexPixels);
+            Console.WriteLine(@"Done packing mini-images.");
             var textureImage = compositeImageAndTranslatedVertexPixels.Item1;
             int textureImageWidth = textureImage.Width;
             int textureImageHeight = textureImage.Height;

@@ -23,6 +23,14 @@ namespace Eshunna.Lib
             return output;
         }
 
+        public static Location2Double operator *(Location2Double location, double multiplier)
+        {
+            double x = location.X * multiplier;
+            double y = location.Y * multiplier;
+            var output = new Location2Double(x, y);
+            return output;
+        }
+
         #endregion
 
 
@@ -93,6 +101,17 @@ namespace Eshunna.Lib
             int y = Convert.ToInt32(Math.Round(location.Y));
 
             var output = new Location2Integer(x, y);
+            return output;
+        }
+
+        public static List<Location2Double> MultiplyBy(this IEnumerable<Location2Double> locations, double multiplier)
+        {
+            var output = new List<Location2Double>();
+            foreach (var location in locations)
+            {
+                var newLocation = location * multiplier;
+                output.Add(newLocation);
+            }
             return output;
         }
     }

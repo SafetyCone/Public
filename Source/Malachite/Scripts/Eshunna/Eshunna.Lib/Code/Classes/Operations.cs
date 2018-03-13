@@ -9,6 +9,8 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
 using Public.Common.Lib.Extensions;
+using Public.Common.Lib.Visuals;
+using Public.Common.Lib.Visuals.MetadataExtractor;
 
 using Eshunna.Lib.NVM;
 using Eshunna.Lib.Patches;
@@ -19,6 +21,59 @@ namespace Eshunna.Lib
 {
     public static class Operations
     {
+        public static int BestCameraForFacet(IList<Camera> cameras, IEnumerable<int> possibleImageIndices, Vector3Double facetCentroid, Vector3Double facetNormalUnit)
+        {
+            var dotProductTuple = Operations.BestCameraForFacetDotProduct(cameras, possibleImageIndices, facetCentroid, facetNormalUnit);
+            var output = dotProductTuple.Item1;
+            return output;
+        }
+
+        public static Tuple<int, double> BestCameraForFacetDotProduct(IList<Camera> cameras, IEnumerable<int> possibleImageIndices, Vector3Double facetCentroid, Vector3Double facetNormalUnit)
+        {
+            var allDotProductTuples = Operations.BestCameraForFacetAllDotProducts(cameras, possibleImageIndices, facetCentroid, facetNormalUnit);
+            var output = allDotProductTuples.Item2[allDotProductTuples.Item1];
+            return output;
+        }
+
+        public static Tuple<int, List<Tuple<int, double>>> BestCameraForFacetAllDotProducts(IList<Camera> cameras, IEnumerable<int> possibleImageIndices, Vector3Double facetCentroid, Vector3Double facetNormalUnit)
+        {
+            double bestDotProduct = Double.MinValue;
+            int bestImageIndexIndex = -1;
+            int imageIndexIndex = 0;
+            var imageIndicesAndDotProducts = new List<Tuple<int, double>>();
+            foreach (var imageIndex in possibleImageIndices)
+            {
+                var camera = cameras[imageIndex];
+
+                var dotProduct = Operations.FacetNormalAndCentroidToCameraDotProduct(camera, facetCentroid, facetNormalUnit);
+
+                var imageIndexAndDotProduct = Tuple.Create(imageIndex, dotProduct);
+                imageIndicesAndDotProducts.Add(imageIndexAndDotProduct);
+
+                if (dotProduct > bestDotProduct)
+                {
+                    bestDotProduct = dotProduct;
+                    bestImageIndexIndex = imageIndexIndex;
+                }
+
+                imageIndexIndex++;
+            }
+            var output = Tuple.Create(bestImageIndexIndex, imageIndicesAndDotProducts);
+            return output;
+        }
+
+        public static List<string> CameraImageFilePaths(string imagesDirectoryPath, IEnumerable<Camera> cameras)
+        {
+            var output = new List<string>();
+            foreach (var camera in cameras)
+            {
+                string imageFileName = camera.FileName;
+                string imageFilePath = Operations.ImageFilePathGet(imagesDirectoryPath, imageFileName);
+                output.Add(imageFilePath);
+            }
+            return output;
+        }
+
         public static Matrix<double> CameraMatrix(NViewMatch nvm, int imageIndex)
         {
             var camera = nvm.Cameras[imageIndex];
@@ -181,6 +236,16 @@ namespace Eshunna.Lib
             return output;
         }
 
+        public static Vector3Double FacetNormal(IList<Patch> patches)
+        {
+            var p1 = patches[0];
+            var p2 = patches[1];
+            var p3 = patches[2];
+
+            var output = Operations.FacetNormal(p1, p2, p3);
+            return output;
+        }
+
         public static Vector3Double FacetNormal(Patch p1, Patch p2, Patch p3)
         {
             // Make sure the normals are actually normalized.
@@ -197,11 +262,12 @@ namespace Eshunna.Lib
             return output;
         }
 
-        public static string ImageFilePathGet(string imageDirectorypath, NViewMatch nvm, int imageIndex)
+        public static double FacetNormalAndCentroidToCameraDotProduct(Camera camera, Vector3Double facetCentroid, Vector3Double facetNormalUnit)
         {
-            string fileName = nvm.Cameras[imageIndex].FileName;
-            string filePath = Path.Combine(imageDirectorypath, fileName);
-            return filePath;
+            var facetCentroidToCamera = camera.Location.ToVector3Double() - facetCentroid;
+            var facetCentroidToCameraUnit = facetCentroidToCamera.L2Normalize(); // Normalize to ensure we get just the best.
+            var facetNormalToCentroidToCameraDotProduct = facetNormalUnit.Dot(facetCentroidToCameraUnit);
+            return facetNormalToCentroidToCameraDotProduct;
         }
 
         public static Matrix<double> HomogenousToInhomogenousColumnVectors(Matrix<double> homogenous)
@@ -234,6 +300,19 @@ namespace Eshunna.Lib
             return output;
         }
 
+        public static string ImageFilePathGet(string imageDirectorypath, NViewMatch nvm, int imageIndex)
+        {
+            string fileName = nvm.Cameras[imageIndex].FileName;
+            string filePath = Path.Combine(imageDirectorypath, fileName);
+            return filePath;
+        }
+
+        public static string ImageFilePathGet(string imagesDirectoryPath, string imageFileName)
+        {
+            string output = Path.Combine(imagesDirectoryPath, imageFileName);
+            return output;
+        }
+
         public static int[] ImageIndicesForFacet(StructureModel structureModel, int facetIndex, PatchFile patchFile)
         {
             var vertices = Operations.FacetVertices(structureModel, facetIndex);
@@ -259,6 +338,100 @@ namespace Eshunna.Lib
             return output;
         }
 
+        public static ImageInfo ImageInfo(string filePath, IExternalFormatImageSizeProvider imageSizeProvieder)
+        {
+            var size = imageSizeProvieder.GetSize(filePath);
+            var output = new ImageInfo(filePath, size);
+            return output;
+        }
+
+        public static List<ImageInfo> ImageInfos(IEnumerable<string> filePaths, IExternalFormatImageSizeProvider imageSizeProvider)
+        {
+            var output = new List<ImageInfo>();
+            foreach (var filePath in filePaths)
+            {
+                var imageInfo = Operations.ImageInfo(filePath, imageSizeProvider);
+                output.Add(imageInfo);
+            }
+            return output;
+        }
+
+        public static List<ImageInfoSet> ImageInfoSets(string sfmImagesDirectoryPath, string wedgeImagesDirectoryPath, IEnumerable<Camera> cameras, ISfmToWedgeImageFilePathMap sfmToWedgeImageFilePathMap, IExternalFormatImageSizeProvider imageSizeProvider)
+        {
+            var sfmImageFilePaths = Operations.CameraImageFilePaths(sfmImagesDirectoryPath, cameras);
+            var wedgeImageFilePaths = Operations.WedgeImageFilePaths(sfmImageFilePaths, sfmToWedgeImageFilePathMap);
+
+            var sfmImageInfos = Operations.ImageInfos(sfmImageFilePaths, imageSizeProvider);
+            var wedgeImageInfos = Operations.ImageInfos(wedgeImageFilePaths, imageSizeProvider);
+
+            int nImages = sfmImageFilePaths.Count;
+            var output = new List<ImageInfoSet>(nImages);
+            for (int iImage = 0; iImage < nImages; iImage++)
+            {
+                var sfmImageInfo = sfmImageInfos[iImage];
+                var wedgeImageInfo = wedgeImageInfos[iImage];
+                var imageInfoSet = new ImageInfoSet(sfmImageInfo, wedgeImageInfo);
+                output.Add(imageInfoSet);
+            }
+            return output;
+        }
+
+        public static List<ImageInfoSet> ImageInfoSets(string sfmImagesDirectoryPath, string wedgeImagesDirectoryPath, IEnumerable<Camera> cameras)
+        {
+            var sfmToWedgeImageFilePathMap = new DifferentDirectorySameFileName(wedgeImagesDirectoryPath);
+            var imageSizeProvider = new ExternalFormatImageSizeProvider();
+
+            var output = Operations.ImageInfoSets(sfmImagesDirectoryPath, wedgeImagesDirectoryPath, cameras, sfmToWedgeImageFilePathMap, imageSizeProvider);
+            return output;
+        }
+        
+
+        public static List<double> ImageScaleFactors(IEnumerable<ImageSizeTransformationPair> imageSizeTransformationPairs)
+        {
+            var output = new List<double>();
+            foreach (var pair in imageSizeTransformationPairs)
+            {
+                double scale = ImageScaler.MaximumDimensionScaleFactorGet(pair.From, pair.To);
+                output.Add(scale);
+            }
+            return output;
+        }
+
+        public static List<double> ImageScaleFactors(string sfmImagesDirectoryPath, string wedgeImagesDirectoryPath, IEnumerable<Camera> cameras)
+        {
+            var cameraImageFilePaths = Operations.CameraImageFilePaths(sfmImagesDirectoryPath, cameras);
+            var sfmToWedgeImageFilePathMap = new DifferentDirectorySameFileName(wedgeImagesDirectoryPath);
+            var sfmAndWedgeFilePaths = Operations.ImageSetFilePaths(cameraImageFilePaths, sfmToWedgeImageFilePathMap);
+            var imageSizeTransformationPairs = Operations.ImageSizeTransformationPairs(sfmAndWedgeFilePaths);
+            var imageScaleFactors = Operations.ImageScaleFactors(imageSizeTransformationPairs);
+            return imageScaleFactors;
+        }
+
+        public static List<double> ImageScaleFactors(IEnumerable<ImageInfoSet> imageInfoSets)
+        {
+            var output = new List<double>();
+            foreach (var imageInfoSet in imageInfoSets)
+            {
+                var sfmImageSize = imageInfoSet.SfmImage.Size;
+                var wedgeImageSize = imageInfoSet.WedgeImage.Size;
+                double scaleFactor = ImageScaler.MaximumDimensionScaleFactorGet(sfmImageSize, wedgeImageSize);
+                output.Add(scaleFactor);
+            }
+            return output;
+        }
+
+        public static List<ImageSetFilePaths> ImageSetFilePaths(IEnumerable<string> sfmImageFilePaths, ISfmToWedgeImageFilePathMap sfmToWedgeImageFilePathMap)
+        {
+            var output = new List<ImageSetFilePaths>();
+            foreach (var sfmImageFilePath in sfmImageFilePaths)
+            {
+                string wedgeImageFilePath = sfmToWedgeImageFilePathMap.WedgeImageFilePath(sfmImageFilePath);
+                var imageSetFilePaths = new ImageSetFilePaths(sfmImageFilePath, wedgeImageFilePath);
+                output.Add(imageSetFilePaths);
+            }
+            return output;
+        }
+
         public static List<Location2Double> ImageLocationsGet(Matrix<double> cameraMatrix, Matrix<double> homogenousPointLocations)
         {
             var unNormalizedHomogenous2D = cameraMatrix * homogenousPointLocations;
@@ -273,6 +446,29 @@ namespace Eshunna.Lib
                 var location2D = new Location2Double(xVector[iVertex], yVector[iVertex]);
                 output.Add(location2D);
             }
+            return output;
+        }
+
+        public static List<ImageSizeTransformationPair> ImageSizeTransformationPairs(List<ImageSetFilePaths> allImageSetFilePaths, IExternalFormatImageSizeProvider imageSizeProvider)
+        {
+            var output = new List<ImageSizeTransformationPair>();
+            foreach (var imageSetFilePath in allImageSetFilePaths)
+            {
+                string fromImagePath = imageSetFilePath.SfmImageFilePath;
+                string toImagePath = imageSetFilePath.WedgeImageFilePath;
+
+                var fromImageSize = imageSizeProvider.GetSize(fromImagePath);
+                var toImageSize = imageSizeProvider.GetSize(toImagePath);
+
+                var imageSizeTransformationPair = new ImageSizeTransformationPair(fromImageSize, toImageSize);
+                output.Add(imageSizeTransformationPair);
+            }
+            return output;
+        }
+
+        public static List<ImageSizeTransformationPair> ImageSizeTransformationPairs(List<ImageSetFilePaths> imagePathPairs)
+        {
+            var output = Operations.ImageSizeTransformationPairs(imagePathPairs, new ExternalFormatImageSizeProvider());
             return output;
         }
 
@@ -310,15 +506,16 @@ namespace Eshunna.Lib
 
         public static Tuple<Bitmap, List<Location2Integer>> MiniImageOfTriangle(Bitmap image, IList<Location2Integer> vertexImagePixelLocations)
         {
-            var miniImageBoundingBox = vertexImagePixelLocations.BoundingBoxGet();
-            var miniImageRectangle = miniImageBoundingBox.RectangleXWidthGet();
-            var miniImage = new Bitmap(miniImageRectangle.Width, miniImageRectangle.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            var vertexMiniImagePixelLocations = Operations.OriginTranslate(vertexImagePixelLocations, miniImageBoundingBox.XMin, miniImageBoundingBox.YMin);
-
             // Color the mini-image.
+            Tuple<Bitmap, List<Location2Integer>> output;
             bool allPixelsInImage = Operations.PixelLocationsInImage(vertexImagePixelLocations, image.Width, image.Height);
             if (allPixelsInImage)
             {
+                var miniImageBoundingBox = vertexImagePixelLocations.BoundingBoxGet();
+                var miniImageRectangle = miniImageBoundingBox.RectangleXWidthGet();
+                var miniImage = new Bitmap(miniImageRectangle.Width, miniImageRectangle.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                var vertexMiniImagePixelLocations = Operations.OriginTranslate(vertexImagePixelLocations, miniImageBoundingBox.XMin, miniImageBoundingBox.YMin);
+
                 var pixelsInImage = Geometry.ListTriangleLocations(vertexImagePixelLocations[0], vertexImagePixelLocations[1], vertexImagePixelLocations[2]);
                 var pixelsInMiniImage = Geometry.ListTriangleLocations(vertexMiniImagePixelLocations[0], vertexMiniImagePixelLocations[1], vertexMiniImagePixelLocations[2]);
                 int nPixels = pixelsInImage.Count;
@@ -329,13 +526,99 @@ namespace Eshunna.Lib
                     var pixelInMiniImage = pixelsInMiniImage[iPixel];
                     miniImage.SetPixel(pixelInMiniImage.X, pixelInMiniImage.Y, color);
                 }
+                output = Tuple.Create(miniImage, vertexMiniImagePixelLocations);
             }
             else
             {
-                // No nothing.
+                // Output a small black square.
+                int imageSize = 5;
+                var miniImage = new Bitmap(imageSize, imageSize, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                var vertexMiniImagePixelLocations = new List<Location2Integer>()
+                {
+                    new Location2Integer(0, 0),
+                    new Location2Integer(imageSize - 1, 0),
+                    new Location2Integer(0, imageSize -1),
+                };
+                output = Tuple.Create(miniImage, vertexMiniImagePixelLocations);
             }
+            return output;
+        }
 
-            var output = Tuple.Create(miniImage, vertexMiniImagePixelLocations);
+        public static Tuple<List<Bitmap>, List<List<Location2Integer>>> MiniImagePerFacet(
+            IList<Camera> cameras,
+            StructureModel structureModel,
+            IList<Patch> patchesClosestToVertex,
+            IList<ImageInfoSet> imageInfoSets,
+            IList<Matrix<double>> cameraMatrices)
+        {
+            // Setup, calculate image scale factors.
+            var imageScaleFactors = Operations.ImageScaleFactors(imageInfoSets);
+
+            // Only load the images we need.
+            var imagesByImageIndex = new Dictionary<int, Bitmap>();
+
+            // Create mini-images.
+            List<Bitmap> miniImages = new List<Bitmap>();
+            List<List<Location2Integer>> miniImageVertexPixels = new List<List<Location2Integer>>();
+            int nFacets = structureModel.Facets.Count;
+            int iFacet = 0;
+            foreach (var facet in structureModel.Facets)
+            {
+                // Get the facet centroid.
+                var facetCentroid = Operations.FacetCentroidVector(structureModel, facet);
+
+                // Patches closest to each vertex.
+                var patches = new Patch[] { patchesClosestToVertex[facet.Vertex1Index], patchesClosestToVertex[facet.Vertex2Index], patchesClosestToVertex[facet.Vertex3Index] };
+
+                // Get the facet normal.
+                var facetNormalUnit = Operations.FacetNormal(patches);
+
+                // Get the list of image indices with good agreement.
+                var imageIndices = Operations.ImageIndicesWithGoodAgreement(patches);
+
+                // Determine which image has the most frontal view of the patch.
+                int bestImageIndex = Operations.BestCameraForFacet(cameras, imageIndices, facetCentroid, facetNormalUnit);
+                var cameraMatrix = cameraMatrices[bestImageIndex];
+                var imageInfoSet = imageInfoSets[bestImageIndex];
+                Bitmap image;
+                if(imagesByImageIndex.ContainsKey(bestImageIndex))
+                {
+                    image = imagesByImageIndex[bestImageIndex];
+                }
+                else
+                {
+                    image = new Bitmap(imageInfoSet.WedgeImage.FilePath);
+                    imagesByImageIndex.Add(bestImageIndex, image);
+                }
+                var sfmImageSize = imageInfoSet.SfmImage.Size;
+
+                // Get the vertices for facet.
+                var facetVertices = new Vector3Double[] {
+                    structureModel.Vertices[facet.Vertex1Index].ToVector3Double(),
+                    structureModel.Vertices[facet.Vertex2Index].ToVector3Double(),
+                    structureModel.Vertices[facet.Vertex3Index].ToVector3Double()
+                };
+
+                // Create a homogenous column vector array for the facet vertices.
+                var facetVerticesHomogenous = Operations.HomogenousVectorArrayCreate(facetVertices);
+
+                // Get the image vertex pixel locations.
+                var imageVerticesCenterOriginHomogenous = Operations.ProductHomogenousNormalizeColumnVectors(cameraMatrix, facetVerticesHomogenous);
+                var imageVerticesCenterOrigin = Operations.Location2Double(imageVerticesCenterOriginHomogenous);
+                var imageVerticesUpperLeftOrigin = Operations.OriginTranslateCenteredToUpperLeft(imageVerticesCenterOrigin, sfmImageSize.Width, sfmImageSize.Height);
+                double imageScaleFactor = imageScaleFactors[bestImageIndex];
+                var wedgeImageVerticesUpperLeftOrigin = imageVerticesUpperLeftOrigin.MultiplyBy(imageScaleFactor);
+                var imageVertexPixels = wedgeImageVerticesUpperLeftOrigin.Round();
+
+                // Get the mini-image of the triangle.
+                var miniImageAndMiniImageVertexPixels = Operations.MiniImageOfTriangle(image, imageVertexPixels);
+                miniImages.Add(miniImageAndMiniImageVertexPixels.Item1);
+                miniImageVertexPixels.Add(miniImageAndMiniImageVertexPixels.Item2);
+
+                Console.WriteLine($@"Processed facet {iFacet.ToString()} of {nFacets.ToString()}");
+                iFacet++;
+            }
+            var output = Tuple.Create(miniImages, miniImageVertexPixels);
             return output;
         }
 
@@ -687,6 +970,17 @@ namespace Eshunna.Lib
             {
                 var vector = new Vector2Double(columnVectors[0, iVector], columnVectors[1, iVector]);
                 output.Add(vector);
+            }
+            return output;
+        }
+
+        public static List<string> WedgeImageFilePaths(IEnumerable<string> sfmImageFilePaths, ISfmToWedgeImageFilePathMap sfmToWedgeImageFilePathMap)
+        {
+            var output = new List<string>();
+            foreach (var sfmImageFilePath in sfmImageFilePaths)
+            {
+                string wedgeFilePath = sfmToWedgeImageFilePathMap.WedgeImageFilePath(sfmImageFilePath);
+                output.Add(wedgeFilePath);
             }
             return output;
         }
