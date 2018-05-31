@@ -10,8 +10,13 @@ namespace SkiaSharpNetCore
     {
         private static string GetFileRootedPath()
         {
-            string directoryRootedPath = @"C:\Users\David\Downloads";
-            string fileName = @"20180303_151739.jpg";
+            // // Win
+            // string directoryRootedPath = @"C:\Users\David\Downloads";
+            // string fileName = @"20180303_151739.jpg";
+
+            // Mac
+            string directoryRootedPath = @"/Users/david/Downloads/jpeg-9b";
+            string fileName = @"testimg.jpg";
 
             string fileRootedPath = Path.Combine(directoryRootedPath, fileName);
             return fileRootedPath;
