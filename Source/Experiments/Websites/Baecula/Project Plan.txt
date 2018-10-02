@@ -1,0 +1,1 @@
+Baecula - A front-end (TypeScript) project to randomly generate alerts, then display those alerts using the Bootstrap alert class.
