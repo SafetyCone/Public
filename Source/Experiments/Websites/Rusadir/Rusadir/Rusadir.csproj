@@ -17,4 +17,8 @@
     <TypeScriptCompile Include="src\ts\Test.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\ts\Libraries\" />
+  </ItemGroup>
+
 </Project>
