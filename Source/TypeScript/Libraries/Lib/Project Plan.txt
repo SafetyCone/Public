@@ -1,1 +1,1 @@
-Typescript Common.Lib.
+Typescript Lib - This is the Common library for all Public TypeScript libraries.
