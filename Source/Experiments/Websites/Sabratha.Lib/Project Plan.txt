@@ -1,0 +1,1 @@
+Sabratha.Lib is a TypeScript library project for use with Sabratha. The idea is to at least create one library location for commonly used functionality.

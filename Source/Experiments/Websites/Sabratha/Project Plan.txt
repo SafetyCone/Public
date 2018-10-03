@@ -1,0 +1,9 @@
+Sabratha - A front-end (TypeScript) project to randomly generate alerts, then display those alerts using the Bootstrap alert class.
+
+Sabratha uses npm link to 
+
+Note that Sabratha is an extension of Baecula and Rusadir. The projects got all messed up because:
+
+1) Baecula - GitHub does not recognize SVN:externals! This is SHITTY. Very SHITTY. Thus my attempts at creating a TypeScript library failed.
+2) Rusadir - I thought that the Visual Studio AnkhSVN pluging somehow got GitHub to recognize externals, but it didn't.
+
