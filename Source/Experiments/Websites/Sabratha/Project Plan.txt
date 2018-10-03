@@ -7,3 +7,8 @@ Note that Sabratha is an extension of Baecula and Rusadir. The projects got all 
 1) Baecula - GitHub does not recognize SVN:externals! This is SHITTY. Very SHITTY. Thus my attempts at creating a TypeScript library failed.
 2) Rusadir - I thought that the Visual Studio AnkhSVN pluging somehow got GitHub to recognize externals, but it didn't.
 
+Goals:
+* (DONE) Format alerts using Bootstrap.
+* (DONE) Add alerts using a button.
+* (DONE) Add alerts using a timer on a set interval.
+* (DONE) Make alerts dismissable.

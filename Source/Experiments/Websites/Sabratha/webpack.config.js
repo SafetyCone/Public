@@ -3,6 +3,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
+        "Index": "./src/ts/Index.ts",
         "Main": "./src/ts/Main.ts",
     },
     output: {
