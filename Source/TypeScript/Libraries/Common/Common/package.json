@@ -1,6 +1,6 @@
 {
   "name": "@rivetanomalytics/common",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Common TypeScript functionality.",
   "main": "dist/Index.js",
   "types": "dist/Index.d.ts",
