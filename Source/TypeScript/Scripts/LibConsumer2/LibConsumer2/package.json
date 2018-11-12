@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rivetanomalytics/common": "0.0.7",
     "@rivetanomalytics/testlib2": "^1.0.0"
   }
 }
