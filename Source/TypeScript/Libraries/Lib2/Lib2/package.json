@@ -1,0 +1,12 @@
+{
+  "name": "@rivetanomalytics/testlib2",
+  "version": "1.0.0",
+  "description": "A quick test of TypeScript library creation.",
+  "main": "dist/Index.js",
+  "types": "dist/Index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Coats",
+  "license": "ISC"
+}

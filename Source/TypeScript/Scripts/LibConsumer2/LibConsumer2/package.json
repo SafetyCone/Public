@@ -1,0 +1,15 @@
+{
+  "name": "libconsumer2",
+  "version": "1.0.0",
+  "description": "A test consumer of a test TypeScript library.",
+  "main": "dist/Index.js",
+  "scripts": {
+    "start": "node ./dist/Index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rivetanomalytics/testlib2": "^1.0.0"
+  }
+}
