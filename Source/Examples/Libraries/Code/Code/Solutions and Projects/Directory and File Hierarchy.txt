@@ -1,0 +1,42 @@
+﻿* .sln
+	- Solution files are simply named.
+	- Every solution file is labeled with a VS{YEAR} token.
+* .csproj - The standard version has no token, prior versions get a VS2010, VS2013 token, non-standard future version get a VS2017 token.
+
+* Repositories/Public/Source
+	* Common
+		* Libraries
+			* Lib
+				* Construction
+					- Public.Common.Lib.Construction.csproj
+				* Lib
+					- Public.Common.Lib.csproj
+				- Common.Construction.VS2015.sln (This is THE library for THE Common domain of THE repository. Ok to not be more descriptive in the solution file name.)
+				
+* Repositories/Minex/Source
+	* Common
+		* Libraries
+			* Lib
+				* Construction
+					- Minex.Common.Lib.Construction.csproj
+				* Lib
+					- Minex.Common.Lib.csproj
+				- Common.Construction.VS2010.sln
+
+* Repositories/Minex/Source
+	* Common
+		* Libraries
+			* Lib.Code
+				* Construction
+					- Minex.Common.Lib.Code.Construction.csproj
+				* Lib.Code
+					- Minex.Common.Lib.Code.csproj
+				- Lib.Code.VS2010.sln
+
+* Repositories/Minex/Source
+	* Common
+		* Scripts
+			* Simeon
+				* Simeon
+					- Minex.Common.Simeon.csproj
+				- Simeon.VS2010.sln

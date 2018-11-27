@@ -46,7 +46,7 @@ namespace Public.Examples.Code.Extensions
             if(!EnumerationExtensions.TryFromDefault(enumeration, out output))
             {
 #if (NETFX_40) // Make sure the Public/Tools/VersionSpecificSymbols.Common.prop import is included in the project file.
-                string varName = nameof(output);
+                //string varName = nameof(output);
                 throw new ArgumentException(@"Unrecognized enumeration string.", nameof(enumeration));
 #else
                 throw new ArgumentException(@"Unrecognized enumeration string.", "enumeration");

@@ -12,12 +12,12 @@ namespace Examples
 
         public void Dispose()
         {
-            this.CleanUp(true);
+            this.Dispose(true);
 
             GC.SuppressFinalize(this);
         }
 
-        private void CleanUp(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!this.zDisposed)
             {
@@ -34,7 +34,7 @@ namespace Examples
 
         ~DisposableClass()
         {
-            this.CleanUp(false);
+            this.Dispose(false);
         }
 
         #endregion

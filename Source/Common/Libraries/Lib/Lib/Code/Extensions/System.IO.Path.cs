@@ -40,18 +40,34 @@ namespace Public.Common.Lib.IO.Extensions
 
         /// <summary>
         /// Provides the extension of the file without the leading file extension separator prefix ("bmp" instead of ".bmp").
+        /// Also makes sure the extension is lower-case since this usually desired.
         /// </summary>
         /// <remarks>
         /// The System.IO.Path.GetExtension() method returns the file extension prefixed with the file extension separator (ex: ".bmp").
         /// 
         /// The file extension separator is generally '.' (period).
         /// </remarks>
-        public static string GetExtensionOnly(string path)
+        public static string GetExtension(string path)
+        {
+            string fileExtension = PathExtensions.GetExtensionWithoutLowering(path);
+            string fileExtensionLowered = fileExtension.ToLowerInvariant();
+            return fileExtensionLowered;
+        }
+
+        /// <summary>
+        /// Provides the extension of the file without the leading file extension separator prefix ("bmp" instead of ".bmp").
+        /// </summary>
+        /// <remarks>
+        /// The System.IO.Path.GetExtension() method returns the file extension prefixed with the file extension separator (ex: ".bmp").
+        /// 
+        /// The file extension separator is generally '.' (period).
+        /// </remarks>
+        public static string GetExtensionWithoutLowering(string path)
         {
             string fileExtensionWithSeparator = Path.GetExtension(path);
 
-            string output = fileExtensionWithSeparator.Substring(1); // Skip the first character of the string since it will be the file extension separator.
-            return output;
+            string fileExtension = fileExtensionWithSeparator.Substring(1); // Skip the first character of the string since it will be the file extension separator.
+            return fileExtension;
         }
 
         /// <summary>
@@ -59,7 +75,7 @@ namespace Public.Common.Lib.IO.Extensions
         /// </summary>
         public static bool HasExtension(string fileName, string extension)
         {
-            string fileExtension = PathExtensions.GetExtensionOnly(fileName);
+            string fileExtension = PathExtensions.GetExtension(fileName);
 
             bool output = fileExtension == extension;
             return output;
@@ -106,7 +122,7 @@ namespace Public.Common.Lib.IO.Extensions
 
             string directoryPath = Path.GetDirectoryName(path);
             string fileNameOnly = Path.GetFileNameWithoutExtension(path);
-            string extension = PathExtensions.GetExtensionOnly(path);
+            string extension = PathExtensions.GetExtension(path);
 
             string datedFileName = String.Format(@"{0} - {1}", fileNameOnly, todayYYYYMMDD);
             string fullDatedFileName = PathExtensions.GetFullFileName(datedFileName, extension);

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBB4B521-DABE-472C-801F-326E96D4FA11}</ProjectGuid>
+    <ProjectGuid>{6F255787-E1E7-454D-831B-527BCDDEE741}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Public.Examples.Code</RootNamespace>
-    <AssemblyName>Public.Examples.Code</AssemblyName>
+    <RootNamespace>Public.Common.Lib.DesignPatterns</RootNamespace>
+    <AssemblyName>Public.Common.Lib.DesignPatterns</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,34 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\ComparableClass.cs" />
-    <Compile Include="Code\DisposableClass.cs" />
-    <Compile Include="Code\EnumerableYieldReturn.cs" />
-    <Compile Include="Code\Enumeration.cs" />
-    <Compile Include="Code\EquatableClass.cs" />
-    <Compile Include="Code\EqualsStruct.cs" />
-    <Compile Include="Code\EquatableAndComparableClass.cs" />
-    <Compile Include="Code\ExampleException.cs" />
-    <Compile Include="Code\Extension.cs" />
-    <Compile Include="Code\FactoryClass.cs" />
-    <Compile Include="Code\IFileSerializerExample.cs" />
+    <Compile Include="Code\Factories\Interfaces\IFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib.DesignPatterns\Lib.DesignPatterns\Public.Common.Lib.DesignPatterns.csproj">
-      <Project>{6f255787-e1e7-454d-831b-527bcddee741}</Project>
-      <Name>Public.Common.Lib.DesignPatterns</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Common\Libraries\Lib\Lib\Public.Common.Lib.csproj">
-      <Project>{b76ff3db-e7ec-4b04-a51a-2958ea072645}</Project>
-      <Name>Public.Common.Lib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Solutions and Projects\Directory and File Hierarchy.txt" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\..\..\Tools\VersionSpecificSymbols.Common.prop" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
