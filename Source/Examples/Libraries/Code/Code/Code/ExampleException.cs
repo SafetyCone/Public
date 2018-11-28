@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 
 
-namespace Public.Examples
+namespace Public.Examples.Code
 {
     // Exceptions can be very simple, most of the complications here are due to serialization.
     public class ExampleException : Exception, ISerializable

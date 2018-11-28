@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Code\ComparableClass.cs" />
     <Compile Include="Code\DisposableClass.cs" />
+    <Compile Include="Code\DisposableClassInheritance.cs" />
     <Compile Include="Code\EnumerableYieldReturn.cs" />
     <Compile Include="Code\Enumeration.cs" />
     <Compile Include="Code\EquatableClass.cs" />

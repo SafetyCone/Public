@@ -1,11 +1,13 @@
 ﻿using System;
 
 
-namespace Examples
+namespace Public.Examples.Code
 {
     /// <summary>
     /// Adapted from the Visual Studio IDisposable implementation code-snippet.
+    /// Also: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
     /// </summary>
+    // sealed - Consider making the class sealed to remove the virtual qualifier from the protected dispose call below.
     class DisposableClass : IDisposable
     {
         #region IDisposable Members
@@ -21,7 +23,8 @@ namespace Examples
             //GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        // Remove the virtual call if the class is sealed (or has no plans for subclassing, in which case this should be communicated by sealing the class).
+        protected virtual void Dispose(bool disposing)
         {
             if (!this.zDisposed)
             {

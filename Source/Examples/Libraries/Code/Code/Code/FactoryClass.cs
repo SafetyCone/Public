@@ -2,7 +2,7 @@
 using Public.Common.Lib.DesignPatterns;
 
 
-namespace Public.Examples.Code.Code
+namespace Public.Examples.Code
 {
     public class FactoryClass : IFactory<string, int>
     {

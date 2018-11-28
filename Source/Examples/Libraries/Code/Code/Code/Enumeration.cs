@@ -42,8 +42,7 @@ namespace Public.Examples.Code.Extensions
 
         public static Enumeration FromDefault(string enumeration)
         {
-            Enumeration output;
-            if(!EnumerationExtensions.TryFromDefault(enumeration, out output))
+            if(!EnumerationExtensions.TryFromDefault(enumeration, out Enumeration output))
             {
 #if (NETFX_40) // Make sure the Public/Tools/VersionSpecificSymbols.Common.prop import is included in the project file.
                 //string varName = nameof(output);

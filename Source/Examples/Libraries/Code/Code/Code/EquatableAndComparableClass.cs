@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Public.Examples
+namespace Public.Examples.Code
 {
     /// <summary>
     /// Gives an example of an Equatable and Comparable class (data class using value semantics).

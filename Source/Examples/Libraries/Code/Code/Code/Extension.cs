@@ -16,7 +16,7 @@ using System.Text;
 /// 
 /// In conclusion, keep extensions located in the same assemblies and namespaces as the functionality they support, and keep the number of extensions in the Common.Lib to a minimum.
 /// </summary>
-namespace Public.Common.Lib.Extensions
+namespace Public.Examples.Code.Extensions
 {
     public static class StringExtensions
     {

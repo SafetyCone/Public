@@ -134,14 +134,14 @@ namespace Public.Examples.Code
 
         public bool Equals(EqualsClassDescendant other)
         {
+            if (object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             if (object.ReferenceEquals(null, other))
             {
                 return false;
-            }
-
-            if(object.ReferenceEquals(this, other))
-            {
-                return true;
             }
 
             // Put the type comparison here.
