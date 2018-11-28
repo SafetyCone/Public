@@ -10,7 +10,7 @@ namespace Public.Examples.Code
     // sealed - Consider making the class sealed to remove the virtual qualifier from the protected dispose call below.
     class DisposableClass : IDisposable
     {
-        #region IDisposable Members
+        #region IDisposable
 
         private bool zDisposed = false; // To detect redundant calls.
 

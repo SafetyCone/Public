@@ -5,6 +5,8 @@ namespace Public.Examples.Code
 {
     class DisposableClassInheritance : DisposableClass // No need for a redundant IDisposable interface inheritance. The base class already specifies that inheritance.
     {
+        #region IDisposable
+
         // The inherited class needs its own disposed tracker.
         private bool zDisposed = false; // To detect redundant calls.
 
@@ -30,5 +32,7 @@ namespace Public.Examples.Code
         //{
         //    Dispose(false);
         //}
+
+        #endregion
     }
 }
