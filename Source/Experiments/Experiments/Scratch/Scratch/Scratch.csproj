@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Code\Enumerations\TestEnumeration.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Code\Enumerations\TestEnumeration.cs" />
+  </ItemGroup>
+
+</Project>

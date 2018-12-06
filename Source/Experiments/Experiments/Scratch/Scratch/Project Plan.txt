@@ -1,0 +1,4 @@
+﻿Scratch is a console-app for scratch-work and experimenting related to .NET or C#.
+
+Experiments:
+* Can Enumerations have static methods? No! But you can have static methods in an {EnumerationType}Helper class, and you can define extension methods on enumerations.
