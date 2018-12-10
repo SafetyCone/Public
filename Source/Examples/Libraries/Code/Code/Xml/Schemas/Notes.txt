@@ -1,0 +1,3 @@
+﻿To find more examples of XML schema files, see: Repositories|Minex|Common|Experiments|SchedulerSimple.
+
+To learn more about XML schema: https://www.w3schools.com/xml/schema_howto.asp

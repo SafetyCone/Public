@@ -66,6 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Solutions and Projects\Directory and File Hierarchy.txt" />
+    <Content Include="Xml\BasicTypes.xml" />
+    <Content Include="Xml\Schemas\Notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Xml\Schemas\BasicTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\Tools\VersionSpecificSymbols.Common.prop" />
