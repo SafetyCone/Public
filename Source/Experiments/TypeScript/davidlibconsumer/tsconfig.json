@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "module": "commonjs"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
