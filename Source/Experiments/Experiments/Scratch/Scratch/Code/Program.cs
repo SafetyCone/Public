@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+
 
 namespace Scratch
 {
@@ -6,7 +8,7 @@ namespace Scratch
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            TestSystemPath.SubMain();
         }
     }
 }
