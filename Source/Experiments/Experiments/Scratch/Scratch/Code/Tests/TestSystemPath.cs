@@ -19,16 +19,110 @@ namespace Scratch
             //TestSystemPath.TestGetInvalidPathChars();
             //TestSystemPath.TestGetPathRoot();
             //TestSystemPath.TestGetRandomFileName();
-            TestSystemPath.TestGetRelativePath();
+            //TestSystemPath.TestGetRelativePath();
+            //TestSystemPath.TestGetTempFileName();
+            //TestSystemPath.TestGetTempPath();
+            //TestSystemPath.TestHasExtension();
+            //TestSystemPath.TestInvalidPathChars();
+            //TestSystemPath.TestIsPathFullyQualified();
+            //TestSystemPath.TestIsPathRooted();
+            //TestSystemPath.TestJoin();
+            TestSystemPath.TestSeparatorChars();
         }
 
-        //private static void TestGetTempFileName()
+        public static void TestSeparatorChars()
+        {
+            var writer = Console.Out;
+
+            writer.WriteLine($@"Path separator char: '{Path.PathSeparator}'");
+            writer.WriteLine($@"Volume separator char: '{Path.VolumeSeparatorChar}'");
+            writer.WriteLine($@"Directory separator char: '{Path.DirectorySeparatorChar}'");
+            writer.WriteLine($@"Alt directory separator char: '{Path.AltDirectorySeparatorChar}'");
+        }
+
+        //public static void TestJoin()
         //{
         //    var writer = Console.Out;
 
-        //    var tempFileName = Path.();
-        //    writer.WriteLine($@"Random path segment: {randomPathSegment}"); // Example output: ulcdtig4.v53
+        //    var isRooted1 = Path.Join(@"C:\temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted 1: {isRooted1}"); // Example output: True
         //}
+
+        //public static void TestIsPathRooted()
+        //{
+        //    var writer = Console.Out;
+
+        //    var isRooted1 = Path.IsPathRooted(@"C:\temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted 1: {isRooted1}"); // Example output: True
+
+        //    var isRooted2 = Path.IsPathRooted(@"temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted2: {isRooted2}"); // Example output: False
+
+        //    var isRooted3 = Path.IsPathRooted(@"/mnt/efs/temp.txt");
+        //    writer.WriteLine($@"Is rooted 3: {isRooted3}"); // Example output: True
+
+        //    var isRooted4 = Path.IsPathRooted(@"temp/temp.txt");
+        //    writer.WriteLine($@"Is rooted 4: {isRooted4}"); // Example output: False
+
+        //    var isRooted5 = Path.IsPathRooted(@"\temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted5: {isRooted5}"); // Example output: True
+
+        //    var isRooted6 = Path.IsPathRooted(@"/temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted6: {isRooted6}"); // Example output: True
+        //}
+
+        //public static void TestIsPathFullyQualified()
+        //{
+        //    var writer = Console.Out;
+
+        //    var isRooted1 = Path.IsPathFullyQualified(@"C:\temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted 1: {isRooted1}"); // Example output: True
+
+        //    var isRooted2 = Path.IsPathFullyQualified(@"temp\temp.txt");
+        //    writer.WriteLine($@"Is rooted2: {isRooted2}"); // Example output: False
+
+        //    var isRooted3 = Path.IsPathFullyQualified(@"/mnt/efs/temp.txt");
+        //    writer.WriteLine($@"Is rooted 3: {isRooted3}"); // Example output: False
+
+        //    var isRooted4 = Path.IsPathFullyQualified(@"temp/temp.txt");
+        //    writer.WriteLine($@"Is rooted 4: {isRooted4}"); // Example output: False
+        //}
+
+        //// Obsolete.
+        //public static void TestInvalidPathChars()
+        //{
+        //    var output = Path.InvalidPathChars;
+        //}
+
+        private static void TestHasExtension()
+        {
+            var writer = Console.Out;
+
+            var hasExtension1 = Path.HasExtension(@"C:\temp\temp.txt");
+            writer.WriteLine($@"Has extension 1: {hasExtension1}"); // Example output: True
+
+            var hasExtension2 = Path.HasExtension(@"C:\temp\temp");
+            writer.WriteLine($@"Has extension 2: {hasExtension2}"); // Example output: False
+
+            var hasExtension3 = Path.HasExtension(@"C:\temp\temp.");
+            writer.WriteLine($@"Has extension 3: {hasExtension3}"); // Example output: False
+        }
+
+        private static void TestGetTempPath()
+        {
+            var writer = Console.Out;
+
+            var tempPath = Path.GetTempPath();
+            writer.WriteLine($@"Temp path: {tempPath}"); // Example output: C:\Users\david\AppData\Local\Temp\
+        }
+
+        private static void TestGetTempFileName()
+        {
+            var writer = Console.Out;
+
+            var tempFileName = Path.GetTempFileName();
+            writer.WriteLine($@"Temp file name: {tempFileName}"); // Example output: C:\Users\david\AppData\Local\Temp\tmpB013.tmp
+        }
 
         private static void TestGetRelativePath()
         {
