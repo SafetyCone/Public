@@ -5,7 +5,10 @@ using System.Collections.Generic;
 namespace Public.Examples.Code
 {
     /// <summary>
-    /// An example comparable class. Shows:
+    /// An example comparable class.
+    /// When you implement IComparable you should implement the comparison operators '&lt;', '&gt;', '&lt;=', and '&gt;='.
+    /// 
+    /// Shows:
     /// * Typed vs. generic field comparisons.
     /// * Also implements the classic non-generic base interface.
     /// * Operators &lt;, &gt;, &lt;=, and &gt;=.
@@ -87,12 +90,13 @@ namespace Public.Examples.Code
 
         public int CompareTo(ComparableClass<T> other)
         {
+            // If the type is a reference-type, use this short-circuit to disquality identical instances.
             if(object.ReferenceEquals(this, other))
             {
                 return 0;
             }
 
-            if(object.ReferenceEquals(other, null))
+            if(other is null)
             {
                 return 1; // Any non-null object > null.
             }

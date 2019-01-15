@@ -6,8 +6,14 @@ using Public.Common.Lib;
 namespace Public.Examples.Code
 {
     /// <summary>
-    /// An example equatable class. It shows several options to choose from:
+    /// An example equatable class.
+    /// When you implement IEquatable and its Equals() method, you should implement an override of Object.Equals().
+    /// And if you override Object.Equals(), you should override Object.GetHashCode() and the equality operators '==' and '!='.
+    /// 
+    /// It shows several options to choose from:
     /// * DEBUG pragma behavior.
+    /// 
+    /// * Purports to show the "right" way. Simple IEquatable.Equals() method, complex Object.Equals() method. http://www.aaronstannard.com/overriding-equality-in-dotnet/
     /// </summary>
     public class EquatableClass : IEquatable<EquatableClass>
     {
@@ -87,17 +93,47 @@ namespace Public.Examples.Code
 
         public override bool Equals(object obj)
         {
-            bool output = false;
             // Check type to ensure we are not comparing an object of a derived type to an object of the base type.
             // This 'is' operator will return true for derived types since an instance of a derived type is an instance of the base type.
             // The 'as' operator will return a reference to the derived instance as a base type instance, and the properties of the two base-type instances might be the same, but obviously the two objects are not equal since one of them is actually an instance of the derived type!
-            if (obj.GetType() == typeof(EquatableClass))
+            if(obj == null || obj.GetType() != typeof(EquatableClass))
             {
-                output = this.Equals(obj as EquatableClass);
+                return false;
             }
 
+            var objAsType = obj as EquatableClass;
+
+            var output = this.Equals(objAsType);
             return output;
         }
+
+        // This is the expansion of the Visual Studio equals snippet. Note that the links go nowhere!
+        //public override bool Equals(object obj)
+        //{
+        //    //       
+        //    // See the full list of guidelines at
+        //    //   http://go.microsoft.com/fwlink/?LinkID=85237  // Goes nowhere!
+        //    // and also the guidance for operator== at
+        //    //   http://go.microsoft.com/fwlink/?LinkId=85238  // Goes nowhere!
+        //    //
+
+        //    if (obj == null || GetType() != obj.GetType())
+        //    {
+        //        return false;
+        //    }
+
+        //    // TODO: write your implementation of Equals() here
+        //    throw new NotImplementedException();
+        //    return base.Equals(obj);
+        //}
+        //
+        //// override object.GetHashCode
+        //public override int GetHashCode()
+        //{
+        //    // TODO: write your implementation of GetHashCode() here
+        //    throw new NotImplementedException();
+        //    return base.GetHashCode();
+        //}
 
         public override int GetHashCode()
         {

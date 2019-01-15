@@ -10,7 +10,7 @@ namespace Public.Examples.Code
     // IEquatable<T> should always be implemented for value types.
     // Make the struct serializable because why not?
     [Serializable]
-    struct EqualsStruct : IEquatable<EqualsStruct>
+    struct EquatableStruct : IEquatable<EquatableStruct>
     {
         #region Static
 
@@ -18,13 +18,13 @@ namespace Public.Examples.Code
         // The compiler helpfully warns that these relationships should be followed.
         // If you want to have the compiler disable the warning in a particular file (and re-enable it later in the file).
         // Also, for ease of use, defining these operators can help.
-        public static bool operator ==(EqualsStruct lhs, EqualsStruct rhs)
+        public static bool operator ==(EquatableStruct lhs, EquatableStruct rhs)
         {
             return lhs.Equals(rhs);
         }
 
         // If op_Equals is present, op_NotEquals must also be present, and vice-versa.
-        public static bool operator !=(EqualsStruct lhs, EqualsStruct rhs)
+        public static bool operator !=(EquatableStruct lhs, EquatableStruct rhs)
         {
             return !(lhs.Equals(rhs));
         }
@@ -35,7 +35,7 @@ namespace Public.Examples.Code
 
         // Important NOT to interface-explicity implement this method since it will be needed in the Equals() override and operator overloads.
         // I.e., do NOT use bool IEquatable<ReferenceStruct>.Equals(ReferenceStruct other).
-        public bool Equals(EqualsStruct other)
+        public bool Equals(EquatableStruct other)
         {
             return (this.C == other.C) && (this.D == other.D);
         }
@@ -77,7 +77,7 @@ namespace Public.Examples.Code
         //}
 
         // Or just avoid using the reference this.
-        public EqualsStruct(string c, string d)
+        public EquatableStruct(string c, string d)
         {
             this.zC = c;
             this.zD = d;
@@ -105,7 +105,7 @@ namespace Public.Examples.Code
         public override bool Equals(object obj)
         {
             // Note that because structs are implicitly sealed (no descendent classes) instead of using 'as' we can use 'is'.
-            if (obj is EqualsStruct objAsEqualsStruct)
+            if (obj is EquatableStruct objAsEqualsStruct)
             {
                 return this.Equals(objAsEqualsStruct);
             }
