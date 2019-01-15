@@ -25,4 +25,7 @@ The primary distinction in equality for types is whether a type is a reference-t
 Reference-Types:
 For reference types, the C# built-in equality methods implement reference-equality:
 
-* Object.Equals() - Uses Object.ReferenceEquals(). This is demonstrated in ReferenceTypeDemonstrations.ObjectEqualsSameAsObjectReferenceEquals().
+* Object.Equals()
+	* Test whether two reference-type variables that reference the same instance are Object.Equals(). Demonstrated in ReferenceTypeDemonstrations.ObjectEqualsReferenceEquality().
+	* Test the converse, whether two reference-type variables that reference different instances are Object.Equals(). Demonstrated in ReferenceTypeDemonstrations.ObjectEqualsDifferentInstanceReferenceInequality().
+	* Uses Object.ReferenceEquals(). This is demonstrated in ReferenceTypeDemonstrations.ObjectEqualsSameAsObjectReferenceEquals().
