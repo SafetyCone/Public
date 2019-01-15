@@ -1,0 +1,4 @@
+﻿ExaminingComparisons - A console-app for experiments examining and demonstrating concepts related to comparisons in C#.
+
+
+* SortingDemonstrations.CanNonComparableTypesBeSorted() - Can types that do not implement IComparable<T> or IComparable be sorted in collections like lists?
