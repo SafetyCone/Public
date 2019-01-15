@@ -13,14 +13,18 @@ namespace ExaminingEquals
             //ReferenceTypeDemonstrations.ObjectEqualsSameAsObjectReferenceEquals();
         }
 
+        /// <summary>
+        /// Result: False.
+        /// Test whether 
+        /// </summary>
         private static void ObjectEqualsSameAsObjectReferenceEquals()
         {
 
         }
 
         /// <summary>
-        /// Result:
-        /// Test whether two reference-type variables that reference different instances are Object.Equals().
+        /// Result: False.
+        /// Are two reference-type variables that reference different instances Object.Equals()?
         /// Expected: False, because reference-types use reference-equality by default.
         /// 
         /// Statement of reference-types using reference-equality for implementation of Object.Equals(): https://docs.microsoft.com/en-us/dotnet/api/system.object.equals?view=netframework-4.7.2#System_Object_Equals_System_Object_
@@ -37,7 +41,7 @@ namespace ExaminingEquals
 
         /// <summary>
         /// Result: True.
-        /// Test whether two reference-type variables that reference the same instance are Object.Equals().
+        /// Are two reference-type variables that reference the same instance Object.Equals()?
         /// Expected: True, because reference-types use reference-equality by default.
         /// 
         /// Statement of reference-types using reference-equality for implementation of Object.Equals(): https://docs.microsoft.com/en-us/dotnet/api/system.object.equals?view=netframework-4.7.2#System_Object_Equals_System_Object_
