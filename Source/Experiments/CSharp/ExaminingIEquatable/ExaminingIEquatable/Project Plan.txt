@@ -1,0 +1,1 @@
+﻿ExaminingIEquatable - An console-app for experiments examining the System.IEquatable<T> interface.
