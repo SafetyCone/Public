@@ -1,0 +1,1 @@
+﻿ExaminingClasses.Lib - A library containing types for use in examining concepts related to class in C#.
