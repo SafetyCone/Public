@@ -16,13 +16,13 @@ namespace Public.Examples.Code
         public static bool operator ==(EquatableClass lhs, EquatableClass rhs)
         {
             bool output;
-            if(object.ReferenceEquals(null, lhs))
+            if(lhs is null)
             {
-                output =  object.ReferenceEquals(null, rhs);
+                output = rhs is null;
             }
             else
             {
-                output = lhs.Equals(rhs); // Equals() handles a null right side.
+                output = lhs.Equals(rhs); // Equals(EquatableClass) handles a null right side.
             }
 
             return output;
@@ -46,18 +46,18 @@ namespace Public.Examples.Code
                 return true;
             }
 
-            if (object.ReferenceEquals(null, other))
+            if (other is null)
             {
-                return false;
+                return false; // We're inside the 'this' instance, so it can't be null!
             }
 
-            // Put the type comparison here.
+            // Compare exact types. Instances of derived types can have the same A and B property values, and yet are NOT equal!
             if(this.GetType() != other.GetType())
             {
                 return false;
             }
 
-#if DEBUG
+#if DEBUG // Allow for line-by-line debugging to see where output changes.
             bool output = true;
             output = output && (this.A == other.A);
             output = output && (this.B == other.B);
@@ -88,7 +88,10 @@ namespace Public.Examples.Code
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj.GetType() == typeof(EquatableClass)) // Check type to ensure we are not comparing an object of a derived type to an object of the base type, since for a derived type the as operator will return a reference to the base type, which might be the same as an object of the base type, but the two objects are not equal!
+            // Check type to ensure we are not comparing an object of a derived type to an object of the base type.
+            // This 'is' operator will return true for derived types since an instance of a derived type is an instance of the base type.
+            // The 'as' operator will return a reference to the derived instance as a base type instance, and the properties of the two base-type instances might be the same, but obviously the two objects are not equal since one of them is actually an instance of the derived type!
+            if (obj.GetType() == typeof(EquatableClass))
             {
                 output = this.Equals(obj as EquatableClass);
             }
@@ -139,12 +142,12 @@ namespace Public.Examples.Code
                 return true;
             }
 
-            if (object.ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }
 
-            // Put the type comparison here.
+            // Compare exact types. Instances of derived types can have the same A and B property values, and yet are NOT equal!
             if (this.GetType() != other.GetType())
             {
                 return false;
@@ -152,7 +155,7 @@ namespace Public.Examples.Code
 
             if (this.C == other.C)
             {
-                return base.Equals((EquatableClass)other);
+                return base.Equals((EquatableClass)other); // Problem? Won't the base always return false due to exact type-check in base?
             }
             
             return false;

@@ -45,9 +45,11 @@
     <Compile Include="Code\DisposableClassInheritance.cs" />
     <Compile Include="Code\EnumerableYieldReturn.cs" />
     <Compile Include="Code\Enumeration.cs" />
+    <Compile Include="Code\EqualityComparerClass.cs" />
     <Compile Include="Code\EquatableClass.cs" />
     <Compile Include="Code\EqualsStruct.cs" />
     <Compile Include="Code\EquatableAndComparableClass.cs" />
+    <Compile Include="Code\ExampleClass.cs" />
     <Compile Include="Code\ExampleException.cs" />
     <Compile Include="Code\Extension.cs" />
     <Compile Include="Code\FactoryClass.cs" />

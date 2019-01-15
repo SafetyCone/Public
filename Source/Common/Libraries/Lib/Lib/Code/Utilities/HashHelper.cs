@@ -10,6 +10,8 @@ namespace Public.Common.Lib
     /// </summary>
     /// <remarks>
     /// Adapted from: Effective C#: 50 Specific Ways to Improve your C#, 3rd Edition - Item 26: Implement Classic Interfaces in Addition to Generic Interfaces.
+    /// But also see here: https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
+    /// And here: http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
     /// </remarks>
     public class HashHelper
     {
