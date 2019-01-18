@@ -8,7 +8,7 @@ namespace Public.Examples.Code
     /// <summary>
     /// An example equatable class.
     /// When you implement IEquatable and its Equals() method, you should implement an override of Object.Equals().
-    /// And if you override Object.Equals(), you should override Object.GetHashCode() and the equality operators '==' and '!='.
+    /// And if you override Object.Equals(), you should override Object.GetHashCode() and the equality operators '==' and '!='. If you don't, and you use the '==' operator, you will get the version of the operator that uses the base Object.Equals() method.
     /// 
     /// It shows several options to choose from:
     /// * DEBUG pragma behavior.
@@ -52,13 +52,10 @@ namespace Public.Examples.Code
                 return true;
             }
 
-            if (other is null)
-            {
-                return false; // We're inside the 'this' instance, so it can't be null!
-            }
-
-            // Compare exact types. Instances of derived types can have the same A and B property values, and yet are NOT equal!
-            if(this.GetType() != other.GetType())
+            // Null check and compare exact types.
+            // We're inside the 'this' instance, so it can't be null!
+            // Instances of derived types can have the same A and B property values, and yet are NOT equal!
+            if (other is null || this.GetType().Equals(other.GetType()))
             {
                 return false;
             }
@@ -96,7 +93,7 @@ namespace Public.Examples.Code
             // Check type to ensure we are not comparing an object of a derived type to an object of the base type.
             // This 'is' operator will return true for derived types since an instance of a derived type is an instance of the base type.
             // The 'as' operator will return a reference to the derived instance as a base type instance, and the properties of the two base-type instances might be the same, but obviously the two objects are not equal since one of them is actually an instance of the derived type!
-            if(obj == null || obj.GetType() != typeof(EquatableClass))
+            if(obj == null || obj.GetType().Equals(typeof(EquatableClass)))
             {
                 return false;
             }
@@ -106,6 +103,20 @@ namespace Public.Examples.Code
             var output = this.Equals(objAsType);
             return output;
         }
+
+        ///// Would this work given the explicit type check in <see cref="EquatableClass.Equals(EquatableClass)"/>?
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj is EnumerationBase objAsEnumerationBase)
+        //    {
+        //        var output = this.Equals(objAsEnumerationBase);
+        //        return output;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         // This is the expansion of the Visual Studio equals snippet. Note that the links go nowhere!
         //public override bool Equals(object obj)
@@ -150,9 +161,9 @@ namespace Public.Examples.Code
         public static bool operator ==(EqualsClassDescendant lhs, EqualsClassDescendant rhs)
         {
             bool output;
-            if (object.ReferenceEquals(null, lhs))
+            if (lhs is null)
             {
-                output = (object.ReferenceEquals(null, rhs)) ;
+                output = rhs is null;
             }
             else
             {
