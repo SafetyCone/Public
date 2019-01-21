@@ -21,22 +21,21 @@ namespace Public.Examples.Code
 
         public static bool operator ==(EquatableClass lhs, EquatableClass rhs)
         {
-            bool output;
             if(lhs is null)
             {
-                output = rhs is null;
+                var output = rhs is null;
+                return output;
             }
             else
             {
-                output = lhs.Equals(rhs); // Equals(EquatableClass) handles a null right side.
+                var output = lhs.Equals(rhs); // Equals(EquatableClass) handles a null right side.
+                return output;
             }
-
-            return output;
         }
 
         public static bool operator !=(EquatableClass lhs, EquatableClass rhs)
         {
-            bool output = !(lhs == rhs);
+            var output = !(lhs == rhs);
             return output;
         }
 
@@ -160,22 +159,22 @@ namespace Public.Examples.Code
 
         public static bool operator ==(EqualsClassDescendant lhs, EqualsClassDescendant rhs)
         {
-            bool output;
             if (lhs is null)
             {
-                output = rhs is null;
+                var output = rhs is null;
+                return output;
             }
             else
             {
-                output = lhs.Equals(rhs); // Equals() handles a null right side.;
+                var output = lhs.Equals(rhs); // Equals() handles a null right side.;
+                return output;
             }
-
-            return output;
         }
 
         public static bool operator !=(EqualsClassDescendant lhs, EqualsClassDescendant rhs)
         {
-            return !(lhs == rhs);
+            var output = !(lhs == rhs);
+            return output;
         }
 
         #endregion
