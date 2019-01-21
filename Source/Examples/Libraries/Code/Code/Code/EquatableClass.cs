@@ -103,6 +103,31 @@ namespace Public.Examples.Code
             return output;
         }
 
+        //// Would this work?
+        //public bool Equals(TelephoneNumber other)
+        //{
+        //    if (object.ReferenceEquals(this, other))
+        //    {
+        //        return true;
+        //    }
+
+        //    if (other == null || other.GetType() != this.GetType())
+        //    {
+        //        return false;
+        //    }
+
+        //    var output = this.Digits == other.Digits;
+        //    return output;
+        //}
+
+        //public override bool Equals(object obj)
+        //{
+        //    var objAsType = obj as TelephoneNumber;
+
+        //    var output = this.Equals(objAsType);
+        //    return output;
+        //}
+
         ///// Would this work given the explicit type check in <see cref="EquatableClass.Equals(EquatableClass)"/>?
         //public override bool Equals(object obj)
         //{
