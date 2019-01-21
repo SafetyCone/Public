@@ -54,15 +54,15 @@ namespace Public.Examples.Code
             // Null check and compare exact types.
             // We're inside the 'this' instance, so it can't be null!
             // Instances of derived types can have the same A and B property values, and yet are NOT equal!
-            if (other is null || this.GetType().Equals(other.GetType()))
+            if (other is null || !this.GetType().Equals(other.GetType()))
             {
                 return false;
             }
 
 #if DEBUG // Allow for line-by-line debugging to see where output changes.
             bool output = true;
-            output = output && (this.A == other.A);
-            output = output && (this.B == other.B);
+            output = output && (this.A.Equals(other.A));
+            output = output && (this.B.Equals(other.B));
 
             return output;
 #else
@@ -92,7 +92,7 @@ namespace Public.Examples.Code
             // Check type to ensure we are not comparing an object of a derived type to an object of the base type.
             // This 'is' operator will return true for derived types since an instance of a derived type is an instance of the base type.
             // The 'as' operator will return a reference to the derived instance as a base type instance, and the properties of the two base-type instances might be the same, but obviously the two objects are not equal since one of them is actually an instance of the derived type!
-            if(obj == null || obj.GetType().Equals(typeof(EquatableClass)))
+            if(obj == null || !obj.GetType().Equals(typeof(EquatableClass)))
             {
                 return false;
             }
@@ -111,12 +111,12 @@ namespace Public.Examples.Code
         //        return true;
         //    }
 
-        //    if (other == null || other.GetType() != this.GetType())
+        //    if (other == null || !other.GetType().Equals(this.GetType()))
         //    {
         //        return false;
         //    }
 
-        //    var output = this.Digits == other.Digits;
+        //    var output = this.Digits.Equals(other.Digits);
         //    return output;
         //}
 
@@ -152,7 +152,7 @@ namespace Public.Examples.Code
         //    //   http://go.microsoft.com/fwlink/?LinkId=85238  // Goes nowhere!
         //    //
 
-        //    if (obj == null || GetType() != obj.GetType())
+        //    if (obj == null || !GetType().Equals(obj.GetType()))
         //    {
         //        return false;
         //    }
@@ -213,18 +213,13 @@ namespace Public.Examples.Code
                 return true;
             }
 
-            if (other is null)
-            {
-                return false;
-            }
-
             // Compare exact types. Instances of derived types can have the same A and B property values, and yet are NOT equal!
-            if (this.GetType() != other.GetType())
+            if (other is null || !this.GetType().Equals(other.GetType()))
             {
                 return false;
             }
 
-            if (this.C == other.C)
+            if (this.C.Equals(other.C))
             {
                 return base.Equals((EquatableClass)other); // Problem? Won't the base always return false due to exact type-check in base?
             }
@@ -249,7 +244,7 @@ namespace Public.Examples.Code
         public override bool Equals(object obj)
         {
             bool output = false;
-            if (obj.GetType() == typeof(EqualsClassDescendant))
+            if (obj.GetType().Equals(typeof(EqualsClassDescendant)))
             {
                 output = this.Equals(obj as EqualsClassDescendant);
             }
