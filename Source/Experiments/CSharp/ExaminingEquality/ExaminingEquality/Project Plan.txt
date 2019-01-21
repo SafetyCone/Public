@@ -1,1 +1,31 @@
 ﻿ExaminingEquality - An console-app for experiments, examinations, demonstrations, and examples of equality in C#.
+
+
+Introduction:
+Equality in C# is a tricky concept, and implementing the concept adds additional complexity.
+
+There are several C# built-in equality methods:
+* Object.Equals()
+* Object.ReferenceEquals()
+* Operator '=='.
+
+In addition, there are several equality interfaces:
+* IEquatable<T>
+* IEqualityComparer<T>
+
+How do these concepts interact, and how do they interact with the concept of inheritance and the concepts of reference-types and value-types?
+
+This experiment examines and demonstrates these interactions.
+
+
+Reference-Types and Value-Types:
+The primary distinction in equality for types is whether a type is a reference-type or a value-type. Then, for reference types, the next distinction is whether the type participates in inheritance (has types that inherit from it, or if it inherits from a type).
+
+
+Reference-Types:
+For reference types, the C# built-in equality methods implement reference-equality:
+
+* Object.Equals()
+	* Test whether two reference-type variables that reference the same instance are Object.Equals(). Demonstrated in ReferenceTypeDemonstrations.ObjectEqualsReferenceEquality().
+	* Test the converse, whether two reference-type variables that reference different instances are Object.Equals(). Demonstrated in ReferenceTypeDemonstrations.ObjectEqualsDifferentInstanceReferenceInequality().
+	* Uses Object.ReferenceEquals(). This is demonstrated in ReferenceTypeDemonstrations.ObjectEqualsSameAsObjectReferenceEquals().
