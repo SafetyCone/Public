@@ -1,16 +1,16 @@
 ﻿using System;
 
 
-namespace ExaminingEquality.Experiments
+namespace ExaminingEquality
 {
     /// <summary>
     /// Experiments with <see cref="Object.ReferenceEquals(object, object)"/> from most basic to most complex.
     /// </summary>
-    public static class ObjectReferenceEquals
+    public static class ObjectReferenceEqualsExperiments
     {
         public static void SubMain()
         {
-            ObjectReferenceEquals.NullObjectReferenceEqualsNull();
+            ObjectReferenceEqualsExperiments.NullObjectReferenceEqualsNull();
         }
 
         /// <summary>

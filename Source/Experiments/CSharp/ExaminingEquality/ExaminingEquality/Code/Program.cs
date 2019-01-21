@@ -7,8 +7,10 @@ namespace ExaminingEquality
     {
         static void Main(string[] args)
         {
-            //Experiments.ObjectEquals.SubMain();
-            Experiments.ObjectReferenceEquals.SubMain();
+            //ObjectEqualsExperiments.SubMain();
+            ObjectReferenceEqualsExperiments.SubMain();
+
+            //EqualityComparerExperiments.SubMain();
         }
     }
 }
