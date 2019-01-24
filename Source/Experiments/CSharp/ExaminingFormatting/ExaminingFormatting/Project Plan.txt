@@ -1,0 +1,25 @@
+﻿ExaminingFormatting - A console-app for experiments, examininations, demonstrations, and examples of formatting in C#.
+
+Introduction:
+Formatting is the process of converting an instance of a type to a string representing the state of the instance. Serialization (to a string) is a specific type of formatting that provides all instance state in the output string, usually with the intent of converting that string back into an instance with the exact same state (deserialization). However, frequently we don't want all information about the instance state, nor will we be interested in converting the string back into an instance. Displaying instances, via Object.ToString() or otherwise, generally means just providing a short string that offers a quick description, or distinguishes the instance from other instances.
+
+In fact, while serializations of an instance all look generally the same, minus the idiosyncractic details of the format (XML, JSON, text, binary), because every serialization must contain the same information, non-serialization formats can come in a bewildering profusion! The diversity of formats is driven by the diversity of situations in which an instance of a type might be displayed. Based on the situation, some information can be left out, the order of included information altered, emphasis can differ accross the included information, and the information itself might look completely different (period- or comma-separated currency and minor-currency units?).
+
+There are several formatting-related interfaces in C#:
+* IFormatProvider
+* ICustomFormatter
+* IFormattable
+
+The main mechanism for formatting is the String.Format(IFormatProvider, String, Object[]) method. This mechanism is used in every method that takes a IFormatProvider, as well as string interpolation.
+
+The other mechanism is overriding Object.ToString(). This mechanism is used in every method that does not take an IFormatProvider, just the instance itself.
+
+
+Notes
+* Formatting is creating a string-view of an instance.
+* IFormatProvider should be called IFormatterProvider, since it provides a formatter (ICustomFormatter).
+* However, IFormatProvider should be called IFormatInfo since it, when cast the appropriate derived-type, provides all information necessary for a formatter to format (like what is the currency symbol?).
+* Also, it's recommended that the same class implement both IFormatProvider and ICustomFormatter. So the format provider also does the formatting.
+* So, IFormatProvider does all the work, and is thus named IFormatProvider.
+* A formatter formats an instance according to a format, given as a string.
+* A format is a string that specifies how state information of an instance should be formatted.
