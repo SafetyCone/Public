@@ -23,3 +23,7 @@ Notes
 * So, IFormatProvider does all the work, and is thus named IFormatProvider.
 * A formatter formats an instance according to a format, given as a string.
 * A format is a string that specifies how state information of an instance should be formatted.
+
+* A class should implement IFormattable if it knows how to format itself in multiple ways.
+	* If the class only knows one way to format itself, it should override Object.ToString().
+	* The IFormatProvide given to the IFormattable.ToString() method plays the part of "IFormatInfo". It provides any info needed for the class to format itself (like what is the currency symbol).
