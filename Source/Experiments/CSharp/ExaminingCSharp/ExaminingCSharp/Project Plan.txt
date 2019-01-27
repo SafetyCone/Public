@@ -1,0 +1,1 @@
+﻿ExaminingCSharp - A console-app for experiments, examinations, demonstrations, and examples of general, uncategorized, or not-yet categorized concepts in C#.
