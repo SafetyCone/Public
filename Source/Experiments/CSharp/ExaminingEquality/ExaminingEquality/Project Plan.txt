@@ -1,4 +1,4 @@
-﻿ExaminingEquality - An console-app for experiments, examinations, demonstrations, and examples of equality in C#.
+﻿ExaminingEquality - A console-app for experiments, examinations, demonstrations, and examples of equality in C#.
 
 
 Introduction:
