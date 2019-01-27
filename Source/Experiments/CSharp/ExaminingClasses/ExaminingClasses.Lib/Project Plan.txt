@@ -1,1 +1,3 @@
 ﻿ExaminingClasses.Lib - A library containing types for use in examining concepts related to class in C#.
+
+Other experiment projects can reference this project to use the ready-made experimental class hierarchies it contains.

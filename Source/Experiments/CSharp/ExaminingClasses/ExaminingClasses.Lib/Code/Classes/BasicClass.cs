@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace ExaminingFormatting
+namespace ExaminingClasses.Lib
 {
     public class BasicClass
     {
