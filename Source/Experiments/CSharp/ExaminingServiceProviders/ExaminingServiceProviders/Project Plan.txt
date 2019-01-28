@@ -1,0 +1,1 @@
+﻿ExaminingServiceProviders - A console-app for experiments, examininations, demonstrations, and examples of using service providers in C#.
