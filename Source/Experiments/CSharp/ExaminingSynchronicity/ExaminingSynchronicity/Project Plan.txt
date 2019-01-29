@@ -1,0 +1,1 @@
+﻿ExaminingEquality - A console-app for experiments, examinations, demonstrations, and examples of synchronicity (sync/async) in C#.
