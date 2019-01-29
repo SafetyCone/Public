@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 
 namespace ExaminingSynchronicity
@@ -10,7 +11,23 @@ namespace ExaminingSynchronicity
             //Demonstrations.FalseAsync();
             //Demonstrations.FalseAsyncWithInterveningWork();
             //Demonstrations.SimpleAsync();
-            Demonstrations.SimpleAsyncWithInterveningWork();
+            //Demonstrations.SimpleAsyncWithInterveningWork();
+            Demonstrations.AsyncSimpleAsyncWithInterveningWork().Wait();
+        }
+
+        private static async Task AsyncSimpleAsyncWithInterveningWork()
+        {
+            var writer = Console.Out;
+
+            writer.WriteLine(@"Calling asynchronous wait...");
+
+            var task = Utilities.AwaitThreeSeconds();
+
+            writer.WriteLine(@"Doing work in the meantime...");
+
+            await task;
+
+            writer.WriteLine(@"Called asynchronous wait.");
         }
 
         /// <summary>
