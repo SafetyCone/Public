@@ -6,7 +6,9 @@ namespace ExaminingSynchronicity
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Demonstrations.SubMain();
+            //Examples.SubMain();
+            //Experiments.SubMain();
         }
     }
 }
