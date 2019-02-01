@@ -1,0 +1,1 @@
+﻿ExaminingEntityFramework.Migrations - The migrations dummy console-app for the ExaminingEntityFramework.Lib library.

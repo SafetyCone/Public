@@ -1,0 +1,1 @@
+﻿ExaminingEntityFramework.Lib - A library supporting the Entity Framework (EF) Core investigations in the experimental console-app ExaminingEntityFramework.

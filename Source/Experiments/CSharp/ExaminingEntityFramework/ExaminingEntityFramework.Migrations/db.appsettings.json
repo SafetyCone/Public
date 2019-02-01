@@ -1,0 +1,14 @@
+﻿{
+  "Database": {
+    "ConnectionStrings": {
+      "TestLocalDatabase": "Server=(localdb)\\MSSQLLocalDB;Database=ExaminingEntityFramework;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Microsoft": "Warning",
+      "Default": "Information"
+    }
+  }
+}

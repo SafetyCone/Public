@@ -1,0 +1,2 @@
+﻿ExaminingEntityFramework - A console-app for experiments investigating Entity Framework (EF) Core.
+
