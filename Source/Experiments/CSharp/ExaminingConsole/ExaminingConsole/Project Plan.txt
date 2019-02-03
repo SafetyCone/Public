@@ -1,0 +1,1 @@
+﻿ExaminingConsole - A console-app for experiments, examinations, demonstrations, and examples of using the System.Console in C#.
