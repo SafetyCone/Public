@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 
 
@@ -8,7 +9,7 @@ namespace ExaminingConsole
     {
         public static void SubMain()
         {
-            Exploration.RedirectStandardInput();
+            //Exploration.RedirectStandardInput();
             //Exploration.TryConsoleKeyEvents();
 
             Explorations.FileProcessor.SubMain();
