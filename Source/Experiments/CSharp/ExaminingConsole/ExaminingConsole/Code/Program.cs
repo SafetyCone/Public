@@ -6,7 +6,8 @@ namespace ExaminingConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Exploration.SubMain();
+            //Experiments.SubMain();
         }
     }
 }
