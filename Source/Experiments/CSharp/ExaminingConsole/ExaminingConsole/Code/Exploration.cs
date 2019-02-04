@@ -10,9 +10,9 @@ namespace ExaminingConsole
         public static void SubMain()
         {
             //Exploration.RedirectStandardInput();
-            //Exploration.TryConsoleKeyEvents();
+            Exploration.TryConsoleKeyEvents();
 
-            Explorations.FileProcessor.SubMain();
+            //Explorations.FileProcessor.SubMain();
         }
 
         private static void TryConsoleKeyEvents()
