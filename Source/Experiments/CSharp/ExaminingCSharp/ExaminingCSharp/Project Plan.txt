@@ -1,1 +1,13 @@
 ﻿ExaminingCSharp - A console-app for experiments, examinations, demonstrations, and examples of general, uncategorized, or not-yet categorized concepts in C#.
+
+
+Notes
+
+Delegates
+* Delegate types in C# are sealed (no inheritance of delegates). See: https://stackoverflow.com/questions/861835/how-do-i-create-a-new-delegate-type-based-on-an-existing-one-in-c
+
+Events
+* See best-practices here: https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern
+* By-convention, use Object as the type for the event sender.
+* By-convention, although no longer enforced, the second argument should derive from System.EventArgs.
+* Use the EventHandler<T> type. Note that there is no constraint on T! (T can derive from any class, not just EventArgs. This is what is meant by the derive from EventArgs convention is no longer enforced.)
