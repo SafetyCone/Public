@@ -7,5 +7,8 @@ namespace ExaminingClasses.Lib
     {
         double ValueTypeValueB { get; set; }
         string ReferenceTypeValueB { get; set; }
+
+
+        void MethodB();
     }
 }

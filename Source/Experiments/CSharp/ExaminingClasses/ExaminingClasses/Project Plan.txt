@@ -1,3 +1,7 @@
 ﻿ExaminingClasses - A console-app experiment examining and demonstrating C# class-related concepts.
 
 The class hierarchies, and value- and reference-types contained in the ExaminingClasses.Lib are useful in other examinations as types on which other concepts can work.
+
+
+Conclusions:
+* Virtual methods are always resolved based on the actual-type of an object.

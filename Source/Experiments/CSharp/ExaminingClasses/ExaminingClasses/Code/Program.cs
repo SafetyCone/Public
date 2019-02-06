@@ -6,7 +6,7 @@ namespace ExaminingClasses
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Experiments.SubMain();
         }
     }
 }

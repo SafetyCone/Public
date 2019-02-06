@@ -10,5 +10,21 @@ namespace ExaminingClasses.Lib
     {
         public double ValueTypeValueB { get; set; }
         public string ReferenceTypeValueB { get; set; }
+
+
+        public override void MethodA()
+        {
+            Console.WriteLine($@"{nameof(ClassB)}:{nameof(ClassB.MethodA)}");
+        }
+
+        public void MethodB()
+        {
+            Console.WriteLine($@"{nameof(ClassB)}:{nameof(ClassB.MethodB)}");
+        }
+
+        protected override void ProtectedMethod()
+        {
+            Console.WriteLine($@"{nameof(ClassB)}:{nameof(ClassB.ProtectedMethod)}");
+        }
     }
 }
