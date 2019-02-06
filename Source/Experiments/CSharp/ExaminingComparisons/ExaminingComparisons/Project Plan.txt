@@ -2,3 +2,10 @@
 
 
 * SortingDemonstrations.CanNonComparableTypesBeSorted() - Can types that do not implement IComparable<T> or IComparable be sorted in collections like lists?
+
+
+Conclusions:
+* Like EqualityComparer<T>.Default, Comparer<T>.Default returns an instance that uses type T's generic interface implementation (IComparable<T>, like IEquatable<T>), or if that's not available then type T's non-generic interface implementation (IComparable, like IEquatable).
+* Unlike EqualityComparer<T>.Default, Comparer<T>.Default does not use a built-in mechanism to compare instances if neither generic nor non-generic interface is implemented.
+* Comparer<T>.Default requires that the type implement IComparable<T> or IComparable.
+* Collections of instances of T cannot be sorted unless T implements either the generic or non-generic interface. Sadly, failure occurs as an exception at runtime instead of at compile-time as an error. Compile-time erroring could be achieved by moving the Sort() method off the collection type and into an interface extension method. Maybe this is not done due to pre-extension method legacy, since this change would be a breaking change.

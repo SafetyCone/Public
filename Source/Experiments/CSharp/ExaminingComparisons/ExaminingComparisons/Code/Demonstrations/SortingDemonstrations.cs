@@ -15,11 +15,9 @@ namespace ExaminingComparisons
         }
 
         /// <summary>
-        /// Result: Yes.
+        /// Result: Expected. Types that implement <see cref="IComparable"/> or <see cref="IComparable{T}"/> can be sorted.
         /// If a type implements <see cref="IComparable"/> or <see cref="IComparable{T}"/>, where &lt;T&gt; is the type itself, then it should be sortable.
         /// Expected: Yes.
-        /// 
-        /// 
         /// </summary>
         private static void CanComparableTypesBeSorted()
         {
@@ -42,7 +40,7 @@ namespace ExaminingComparisons
         }
 
         /// <summary>
-        /// Result: No. An exception is thrown!
+        /// Result: UNEXPECTED! An exception is thrown!
         /// Can types that do not implement IComparable&lt;T&gt; or IComparable be sorted in collections like lists?
         /// The .NET documentation suggests that if an attempt is made to sort a list of instances of a custom type that does not implement IComparable, then an exception will be thrown.
         /// Expected: Yes, no errors.
