@@ -12,8 +12,10 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
+            TypeExperiments.SubMain();
+
             //Experiments.CanSetInDictionary();
-            Experiments.ServiceProviderRequiresExactTypeMatch();
+            //Experiments.ServiceProviderRequiresExactTypeMatch();
         }
 
         /// <summary>

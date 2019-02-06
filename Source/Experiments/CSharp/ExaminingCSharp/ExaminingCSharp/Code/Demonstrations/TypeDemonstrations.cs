@@ -3,11 +3,16 @@
 
 namespace ExaminingCSharp
 {
-    public static class Explorations
+    public static class TypeDemonstrations
     {
         public static void SubMain()
         {
-            TypeExplorations.SubMain();
+
+        }
+
+        private static void TypesAreNotComparable()
+        {
+
         }
     }
 }
