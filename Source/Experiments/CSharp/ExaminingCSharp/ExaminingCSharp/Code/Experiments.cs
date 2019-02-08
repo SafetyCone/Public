@@ -12,10 +12,26 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
-            TypeExperiments.SubMain();
+            //TypeExperiments.SubMain();
 
             //Experiments.CanSetInDictionary();
             //Experiments.ServiceProviderRequiresExactTypeMatch();
+            Experiments.ParamsNoValuesIsEmptyOrNull();
+        }
+
+        /// <summary>
+        /// Result: Expected. Empty.
+        /// If a params argument is specified, but no values are provided, is the result empty or null?
+        /// Expected: Empty (length of zero).
+        /// </summary>
+        private static void ParamsNoValuesIsEmptyOrNull()
+        {
+            void Test(params string[] strs)
+            {
+                Console.WriteLine(strs);
+            }
+
+            Test();
         }
 
         /// <summary>

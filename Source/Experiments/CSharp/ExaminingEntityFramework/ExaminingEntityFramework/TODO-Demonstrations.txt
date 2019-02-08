@@ -1,0 +1,3 @@
+﻿Here is a list of demonstrations TODO:
+
+* Entities have an ID of zero (0) when constructed, and then Int32.MinValue when added to the database context.
