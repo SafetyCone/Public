@@ -16,7 +16,21 @@ namespace ExaminingCSharp
 
             //Experiments.CanSetInDictionary();
             //Experiments.ServiceProviderRequiresExactTypeMatch();
-            Experiments.ParamsNoValuesIsEmptyOrNull();
+            //Experiments.ParamsNoValuesIsEmptyOrNull();
+            Experiments.DefaultConstructorRunsBeforeInitialization();
+        }
+
+        /// <summary>
+        /// Result: Expected. Yes, the default constructor runs, then values are initialized.
+        /// It's possible to initialize objects in C#, and types have default constructors. When an object is initialized, does the default constructor run?
+        /// Expected: Yes, the default constructor will run before initializtaion.
+        /// </summary>
+        private static void DefaultConstructorRunsBeforeInitialization()
+        {
+            var test = new DefaultConstructorClass()
+            {
+                Value1 = 3,
+            };
         }
 
         /// <summary>
