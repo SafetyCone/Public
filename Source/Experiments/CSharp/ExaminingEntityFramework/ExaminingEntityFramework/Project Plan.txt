@@ -1,2 +1,7 @@
 ﻿ExaminingEntityFramework - A console-app for experiments investigating Entity Framework (EF) Core.
 
+
+Conclusions
+
+* Note that adding a navigation property to an entity does NOT necessarily add another column to the entity's database table!
+
