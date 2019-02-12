@@ -10,5 +10,7 @@ namespace ExaminingEntityFramework.Lib.EntityTypes
 
         public string Value1 { get; set; }
         public int Value2 { get; set; }
+
+        public EntityALabel Label { get; set; }
     }
 }

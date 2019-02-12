@@ -4,14 +4,16 @@ using ExaminingEntityFramework.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExaminingEntityFramework.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190212224948_BlogPosts")]
+    partial class BlogPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,22 +53,6 @@ namespace ExaminingEntityFramework.Migrations.Migrations
                     b.ToTable("EntityAs");
                 });
 
-            modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.EntityALabel", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EntityAID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EntityAID")
-                        .IsUnique();
-
-                    b.ToTable("EntityALabels");
-                });
-
             modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.Post", b =>
                 {
                     b.Property<int>("PostID")
@@ -84,14 +70,6 @@ namespace ExaminingEntityFramework.Migrations.Migrations
                     b.HasIndex("BlogID");
 
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.EntityALabel", b =>
-                {
-                    b.HasOne("ExaminingEntityFramework.Lib.EntityTypes.EntityA", "EntityA")
-                        .WithOne("Label")
-                        .HasForeignKey("ExaminingEntityFramework.Lib.EntityTypes.EntityALabel", "EntityAID")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.Post", b =>
