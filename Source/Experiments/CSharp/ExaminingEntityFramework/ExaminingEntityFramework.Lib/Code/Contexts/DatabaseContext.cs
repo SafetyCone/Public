@@ -2,8 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using EntityTypes = ExaminingEntityFramework.Lib.EntityTypes;
-
 
 namespace ExaminingEntityFramework.Lib
 {
@@ -11,6 +9,11 @@ namespace ExaminingEntityFramework.Lib
     {
         public DbSet<EntityTypes.EntityA> EntityAs { get; set; }
         public DbSet<EntityTypes.EntityALabel> EntityALabels { get; set; }
+
+        public DbSet<EntityTypes.EntityB> EntityBs { get; set; }
+        public DbSet<EntityTypes.EntityC> EntityCs { get; set; }
+
+        public DbSet<EntityTypes.EntityBToEntityCMapping> EntityBToEntityCMappings { get; set; }
 
         public DbSet<EntityTypes.Blog> Blogs { get; set; }
         public DbSet<EntityTypes.Post> Posts { get; set; }
