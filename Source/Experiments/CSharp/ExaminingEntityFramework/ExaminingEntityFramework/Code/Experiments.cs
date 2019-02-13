@@ -16,16 +16,44 @@ namespace ExaminingEntityFramework
     {
         #region Static
 
-        public static void SubMain()
+        public static void SubMain(IServiceProvider serviceProvider)
         {
-            var serviceProvider = Program.BuildServiceProvider();
-
             var databaseContext = serviceProvider.GetRequiredService<DatabaseContext>();
 
-            MappingExperiments.SubMain(databaseContext);
+            //MappingExperiments.SubMain(databaseContext);
 
             //Experiments.TestLogging(serviceProvider);
             //Experiments.DoesEFUpdateAllTouchedOrOnlyChangedFields(databaseContext).Wait();
+            Experiments.DoesLabelNeedAddingToContext(databaseContext).Wait();
+        }
+
+        /// <summary>
+        /// Result: Expected. Addition entities must be added to the context.
+        /// Does a label addition entity (an entity that references an entity) need to be added to the database context? Or is just referencing a tracked entity enough to make an entity tracked?
+        /// Expected: No, the label is a separate entity and thus must be added to the context independently.
+        /// </summary>
+        private static async Task DoesLabelNeedAddingToContext(DatabaseContext databaseContext)
+        {
+            await databaseContext.ClearDatabase();
+
+            var newA = new EntityTypes.EntityA()
+            {
+                GUID = Guid.NewGuid(),
+                Value1 = @"Two",
+                Value2 = 2,
+            };
+
+            //databaseContext.EntityAs.Add(newA); // Either works.
+            databaseContext.Add(newA); // Either works. This is preferred because it is shorter!
+
+            var newALabel = new EntityTypes.EntityALabel()
+            {
+                EntityA = newA,
+            };
+
+            databaseContext.Add(newALabel); // Required if you want the label entity to be added to the database. Note! Results in TWO queries being made to the DB.
+
+            await databaseContext.SaveChangesAsync();
         }
 
         /// <summary>

@@ -15,7 +15,10 @@ namespace ExaminingEntityFramework
     {
         static void Main(string[] args)
         {
-            Experiments.SubMain();
+            var serviceProvider = Program.BuildServiceProvider();
+
+            Experiments.SubMain(serviceProvider);
+            //Demonstrations.SubMain(serviceProvider);
         }
 
         public static IServiceProvider BuildServiceProvider()
@@ -40,6 +43,9 @@ namespace ExaminingEntityFramework
                 })
                 .AddDbContext<DatabaseContext>(options =>
                 {
+                    // Show parameter values.
+                    options.EnableSensitiveDataLogging();
+
                     options.UseSqlServer(connectionString, sqlServerOptions =>
                     {
                         sqlServerOptions.MigrationsAssembly(@"ExaminingEntityFramework.Migrations");
