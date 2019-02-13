@@ -22,8 +22,10 @@ namespace ExaminingEntityFramework
 
             var databaseContext = serviceProvider.GetRequiredService<DatabaseContext>();
 
+            MappingExperiments.SubMain(databaseContext);
+
             //Experiments.TestLogging(serviceProvider);
-            Experiments.DoesEFUpdateAllTouchedOrOnlyChangedFields(databaseContext).Wait();
+            //Experiments.DoesEFUpdateAllTouchedOrOnlyChangedFields(databaseContext).Wait();
         }
 
         /// <summary>
