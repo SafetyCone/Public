@@ -1,0 +1,34 @@
+﻿ExaminingExpressions - An experimental console-app for examining expressions in C#.
+
+
+Conclusions
+
+Expressions
+
+It is easy to create an Expression<Func<T1, T2>>, then compile to a Func<T1, T2>, but nearly impossible (other than in a hacky-way) to go from func to expression.
+
+
+LINQ
+
+* Aggregate() is awesome!
+* Count has a predicate-overload.
+* SequenceEqual with an IEqualityComparer<T> is great.
+* Skip() and Take() allow easy pagination of query results. Do a skip, then a take.
+* The 'let' keyword introduces a new range variable (possibly an intermediate- or sub-query).
+* The 'into' keyword allows continuing the query after a select statement. Also, for grouping.
+
+Lookup
+
+The Lookup class differs from the Dictionary class in that: 1) Keys in a lookup do not have to be unique (Lookup[key] returns an IEnumerable<Value>), and 2) Lookup is immutable.
+The lookup is used for the functionality of grouping.
+ToLookup is immediate execution, GroupBy is deferred execution and returns an IGrouping<TKey, TElement>.
+
+Where
+
+Multiple where clauses are ANDs.
+
+
+Links
+
+* Good basics of ExpressionTrees, and LINQ operators guide: https://www.tutorialsteacher.com/linq/linq-standard-query-operators
+* Expression Tree Basics: https://blogs.msdn.microsoft.com/charlie/2008/01/31/expression-tree-basics/
