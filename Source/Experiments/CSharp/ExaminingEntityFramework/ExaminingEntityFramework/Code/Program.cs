@@ -17,7 +17,8 @@ namespace ExaminingEntityFramework
         {
             var serviceProvider = Program.BuildServiceProvider();
 
-            Experiments.SubMain(serviceProvider);
+            Explorations.SubMain(serviceProvider);
+            //Experiments.SubMain(serviceProvider);
             //Demonstrations.SubMain(serviceProvider);
         }
 
