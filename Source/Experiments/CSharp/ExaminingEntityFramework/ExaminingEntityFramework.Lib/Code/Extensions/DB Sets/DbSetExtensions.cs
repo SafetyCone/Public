@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,22 @@ namespace ExaminingEntityFramework.Lib
         /// <summary>
         /// Delete all entities from the database.
         /// </summary>
+        public static int DeleteAllFromDatabase<T>(this DbSet<T> set)
+            where T : class
+        {
+            var context = set.GetDbContext();
+
+            var tableName = set.GetTableName();
+            var command = $@"DELETE FROM [{tableName}]";
+#pragma warning disable EF1000 // Possible SQL injection vulnerability.
+            var rowCount = context.Database.ExecuteSqlCommand(command);
+#pragma warning restore EF1000 // Possible SQL injection vulnerability.
+            return rowCount;
+        }
+
+        /// <summary>
+        /// Delete all entities from the database.
+        /// </summary>
         public static async Task<int> DeleteAllFromDatabaseAsync<T>(this DbSet<T> set)
             where T : class
         {
@@ -62,5 +79,168 @@ namespace ExaminingEntityFramework.Lib
 #pragma warning restore EF1000 // Possible SQL injection vulnerability.
             return rowCount;
         }
+
+        public static IQueryable<TEntity> GetQuery<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class
+        {
+            var output = set.Where(predicate);
+            return output;
+        }
+
+        #region Acquire
+
+        /// <summary>
+        /// Acquires (gets or constructs) a single simple entity.
+        /// </summary>
+        public static TEntity Acquire<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> identityExpression, Func<TEntity> constructor)
+            where TEntity : class
+        {
+            var existsResult = set.ExistsAndGetSingle(identityExpression);
+            if (existsResult.Exists)
+            {
+                return existsResult.Entity;
+            }
+            else
+            {
+                var newEntity = constructor();
+
+                set.Add(newEntity);
+
+                return newEntity;
+            }
+        }
+
+        /// <summary>
+        /// Acquires (gets or constructs) a single simple entity asynchronously.
+        /// </summary>
+        public static async Task<TEntity> AcquireAsync<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> identityExpression, Func<TEntity> constructor)
+            where TEntity : class
+        {
+            var existsResult = await set.ExistsAndGetSingleAsync(identityExpression);
+            if (existsResult.Exists)
+            {
+                return existsResult.Entity;
+            }
+            else
+            {
+                var newEntity = constructor();
+
+                set.Add(newEntity);
+
+                return newEntity;
+            }
+        }
+
+        public static TEntity AcquireFind<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> identityExpression, Func<TEntity> constructor)
+            where TEntity : class
+        {
+            var existsResult = set.ExistsAndGetSingleFind(identityExpression);
+            if (existsResult.Exists)
+            {
+                return existsResult.Entity;
+            }
+            else
+            {
+                var newEntity = constructor();
+
+                set.Add(newEntity);
+
+                return newEntity;
+            }
+        }
+
+        #endregion
+
+        #region Exists And Get
+
+        public static ExistsResult<TEntity> ExistsAndGetFirst<TEntity>(this DbSet<TEntity> set, IQueryable<TEntity> query)
+            where TEntity : class
+        {
+            var output = query.ExistsAndGetFirst();
+            return output;
+        }
+
+        public static ExistsResult<TEntity> ExistsAndGetFirst<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class
+        {
+            var query = set.GetQuery(predicate);
+
+            var output = set.ExistsAndGetFirst(query);
+            return output;
+        }
+
+        public static ExistsResult<TEntity> ExistsAndGetSingle<TEntity>(this DbSet<TEntity> set, IQueryable<TEntity> query)
+            where TEntity : class
+        {
+            var output = query.ExistsAndGetSingle();
+            return output;
+        }
+
+        public static ExistsResult<TEntity> ExistsAndGetSingle<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class
+        {
+            var query = set.GetQuery(predicate);
+
+            var output = set.ExistsAndGetSingle(query);
+            return output;
+        }
+
+        public static Task<ExistsResult<TEntity>> ExistsAndGetSingleAsync<TEntity>(this DbSet<TEntity> set, IQueryable<TEntity> query)
+            where TEntity : class
+        {
+            var output = query.ExistsAndGetSingleAsync();
+            return output;
+        }
+
+        public static Task<ExistsResult<TEntity>> ExistsAndGetSingleAsync<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class
+        {
+            var query = set.GetQuery(predicate);
+
+            var output = set.ExistsAndGetSingleAsync(query);
+            return output;
+        }
+
+        public static FindExistsResult<TEntity> ExistsAndGetSingleFind<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity: class
+        {
+            var predicateFunction = predicate.Compile();
+
+            var localResult = set.Local.ExistsAndGetSingle(predicateFunction);
+            if(localResult.Exists)
+            {
+                var output = localResult.ToFindExistsResult(LocalOrRemote.Local);
+                return output;
+            }
+            else
+            {
+                var remoteResult = set.ExistsAndGetSingle(predicate);
+
+                var output = localResult.ToFindExistsResult(LocalOrRemote.Remote);
+                return output;
+            }
+        }
+
+        public static async Task<FindExistsResult<TEntity>> ExistsAndGetSingleFindAsync<TEntity>(this DbSet<TEntity> set, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class
+        {
+            var predicateFunction = predicate.Compile();
+
+            var localResult = set.Local.ExistsAndGetSingle(predicateFunction);
+            if (localResult.Exists)
+            {
+                var output = localResult.ToFindExistsResult(LocalOrRemote.Local);
+                return output;
+            }
+            else
+            {
+                var remoteResult = await set.ExistsAndGetSingleAsync(predicate);
+
+                var output = localResult.ToFindExistsResult(LocalOrRemote.Remote);
+                return output;
+            }
+        }
+
+        #endregion
     }
 }
