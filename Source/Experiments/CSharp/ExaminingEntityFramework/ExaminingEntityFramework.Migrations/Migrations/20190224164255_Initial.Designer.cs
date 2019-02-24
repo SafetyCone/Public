@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExaminingEntityFramework.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190213152925_EntitiesBAndC")]
-    partial class EntitiesBAndC
+    [Migration("20190224164255_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,36 @@ namespace ExaminingEntityFramework.Migrations.Migrations
                     b.ToTable("EntityCs");
                 });
 
+            modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.Event", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EventTypeID");
+
+                    b.Property<Guid>("GUID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EventTypeID");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.EventType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("EventTypes");
+                });
+
             modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.Post", b =>
                 {
                     b.Property<int>("PostID")
@@ -147,6 +177,14 @@ namespace ExaminingEntityFramework.Migrations.Migrations
                     b.HasOne("ExaminingEntityFramework.Lib.EntityTypes.EntityC", "EntityC")
                         .WithMany()
                         .HasForeignKey("EntityCID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ExaminingEntityFramework.Lib.EntityTypes.Event", b =>
+                {
+                    b.HasOne("ExaminingEntityFramework.Lib.EntityTypes.EventType", "EventType")
+                        .WithMany()
+                        .HasForeignKey("EventTypeID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
