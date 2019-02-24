@@ -24,7 +24,37 @@ namespace ExaminingEntityFramework
 
             //Experiments.TestLogging(serviceProvider);
             //Experiments.DoesEFUpdateAllTouchedOrOnlyChangedFields(databaseContext).Wait();
-            Experiments.DoesLabelNeedAddingToContext(databaseContext).Wait();
+            //Experiments.DoesLabelNeedAddingToContext(databaseContext).Wait();
+            Experiments.WillSubEntityBeFoundLocally(databaseContext);
+        }
+
+        /// <summary>
+        /// Result: Expected. Entities added locally are NOT found by querying the set!
+        /// 
+        /// Expected: Entities that have been added locally will NOT be found by querying a set. Only entities that have been saved to the database will be found.
+        /// </summary>
+        /// <param name="databaseContext"></param>
+        private static void WillSubEntityBeFoundLocally(DatabaseContext databaseContext)
+        {
+            databaseContext.ClearDatabase();
+
+            var eventAName = @"EventA";
+
+            var eventType = new EntityTypes.EventType()
+            {
+                Name = eventAName,
+            };
+
+            databaseContext.Add(eventType);
+
+            var eventTypeA = databaseContext.EventTypes.Acquire(x => x.Name == eventAName, () =>
+            {
+                var newEventType = new EntityTypes.EventType()
+                {
+                    Name = eventAName,
+                };
+                return newEventType;
+            });
         }
 
         /// <summary>
@@ -34,7 +64,7 @@ namespace ExaminingEntityFramework
         /// </summary>
         private static async Task DoesLabelNeedAddingToContext(DatabaseContext databaseContext)
         {
-            await databaseContext.ClearDatabase();
+            await databaseContext.ClearDatabaseAsync();
 
             var newA = new EntityTypes.EntityA()
             {
@@ -67,7 +97,7 @@ namespace ExaminingEntityFramework
         /// </summary>
         private static async Task DoesEFUpdateAllTouchedOrOnlyChangedFields(DatabaseContext databaseContext)
         {
-            await databaseContext.ClearDatabase();
+            await databaseContext.ClearDatabaseAsync();
 
             var appType1 = new AppTypes.EntityA()
             {
