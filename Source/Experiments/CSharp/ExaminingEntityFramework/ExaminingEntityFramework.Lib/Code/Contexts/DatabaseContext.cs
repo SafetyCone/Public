@@ -15,6 +15,9 @@ namespace ExaminingEntityFramework.Lib
 
         public DbSet<EntityTypes.EntityBToEntityCMapping> EntityBToEntityCMappings { get; set; }
 
+        public DbSet<EntityTypes.Event> Events { get; set; }
+        public DbSet<EntityTypes.EventType> EventTypes { get; set; }
+
         public DbSet<EntityTypes.Blog> Blogs { get; set; }
         public DbSet<EntityTypes.Post> Posts { get; set; }
 
