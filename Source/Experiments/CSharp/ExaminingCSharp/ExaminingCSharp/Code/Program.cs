@@ -8,8 +8,8 @@ namespace ExaminingCSharp
         {
             //Scratch.SubMain();
             //Explorations.SubMain();
-            Experiments.SubMain();
-            //Demonstrations.SubMain();
+            //Experiments.SubMain();
+            Demonstrations.SubMain();
             //Program.SubMain();
         }
 
