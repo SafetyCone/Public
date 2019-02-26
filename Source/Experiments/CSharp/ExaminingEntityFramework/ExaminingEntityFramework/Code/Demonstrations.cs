@@ -23,6 +23,7 @@ namespace ExaminingEntityFramework
 
         /// <summary>
         /// This seems to have a transient error on the Contains() method, not sure how I made it go away, maybe by using System.Collections.Generic?
+        /// This is probably caused by needing to select a PROPERTY of x, not just 'x'.
         /// </summary>
         /// <param name="databaseContext"></param>
         private static void CorrectWayToUseContains(DatabaseContext databaseContext)
