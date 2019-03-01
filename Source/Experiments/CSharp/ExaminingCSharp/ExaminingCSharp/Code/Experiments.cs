@@ -17,7 +17,29 @@ namespace ExaminingCSharp
             //Experiments.CanSetInDictionary();
             //Experiments.ServiceProviderRequiresExactTypeMatch();
             //Experiments.ParamsNoValuesIsEmptyOrNull();
-            Experiments.DefaultConstructorRunsBeforeInitialization();
+            //Experiments.DefaultConstructorRunsBeforeInitialization();
+            Experiments.PassInterfaceByReferenceExperiment();
+        }
+
+        /// <summary>
+        /// Result: UNEXPECTED! There was no problem completely changing the type of the instance behind an interface when the instance is passed by reference to an interface.
+        /// If I pass an interface instance by reference, can I completely replace the instance to which the reference points?
+        /// Expected: No. I am not entirely sure about why, perhaps something related to the fundamental need for computers to know the size of all things, but I think something will stop me from re-assigning a reference.
+        /// </summary>
+        private static void PassInterfaceByReferenceExperiment()
+        {
+            var interfaceA = new ClassA() as IInterfaceA;
+
+            Console.WriteLine($@"interfaceA type before: {interfaceA.GetType().FullName}");
+
+            Experiments.ReplaceClassAWithClassB(ref interfaceA);
+
+            Console.WriteLine($@"interfaceA type after: {interfaceA.GetType().FullName}");
+        }
+
+        private static void ReplaceClassAWithClassB(ref IInterfaceA interfaceA)
+        {
+            interfaceA = new ClassB();
         }
 
         /// <summary>
