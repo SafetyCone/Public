@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,27 @@ namespace ExaminingEntityFramework
             //Experiments.TestLogging(serviceProvider);
             //Experiments.DoesEFUpdateAllTouchedOrOnlyChangedFields(databaseContext).Wait();
             //Experiments.DoesLabelNeedAddingToContext(databaseContext).Wait();
-            Experiments.WillSubEntityBeFoundLocally(databaseContext);
+            //Experiments.WillSubEntityBeFoundLocally(databaseContext);
+            Experiments.InPlaceOrNew(databaseContext);
+        }
+
+        /// <summary>
+        /// Result: Expected. The fluent API builds new IQueryable (query specification) instances, and does now work in place.
+        /// Does using the fluent API for IQueryable result in in-place modifications to the IQueryable, or does it create new instances of the IQueryable?
+        /// Expected: New instances.
+        /// </summary>
+        private static void InPlaceOrNew(DatabaseContext databaseContext)
+        {
+            var queryBase = databaseContext.EntityAs;
+
+            var query1 = queryBase;
+            query1.Where(x => x.Value2 == 5); // Resulting query is thrown away.
+
+            var results1 = query1.ToList(); // No where clause!
+
+            var query2 = queryBase.Where(x => x.Value2 == 5);
+
+            var results2 = query2.ToList(); // Has where clause.
         }
 
         /// <summary>
