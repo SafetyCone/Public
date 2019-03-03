@@ -1,3 +1,5 @@
 ﻿Here is a list of demonstrations TODO:
 
 * Entities have an ID of zero (0) when constructed, and then Int32.MinValue when added to the database context.
+* Show that entities which are navigation properties of an entity added to a DbContext also get added to the DbContext.
+* Show that you don't have to bi-directionally add navigations properties. You can go top-down, and add the top to the DbContext, or you can go bottom-up and add the bottom to the DbContext. Just so long as the entity that you add references all the other entities you want to add, all entities will be added.

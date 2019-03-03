@@ -27,6 +27,11 @@ namespace ExaminingEntityFramework.Lib
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            Console.WriteLine(@"Here!");
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EntityTypes.EntityA>().HasAlternateKey(x => x.GUID);

@@ -20,6 +20,23 @@ namespace ExaminingEntityFramework
             var databaseContext = serviceProvider.GetRequiredService<DatabaseContext>();
 
             Explorations.CreateEntityACollectionQuery(databaseContext);
+            Explorations.ParameterlessConstruction();
+        }
+
+        private static void ParameterlessConstruction()
+        {
+            var databaseContext = new DatabaseContext();
+        }
+
+        private static void IQueryableInterfaces(DatabaseContext databaseContext)
+        {
+            var find = databaseContext.EntityAs.Find(2); // Find returns an entity, not an IQueryable.
+
+            IQueryable<EntityTypes.EntityA> queryable = databaseContext.EntityAs;
+            //queryable.find // Does not exist on IQueryable!
+
+            databaseContext.Find<EntityTypes.EntityA>(2); // Exists on DbContext.
+            databaseContext.Find(typeof(EntityTypes.EntityA), 2); // Exists on DbContext.
         }
 
         private static void CreateEntityACollectionQuery(DatabaseContext databaseContext)
