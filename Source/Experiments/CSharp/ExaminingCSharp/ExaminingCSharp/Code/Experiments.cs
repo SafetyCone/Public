@@ -12,13 +12,14 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
+            IOExperiments.SubMain();
             //TypeExperiments.SubMain();
 
             //Experiments.CanSetInDictionary();
             //Experiments.ServiceProviderRequiresExactTypeMatch();
             //Experiments.ParamsNoValuesIsEmptyOrNull();
             //Experiments.DefaultConstructorRunsBeforeInitialization();
-            Experiments.PassInterfaceByReferenceExperiment();
+            //Experiments.PassInterfaceByReferenceExperiment();
         }
 
         /// <summary>

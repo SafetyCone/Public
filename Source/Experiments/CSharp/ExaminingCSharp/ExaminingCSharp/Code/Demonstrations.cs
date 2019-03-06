@@ -7,8 +7,10 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
-            ClosureDemonstrations.SubMain();
+            //ClosureDemonstrations.SubMain();
             //IntegerDemonstrations.SubMain();
+            IODemonstrations.SubMain();
+            //TypeDemonstrations.SubMain();
         }
     }
 }

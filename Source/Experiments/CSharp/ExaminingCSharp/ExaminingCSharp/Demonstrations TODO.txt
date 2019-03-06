@@ -1,3 +1,5 @@
 Events:
 * Un-subscribing the same handler from an event multiple times does not cause an exception.
 * Un-subscribing a never-subscribed handler from an event does not cause an exception.
+
+System.IO:
