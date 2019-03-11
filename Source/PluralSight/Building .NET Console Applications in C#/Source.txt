@@ -1,1 +1,0 @@
-https://app.pluralsight.com/library/courses/building-dotnet-console-applications-csharp/table-of-contents

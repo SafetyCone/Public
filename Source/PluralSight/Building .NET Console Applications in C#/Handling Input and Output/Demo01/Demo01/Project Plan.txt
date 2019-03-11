@@ -1,3 +1,0 @@
-﻿Demo01 - Writing to the Console Window
-
-Source: https://app.pluralsight.com/player?course=building-dotnet-console-applications-csharp&author=jason-roberts&name=building-dotnet-console-applications-csharp-m1&clip=2
