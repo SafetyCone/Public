@@ -1,0 +1,1 @@
+﻿ExaminingLogging.Lib - A library to support the explorations, experiments, demonstrations, and examples in the ExaminingLogging project, examining logging in C#.
