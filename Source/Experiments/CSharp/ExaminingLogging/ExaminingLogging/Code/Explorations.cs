@@ -26,7 +26,7 @@ namespace ExaminingLogging
 
             var logger = loggerFactory.CreateLogger<Explorations>();
 
-            logger.LogInformation(@"Hello world!");
+            logger.LogInformation(@"Hello world!", 1, 3.3, DateTime.UtcNow);
         }
     }
 }

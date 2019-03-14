@@ -1,1 +1,6 @@
 ﻿ExaminingLogging - A console-app for explorations, experiments, demonstrations, and examples of logging in C#.
+
+
+Links:
+
+* TState semantics for ILogger: https://nblumhardt.com/2016/11/ilogger-beginscope/
