@@ -1,0 +1,32 @@
+﻿ExaminingDependencyInjection - A console-app for explorations, experiments, demonstrations, and examples of dependency-injection (DI) in C#.
+
+
+Compound Services
+
+There is a specific problem that needs addressing. A common design is to have multiple implmentation types (ServiceA, ServiceB, ServiceC...) of some service type (IService). Then, since all implementations should operate on the same data (for example, all loggers on the same log message), a *compound* implementation type is created that stores references to instances of all other types. To make it transparent to uses whether or not they are using an instance of a single implementation type or an instance of the compound type, the compound type implements the same interface. Internally, the compound type instance just passes all input to each of its contained instances.
+
+This presents a problem when it comes to dependency injection container service configuration. We want to add each implementation type using the same service type, then use a call to GetServices<IService> or the IEnumerable<IService> input argument type to get all service instances for the constructor compound service instance. However, these calls will try to return an instance of the compound service! This will result in either an infinite loop, or if service references are tracked, a circular reference. How to resolve this?
+
+The constraints on the problem are:
+
+1) You want to add each implementation type as the same service type.
+2) You want to add the compound implementation type as the same service type as the implementation types.
+3) You do not want to add each implementation type as its own type. This is to allow a project to "grow". You start with a single implementation of a service (say just a Console logger), then grow to include other implementations (say File, or DB loggers). You do not want to have to change your DI container setup when you go from one implementation, to N implementations and a compound implmentation.
+4) You also do not want to re-specify the implementation types. This would be required if you changed the IService implementation type from 1 to N and a compound.
+
+Some ideas:
+
+* Simplest: start with a call to Add<IService, ImplementationA>(). Then change to Add<ImplementationA>(), and Add<IService, CompoundImplementation>(<factory function, in which ImplementationA is requested and added.>).
+
+* Use a factory function for the compound implementation in the DI container, and use a global (or thread-safe static) variable to prevent recursion during the call to the factory function.
+
+* Use two different service types, say IService and IServiceImplementation. This requires either:
+
+A) Foreknowledge of whether IService will have 1 or N implementations. It might be possible to intelligently predict the probable possibility for N implementations (for example in a source-sink architecture, there will probably be many sinks).
+B) Changing interfaces in the middle of the project by creating a new IServiceImplementation interface, relabeling ServiceA as implementing IServiceImplementation, not IService, create a new compound implementation type that implements IService, and updated your DI container configuration accordingly.
+C) Or you will have to just assume there will always be N and do the initial extra work of creating and using the compound type, IService, and IServiceImplementation.
+
+* Perform some reflection-judo in the method to add the compound implementation that will build a service provider, search the service collection for any service descriptors of the IService type, and remove them, then add itself in as an IService, constructing an instance using the intermediate service provider. This requires:
+
+1) That the compound IService implementation be the last IService implementation added to the DI container.
+2) That the IService implementations will not rely on any services net yet added to the DI container (basically, that the compound IService implementation will be the *last* implementation added to the container).

@@ -1,0 +1,1 @@
+﻿ExaminingDependencyInjection.Lib - A library to support the explorations, experiments, demonstrations, and examples in the ExaminingDependencyInjection project, examining dependency-injection (DI) in C#.
