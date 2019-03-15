@@ -7,7 +7,8 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
-            TypeExplorations.SubMain();
+            NameofExplorations.SubMain();
+            //TypeExplorations.SubMain();
         }
     }
 }

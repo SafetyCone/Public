@@ -7,9 +7,9 @@ namespace ExaminingCSharp
         static void Main(string[] args)
         {
             //Scratch.SubMain();
-            //Explorations.SubMain();
+            Explorations.SubMain();
             //Experiments.SubMain();
-            Demonstrations.SubMain();
+            //Demonstrations.SubMain();
             //Program.SubMain();
         }
 
