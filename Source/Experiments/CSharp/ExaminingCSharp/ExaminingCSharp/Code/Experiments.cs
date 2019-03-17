@@ -12,7 +12,7 @@ namespace ExaminingCSharp
     {
         public static void SubMain()
         {
-            IOExperiments.SubMain();
+            //IOExperiments.SubMain();
             //TypeExperiments.SubMain();
 
             //Experiments.CanSetInDictionary();
@@ -20,6 +20,22 @@ namespace ExaminingCSharp
             //Experiments.ParamsNoValuesIsEmptyOrNull();
             //Experiments.DefaultConstructorRunsBeforeInitialization();
             //Experiments.PassInterfaceByReferenceExperiment();
+            Experiments.CanUseNull();
+        }
+
+        /// <summary>
+        /// Result: UNEXPECTED! The framework seems to successfully handle a null IDisposable instance.
+        /// If a method returns an IDisposable, but returns a null instance, does the C# language 'using' construct thrown an exception?
+        /// Expected: This will throw an error since an attempt will be made to call NULL.Dispose().
+        /// 
+        /// The framework only calls Dispose() on non-null objects. See the translation of the 'using' construct shown here: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement.
+        /// </summary>
+        private static void CanUseNull()
+        {
+            using (IDisposable disposable = null)
+            {
+                Console.WriteLine(@"OK");
+            }
         }
 
         /// <summary>
