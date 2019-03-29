@@ -1,0 +1,1 @@
+﻿ExaminingOptions.Lib - A library to support the explorations, experiments, demonstrations, and examples in the ExaminingOptions project, examining options in .NET Core C#.

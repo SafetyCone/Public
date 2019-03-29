@@ -1,0 +1,5 @@
+﻿ExaminingOptions - A console-app for explorations, experiments, demonstrations, and examples of options in .NET Core C#.
+
+Links:
+
+* A good overview of options on which the ConsoleWriter exploration is based: https://henkmollema.github.io/advanced-options-configuration-in-asp.net-core/.
