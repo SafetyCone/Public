@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.IO;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,47 @@ namespace ExaminingDependencyInjection
     {
         public static void SubMain()
         {
-            Explorations.AddCompoundServiceViaFactoryMethod();
+            //Explorations.AddCompoundServiceViaFactoryMethod();
+            //Explorations.DetermineOptionsServices();
+            Explorations.DetermineLoggingServices();
+        }
+
+        private static void DetermineLoggingServices()
+        {
+            var services = new ServiceCollection();
+
+            // Add options beforehand so we only see the logging services since AddLogging() calls AddOptions().
+            services.AddOptions();
+
+            var outputFilePath = @"C:\Temp\Logging services.txt";
+            using (var writer = new StreamWriter(outputFilePath))
+            {
+                Explorations.DetermineNewServices(services, x => x.AddLogging(), writer);
+            }
+        }
+
+        private static void DetermineOptionsServices()
+        {
+            var services = new ServiceCollection();
+
+            var outputFilePath = @"C:\Temp\Options Services.txt";
+            using (var writer = new StreamWriter(outputFilePath))
+            {
+                Explorations.DetermineNewServices(services, x => x.AddOptions(), writer);
+            }
+        }
+
+        private static void DetermineNewServices(IServiceCollection services, Action<IServiceCollection> action, StreamWriter writer)
+        {
+            var initialServices = services.ToList();
+
+            action(services);
+
+            var afterServices = services.ToList();
+
+            var newServices = afterServices.Except(initialServices);
+
+            newServices.DescribeServices(writer);
         }
 
         /// <summary>

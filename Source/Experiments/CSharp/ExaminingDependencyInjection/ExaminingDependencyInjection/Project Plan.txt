@@ -1,4 +1,4 @@
-﻿ExaminingDependencyInjection - A console-app for explorations, experiments, demonstrations, and examples of dependency-injection (DI) in C#.
+﻿ExaminingDependencyInjection - A console-app for explorations, experiments, demonstrations, and examples of dependency-injection (DI) in .NET Core C#.
 
 
 Compound Services
