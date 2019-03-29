@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExaminingOptions", "Examini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExaminingOptions.Lib", "ExaminingOptions.Lib\ExaminingOptions.Lib.csproj", "{1712DDBB-B8E8-417B-BD06-B8A421F737EA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExaminingDependencyInjection.Lib", "..\ExaminingDependencyInjection\ExaminingDependencyInjection.Lib\ExaminingDependencyInjection.Lib.csproj", "{41AF3EA7-E6A3-4B77-8F69-0A9A29834326}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1712DDBB-B8E8-417B-BD06-B8A421F737EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1712DDBB-B8E8-417B-BD06-B8A421F737EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1712DDBB-B8E8-417B-BD06-B8A421F737EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AF3EA7-E6A3-4B77-8F69-0A9A29834326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AF3EA7-E6A3-4B77-8F69-0A9A29834326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AF3EA7-E6A3-4B77-8F69-0A9A29834326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AF3EA7-E6A3-4B77-8F69-0A9A29834326}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

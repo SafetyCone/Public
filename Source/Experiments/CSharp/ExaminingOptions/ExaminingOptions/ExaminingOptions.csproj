@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ExaminingDependencyInjection\ExaminingDependencyInjection.Lib\ExaminingDependencyInjection.Lib.csproj" />
     <ProjectReference Include="..\ExaminingOptions.Lib\ExaminingOptions.Lib.csproj" />
   </ItemGroup>
 
