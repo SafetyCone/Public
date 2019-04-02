@@ -1,0 +1,1 @@
+﻿ExaminingConfiguration- A console-app for explorations, experiments, demonstrations, and examples of configuration in C#.
