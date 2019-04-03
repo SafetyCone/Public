@@ -15,7 +15,42 @@ namespace ExaminingDependencyInjection
         {
             //Explorations.AddCompoundServiceViaFactoryMethod();
             //Explorations.DetermineOptionsServices();
-            Explorations.DetermineLoggingServices();
+            //Explorations.DetermineLoggingServices();
+            Explorations.IsIServiceScopeFactoryBuiltIn();
+        }
+
+        /// <summary>
+        /// Result: Somehow, magically, the Microsoft built-in DI container, even though empty, still creates an <see cref="IServiceScopeFactory"/>!
+        /// From the .NET Core source (https://github.com/aspnet/Extensions/blob/c19b309cd8839c4e572a7fc10ae873b4c7ee1f93/src/DependencyInjection/DI.Abstractions/src/ServiceProviderServiceExtensions.cs#L125), a call to <see cref="IServiceProvider"/>.CreateScope() simply request a required <see cref="IServiceScopeFactory"/> instance and creates a scope.
+        /// Where does this <see cref="IServiceScopeFactory"/> come from? Can any <see cref="ServiceCollection"/> generate it?
+        /// </summary>
+        private static void IsIServiceScopeFactoryBuiltIn()
+        {
+            var services = new ServiceCollection();
+            var serviceProvider = services.BuildServiceProvider();
+
+            var servicesFilePath = @"C:\Temp\Empty Services.txt";
+            using (var streamWriter = new StreamWriter(servicesFilePath))
+            {
+                services.DescribeServices(streamWriter);
+            }
+            // Result: services is indeed empty!
+
+            var scope = serviceProvider.CreateScope(); // And yet, an IServiceScopeFactory is available!
+        }
+
+        /// <summary>
+        /// Result: No, there is no way to use the Microsoft built-in DI container to intercept the scope creation event.
+        /// Similar to how singleton service instances can be configured in a custom fashion after instantiation, is there a point at which a service provider will allow scoped service instanes to be configured after instantiation?
+        /// Configuring service instances after instantiation is a necessary step since service A could depend on service B, and service B could depend on service A. If the dependency linkage was done in a DI factory method, then an infinite loop (or if the DI container implementation detects cycles, an exception) occurs.
+        /// If instead service instances are created, then after both service instances are created, dependency linked, then there is no dependency cycle.
+        /// I want to intercept the <see cref="IServiceProvider.cre"/>
+        /// </summary>
+        private static void ServiceProviderScopeConfiguration()
+        {
+            var serviceProvider = new ServiceCollection().BuildServiceProvider();
+
+            //serviceProvider.CreateScope();
         }
 
         private static void DetermineLoggingServices()
