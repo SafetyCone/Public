@@ -5,16 +5,16 @@ using System.Threading;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 
-using Microsoft.Extensions.Options;
-
 using ExaminingConfiguration.Lib;
 using ExaminingDependencyInjection.Lib;
 using ExaminingLogging.Lib;
+using ExaminingLogging.Lib.SimplestConsole;
 
 
 namespace ExaminingLogging
@@ -27,7 +27,51 @@ namespace ExaminingLogging
             //Explorations.GetLoggerFromDI();
             //Explorations.GetLoggerFilterOptions();
             //Explorations.ConfigureAndTestMicrosoftLogging();
-            Explorations.GetIntermediateLoggingServices();
+            //Explorations.GetIntermediateLoggingServices();
+            Explorations.TestSimplestConsoleConfiguration();
+        }
+
+        private static void TestSimplestConsoleConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"Configurations/SimplestConsole.Logging.json")
+
+                .Build();
+
+            var configurationDescriptionFilePath = @"C:\Temp\Configuration.txt";
+            using (var streamWriter = new StreamWriter(configurationDescriptionFilePath))
+            {
+                configuration.DescribeConfiguration(streamWriter);
+            }
+
+            var services = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder
+                        .AddConfiguration(loggingBuilder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>().GetSection(@"Logging"))
+                        .Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, SimplestConsoleLoggerProvider>())
+                        ;
+                })
+                ;
+
+            var servicesDescriptionFilePath = @"C:\Temp\Services.txt";
+            using (var streamWriter = new StreamWriter(servicesDescriptionFilePath))
+            {
+                services.DescribeServices(streamWriter);
+            }
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var loggerProviderConfigurationOfSimplestConsole = serviceProvider.GetRequiredService<ILoggerProviderConfiguration<SimplestConsoleLoggerProvider>>();
+            var loggerProviderConfigurationOfSimplestConsoleFilePath = @"C:\Temp\Configuration-SimplestConsoleLoggerProvider.txt";
+            using (var streamWriter = new StreamWriter(loggerProviderConfigurationOfSimplestConsoleFilePath))
+            {
+                loggerProviderConfigurationOfSimplestConsole.Configuration.DescribeConfiguration(streamWriter);
+            }
+
+            var loggerFilterOptionsOptions = serviceProvider.GetRequiredService<IOptions<LoggerFilterOptions>>();
+            var loggerFilterOptions = loggerFilterOptionsOptions.Value;
         }
 
         private static void GetIntermediateLoggingServices()
@@ -40,7 +84,7 @@ namespace ExaminingLogging
             var configurationDescriptionFilePath = @"C:\Temp\Configuration.txt";
             using (var streamWriter = new StreamWriter(configurationDescriptionFilePath))
             {
-                configuration.DescibeConfiguration(streamWriter);
+                configuration.DescribeConfiguration(streamWriter);
             }
 
             var services = new ServiceCollection()
@@ -79,7 +123,7 @@ namespace ExaminingLogging
             var consoleLoggerConfigurationDescriptionFilePath = @"C:\Temp\Configuration-ConsoleLoggerProvider.txt";
             using (var streamWriter = new StreamWriter(consoleLoggerConfigurationDescriptionFilePath))
             {
-                consoleLoggerProviderConfiguration.DescibeConfiguration(streamWriter);
+                consoleLoggerProviderConfiguration.DescribeConfiguration(streamWriter);
             }
 
             //var loggerProviderConfigurationGenericType = loggingConfigurationAssembly.GetType(@"Microsoft.Extensions.Logging.Configuration.ILoggerProviderConfiguration`1");
@@ -89,7 +133,7 @@ namespace ExaminingLogging
             var consoleLoggerConfigurationDescriptionFilePath2 = @"C:\Temp\Configuration-ConsoleLoggerProvider2.txt";
             using (var streamWriter = new StreamWriter(consoleLoggerConfigurationDescriptionFilePath2))
             {
-                loggerProviderConfigurationOfConsole.Configuration.DescibeConfiguration(streamWriter);
+                loggerProviderConfigurationOfConsole.Configuration.DescribeConfiguration(streamWriter);
             }
 
             var loggerFilterOptionsOptions = serviceProvider.GetRequiredService<IOptions<LoggerFilterOptions>>();
