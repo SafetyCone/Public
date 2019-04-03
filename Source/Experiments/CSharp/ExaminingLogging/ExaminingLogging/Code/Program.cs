@@ -9,7 +9,8 @@ namespace ExaminingLogging
     {
         static void Main(string[] args)
         {
-            Explorations.SubMain();
+            //Explorations.SubMain();
+            Experiments.SubMain();
         }
 
         private static void TypesOfInterest()
