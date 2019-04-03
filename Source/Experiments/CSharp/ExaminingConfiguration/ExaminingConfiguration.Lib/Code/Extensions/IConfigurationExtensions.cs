@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,16 @@ namespace ExaminingConfiguration.Lib
 {
     public static class IConfigurationExtensions
     {
+        public static bool IsEmpty(this IConfiguration configuration)
+        {
+            var children = configuration.GetChildren();
+
+            var childCount = children.Count();
+
+            var isEmpty = childCount < 1;
+            return isEmpty;
+        }
+
         public static IEnumerable<IConfigurationSection> GetAllLeafConfigurationSections(this IConfiguration configuration)
         {
             foreach (var configurationSection in configuration.GetChildren())

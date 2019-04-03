@@ -11,6 +11,16 @@ namespace ExaminingConfiguration.Lib
 {
     public static class IConfigurationSectionExtensions
     {
+        public static bool IsEmpty(this IConfigurationSection configurationSection)
+        {
+            var children = configurationSection.GetChildren();
+
+            var childCount = children.Count();
+
+            var isEmpty = childCount < 1;
+            return isEmpty;
+        }
+
         public static IEnumerable<IConfigurationSection> GetAllLeafConfigurationSections(this IConfigurationSection configurationSection)
         {
             var children = configurationSection.GetChildren();
