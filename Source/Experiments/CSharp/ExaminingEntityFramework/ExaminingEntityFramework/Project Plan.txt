@@ -1,6 +1,16 @@
 ﻿ExaminingEntityFramework - A console-app for experiments investigating Entity Framework (EF) Core.
 
 
+Multiple Contexts
+
+I want to know if a single database can support migrations from multiple contexts.
+
+Links
+
+* Yes, it is possible and works just the way you would think: https://blog.tekspace.io/code-first-multiple-db-context-migration/.
+
+
+
 Conclusions
 
 * Note that adding a navigation property to an entity does NOT necessarily add another column to the entity's database table!

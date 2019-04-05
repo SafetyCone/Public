@@ -1,11 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using LinqKit;
 
+using ExaminingDependencyInjection.Lib;
 using ExaminingEntityFramework.Lib;
 
 using EntityTypes = ExaminingEntityFramework.Lib.EntityTypes;
@@ -19,13 +22,40 @@ namespace ExaminingEntityFramework
         {
             var databaseContext = serviceProvider.GetRequiredService<DatabaseContext>();
 
-            Explorations.CreateEntityACollectionQuery(databaseContext);
-            Explorations.ParameterlessConstruction();
+            //Explorations.CreateEntityACollectionQuery(databaseContext);
+            //Explorations.ParameterlessConstruction();
+            //Explorations.DescribeDatabaseServices();
+            Explorations.GetNewDatabaseContextWithDbContextOptions();
+        }
+
+        private static void GetNewDatabaseContextWithDbContextOptions()
+        {
+            var serviceProvider = Program.GetServiceProvider();
+
+            var dbContextOptions = serviceProvider.GetRequiredService<DbContextOptions>();
+            using (var databaseContext = new DatabaseContext(dbContextOptions))
+            {
+                databaseContext.EntityALabels.Add(new EntityTypes.EntityALabel());
+            }
+        }
+
+        /// <summary>
+        /// Result: There is a DbContextOptions available from the services.
+        /// </summary>
+        private static void DescribeDatabaseServices()
+        {
+            var services = Program.GetServices();
+
+            var servicesFilePath = @"C:\Temp\Database Services.txt";
+            using (var streamWriter = new StreamWriter(servicesFilePath))
+            {
+                services.DescribeServices(streamWriter);
+            }
         }
 
         private static void ParameterlessConstruction()
         {
-            var databaseContext = new DatabaseContext();
+            //var databaseContext = new DatabaseContext();
         }
 
         private static void IQueryableInterfaces(DatabaseContext databaseContext)

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ExaminingDependencyInjection\ExaminingDependencyInjection.Lib\ExaminingDependencyInjection.Lib.csproj" />
     <ProjectReference Include="..\ExaminingEntityFramework.Lib\ExaminingEntityFramework.Lib.csproj" />
   </ItemGroup>
 
