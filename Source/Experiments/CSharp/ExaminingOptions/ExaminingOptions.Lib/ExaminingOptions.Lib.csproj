@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExaminingDependencyInjection\ExaminingDependencyInjection.Lib\ExaminingDependencyInjection.Lib.csproj" />
+  </ItemGroup>
+
 </Project>

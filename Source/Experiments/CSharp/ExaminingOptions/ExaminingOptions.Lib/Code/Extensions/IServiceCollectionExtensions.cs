@@ -3,6 +3,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using ExaminingDependencyInjection.Lib;
+
 
 namespace ExaminingOptions.Lib
 {
@@ -42,6 +44,27 @@ namespace ExaminingOptions.Lib
             services.AddSingleton<IConsoleWriter, ConsoleWriter>();
 
             services.Configure<ConsoleWriterOptions>(configuration.OrSection(@"ConsoleWriter"));
+
+            return services;
+        }
+
+        public static IConfiguration GetConfiguration(this IServiceCollection services)
+        {
+            var output = services.GetIntermediateRequiredService<IConfiguration>();
+            return output;
+        }
+
+        /// <summary>
+        /// Configures <typeparamref name="TOptions"/> using the <see cref="IConfiguration"/> added to the services collection.
+        /// </summary>
+        public static IServiceCollection Configure<TOptions>(this IServiceCollection services)
+            where TOptions : class
+        {
+            var configuration = services.GetConfiguration();
+
+            services
+                .Configure<TOptions>(configuration)
+                ;
 
             return services;
         }

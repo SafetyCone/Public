@@ -20,8 +20,48 @@ namespace ExaminingOptions
             //Explorations.ConsoleWriterAppSettingsConfiguration();
             //Explorations.ConsoleWriterConfiguratorConfiguration();
             //Explorations.ConsoleWriterTryAddEnumerableConfigurator();
-            Explorations.AddDuplicateServices();
+            //Explorations.AddDuplicateServices();
             //Explorations.AddDuplicateServicesWithTryAddEnumerable();
+            //Explorations.TestConfigurationNoConfigurator();
+            Explorations.TestConfigurationAndConfigurator();
+        }
+
+        /// <summary>
+        /// Result: The ConfigureOptions is never used.
+        /// What happens if I use both Configure() and ConfigureOptions()?
+        /// </summary>
+        private static void TestConfigurationAndConfigurator()
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"appsettings.json")
+                .Build();
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddOptions()
+                .Configure<ConfigurationOptions>()
+                .ConfigureOptions<ConfigurationOptionsConfigureOptions>()
+                .BuildServiceProvider();
+
+            var configurationOptions = serviceProvider.GetRequiredService<IOptions<ConfigurationOptions>>();
+        }
+
+        /// <summary>
+        /// Get the non-interpretted string of the configuration options.
+        /// </summary>
+        private static void TestConfigurationNoConfigurator()
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"appsettings.json")
+                .Build();
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddOptions()
+                .Configure<ConfigurationOptions>()
+                .BuildServiceProvider();
+
+            var configurationOptions = serviceProvider.GetRequiredService<IOptions<ConfigurationOptions>>();
         }
 
         /// <summary>
