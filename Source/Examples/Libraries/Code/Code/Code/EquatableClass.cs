@@ -92,15 +92,26 @@ namespace Public.Examples.Code
             // Check type to ensure we are not comparing an object of a derived type to an object of the base type.
             // This 'is' operator will return true for derived types since an instance of a derived type is an instance of the base type.
             // The 'as' operator will return a reference to the derived instance as a base type instance, and the properties of the two base-type instances might be the same, but obviously the two objects are not equal since one of them is actually an instance of the derived type!
-            if(obj == null || !obj.GetType().Equals(typeof(EquatableClass)))
+
+            var objIsNull = obj == null;
+
+            // Handles non-sealed (inheritable) types.
+            // To make sure that this double type-lookup and comparison is only performed once in an inheritance hierarchy, consider implementing an "Equals_Internal()" method that assumes this type check has already passed.
+            var objTypeIsThisType = obj ?? obj.GetType().Equals(this.GetType());
+
+            // Note, if class is sealed (non-inheritable), could also test whether the object type is the specific class type.
+            var objTypeIsSpecificType = obj ?? obj.GetType().Equals(typeof(EquatableClass));
+
+            // Use short-circuited or-operator to not evaluate second clause if obj is null (and thus avoid null-reference exception).
+            if (obj == null || !obj.GetType().Equals(this.GetType()))
             {
                 return false;
             }
 
             var objAsType = obj as EquatableClass;
 
-            var output = this.Equals(objAsType);
-            return output;
+            var isEqual = this.Equals(objAsType);
+            return isEqual;
         }
 
         //// Would this work?
