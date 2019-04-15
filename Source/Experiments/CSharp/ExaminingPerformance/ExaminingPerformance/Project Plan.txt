@@ -1,0 +1,17 @@
+ExaminingPerformance - A console entry-point for explorations, experiments, demonstrations, and examples related to performance in .NET Core C#.
+
+Goals
+
+
+Experiments
+
+typeof() vs. GetType()
+
+Conclusions:
+
+* It doesn't matter. Both operations are very fast
+
+Links:
+
+* The static typeof() is faster than Object.GetType() by about 25%, but both are very fast (typeof() - 2.7s for 100M, Object.GetType() - 3.7s for 100M, relative to just static value access which is 1.1S for 100M: https://stackoverflow.com/questions/353342/performance-of-object-gettype/353435#353435
+* An old post: https://blogs.msdn.microsoft.com/vancem/2006/10/01/drilling-into-net-runtime-microbenchmarks-typeof-optimizations/

@@ -1,0 +1,4 @@
+ExaminingPerformance.Lib - A console entry-point for explorations, experiments, demonstrations, and examples related to performance in .NET Core C#.
+
+Goals
+
