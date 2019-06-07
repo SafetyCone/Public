@@ -11,7 +11,27 @@ namespace ExaminingCSharp
             //IOExperiments.DeletionOfNonExistentDirectoryPath();
             //IOExperiments.DeletionOfNonExistentFilePath();
             //IOExperiments.GetDirectoryNameOfNonWindowsDirectoryPath();
-            IOExperiments.DoesDefaultStreamWriterProduceBOM();
+            //IOExperiments.DoesDefaultStreamWriterProduceBOM();
+            IOExperiments.CreationOfAlreadyExistingDirectory();
+        }
+
+        /// <summary>
+        /// What happens if you create an already existing directory?
+        /// Result: Expected, no exception thrown.
+        /// Expected: No exception is thrown. The <see cref="Directory.CreateDirectory(string)"/> documentation suggests that directories will be created unless they already exist, and that exceptions are thrown only when the specified directory path already exists and is a file.
+        /// Documentation: https://docs.microsoft.com/en-us/dotnet/api/system.io.directory.createdirectory?view=netframework-4.8
+        /// </summary>
+        public static void CreationOfAlreadyExistingDirectory()
+        {
+            var random = new Random(314);
+
+            var directoryName = random.Next().ToString();
+            var directoryPath = $@"C:\Temp\{directoryName}";
+
+            Directory.CreateDirectory(directoryPath);
+            Directory.CreateDirectory(directoryPath);
+
+            Directory.Delete(directoryPath);
         }
 
         /// <summary>
