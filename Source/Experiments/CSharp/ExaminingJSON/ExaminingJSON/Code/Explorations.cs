@@ -12,7 +12,15 @@ namespace ExaminingJSON
     {
         public static void SubMain()
         {
-            Explorations.SerializeSimpleObject();
+            //Explorations.SerializeSimpleObject();
+            Explorations.DeserializeSimpleObject();
+        }
+
+        private static void DeserializeSimpleObject()
+        {
+            var jsonSerializer = Program.GetStandardJsonSerializer();
+
+            var simpleObject = jsonSerializer.Deserialize<BasicClass>(Constants.TempJsonFile1Path);
         }
 
         private static void SerializeSimpleObject()
@@ -21,10 +29,7 @@ namespace ExaminingJSON
 
             var jsonSerializer = Program.GetStandardJsonSerializer();
 
-            using (var textFileWriter = File.CreateText(Constants.TempJsonFile1Path))
-            {
-                jsonSerializer.Serialize(textFileWriter, simpleObject);
-            }
+            jsonSerializer.Serialize(Constants.TempJsonFile1Path, simpleObject);
         }
     }
 }
