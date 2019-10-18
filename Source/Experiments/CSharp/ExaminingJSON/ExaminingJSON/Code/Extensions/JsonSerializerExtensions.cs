@@ -10,7 +10,7 @@ namespace ExaminingJSON
     {
         public static void Serialize<T>(this JsonSerializer jsonSerializer, string jsonFilePath, T value)
         {
-            using (var textFileWriter = File.CreateText(Constants.TempJsonFile1Path))
+            using (var textFileWriter = File.CreateText(jsonFilePath))
             {
                 jsonSerializer.Serialize(textFileWriter, value);
             }
