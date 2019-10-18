@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExaminingJSON", "ExaminingJSON\ExaminingJSON.csproj", "{D917F545-4756-4C05-80F2-045DEE3AE97F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Dependencies", "_Dependencies", "{7441C472-A63E-4A54-995F-9F409B7321A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExaminingClasses.Lib", "..\ExaminingClasses\ExaminingClasses.Lib\ExaminingClasses.Lib.csproj", "{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{D917F545-4756-4C05-80F2-045DEE3AE97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D917F545-4756-4C05-80F2-045DEE3AE97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D917F545-4756-4C05-80F2-045DEE3AE97F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{648E5CEE-B24B-4D2F-89EC-F9E28CC4EDED} = {7441C472-A63E-4A54-995F-9F409B7321A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0FEBA43-72C4-4DCC-8106-7E7CA2B3D916}
