@@ -1,12 +1,25 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+
+
 namespace ExaminingJSON
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Explorations.SubMain();
+        }
+
+        public static JsonSerializer GetStandardJsonSerializer()
+        {
+            var jsonSerializer = new JsonSerializer
+            {
+                Formatting = Formatting.Indented
+            };
+
+            return jsonSerializer;
         }
     }
 }
