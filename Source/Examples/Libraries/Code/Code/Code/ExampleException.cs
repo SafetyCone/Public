@@ -7,6 +7,7 @@ namespace Public.Examples.Code
 {
     // Exceptions can be very simple, most of the complications here are due to serialization.
     // See: https://docs.microsoft.com/en-us/dotnet/standard/exceptions/best-practices-for-exceptions
+    // See: https://blog.gurock.com/articles/creating-custom-exceptions-in-dotnet/
     public class ExampleException : Exception, ISerializable
     {
         private const string ValuePropertyName = @"Value";
